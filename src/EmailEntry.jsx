@@ -8,15 +8,23 @@ function EmailEntry() {
     email: { required: true, type: "email" },
   });
 
+  const callBackendAPI = async () => {
+    const response = await fetch('/testTicks');
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error("ERROR");
+    }
+    return body;
+  };
+
   /**
    * onSubmit is only called when there aren't errors
    * @param {Object} data 
    */
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (data) {
-      console.log('You submitted');
-      console.log(data);
-    }
+      console.log(await callBackendAPI());
+    };
   }
 
   // useForm holds the state of the form (ie touches, values, errors)
