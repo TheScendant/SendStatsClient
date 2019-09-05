@@ -2,7 +2,9 @@ import React from 'react';
 import { useForm, useSettersAsEventHandler, useConstraints } from "react-uniformed";
 import './EmailEntry.css';
 
-function EmailEntry() {
+function EmailEntry(props) {
+
+  const { setEmail } = props;
   // Use HTML5 style validation
   const validators = useConstraints({
     email: { required: true, type: "email" },
@@ -23,6 +25,8 @@ function EmailEntry() {
    */
   const onSubmit = async (data) => {
     if (data) {
+      const { email } = data;
+      setEmail(email);
       console.log(await callBackendAPI());
     };
   }

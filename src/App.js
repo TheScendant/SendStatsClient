@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import EmailEntry from './EmailEntry';
 
-class App extends Component {
-  render() {
-    return (
-      <div id="App">
-        <EmailEntry />
-      </div>
-    );
-  }
+function App() {
+
+  const [email, setEmail] = useState("");
+  return (
+    <div id="App">
+      {email}
+      <EmailEntry setEmail={setEmail} />
+    </div>
+  );
 }
 
 export default App;
