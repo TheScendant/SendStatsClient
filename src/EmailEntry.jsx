@@ -10,8 +10,14 @@ function EmailEntry(props) {
     email: { required: true, type: "email" },
   });
 
-  const callBackendAPI = async () => {
-    const response = await fetch('/testTicks');
+  const callBackendAPI = async (email) => {
+    const response = await fetch('/email', {
+      method: "POST",
+      headers : {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(email)
+    });
     const body = await response.json();
     if (response.status !== 200) {
       throw Error("ERROR");
@@ -26,8 +32,8 @@ function EmailEntry(props) {
   const onSubmit = async (data) => {
     if (data) {
       const { email } = data;
+      console.log(await callBackendAPI(data));
       setEmail(email);
-      console.log(await callBackendAPI());
     };
   }
 
