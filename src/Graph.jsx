@@ -13,7 +13,8 @@ class Graph extends Component {
   }
 
   createGraph() {
-    const grades = ['5.7-','5.7', '5.7+', '5.8', '5.9+', '5.10b', '5.10c', '5.11a', '5.11b', '5.12a'];
+    // const grades = ['5.7-','5.7', '5.7+', '5.8', '5.9+', '5.10b', '5.10c', '5.11a', '5.11b', '5.12a'];
+    const grades = ['5.10c', '5.11a', '5.11b'];
 
     const csv = [
       {Year: 2017, State: 'AL', "Under 5 Years": 552, "5 to 13 Years": 259, "14 to 17 Years": 310},
