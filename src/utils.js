@@ -38,7 +38,7 @@ const gradeSorter = (a, b) => {
         // maybe some fancy index of logic here?
     }
     //ew
-    
+
 }
 
 export default {

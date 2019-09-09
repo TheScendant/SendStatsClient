@@ -16,7 +16,7 @@ class Graph extends Component {
   }
 
   noLabelBarGraph(dateGradeQuantityArray) {
-        
+
     var margin = { top: 20, right: 20, bottom: 70, left: 40 },
       width = 600 - margin.left - margin.right,
       height = 300 - margin.top - margin.bottom;
@@ -112,7 +112,7 @@ class Graph extends Component {
     const dateGradeQuantityArray = this.sliceData();
     this.noLabelBarGraph(dateGradeQuantityArray);
     // const grades = ['5.7-','5.7', '5.7+', '5.8', '5.9+', '5.10b', '5.10c', '5.11a', '5.11b', '5.12a'];
-/* 
+/*
     const csv = [
       { Year: 2017, State: 'AL', "Under 5 Years": 552, "5 to 13 Years": 259, "14 to 17 Years": 310 },
       { Year: 2017, State: 'AK', "Under 5 Years": 856, "5 to 13 Years": 421, "14 to 17 Years": 520 },
@@ -132,13 +132,13 @@ class Graph extends Component {
       { Year: 2018, State: 'DE', "Under 5 Years": 593, "5 to 13 Years": 994, "14 to 17 Years": 474 },
     ];
 
-   
+
 
     const ratings = [...new Set(sends.map(s => s.rating))].sort(); // need a custom grade sorter?
     const dates = [...new Set(sends.map(s => s.date))]; // same as states
 
     console.warn(ratings.join(","));
-    
+
     var keys = ["Year", "State", "Under 5 Years", "5 to 13 Years", "14 to 17 Years"]
     var year = [...new Set(csv.map(d => d.Year))]
     var states = [...new Set(csv.map(d => d.State))]
@@ -251,14 +251,14 @@ class Graph extends Component {
       group.enter().append("g")
         .classed("layer", true)
         .attr("fill", d => z(d.key));
-      
+
       sendGroup.enter().append("g")
         .classed("sendlayer", true)
         //.attr("fill", d=> sendZ(d.rating));
 
       var bars = svg.selectAll("g.layer").selectAll("rect")
         .data(d => d, e => e.data.State);
-      
+
       const sendBars = sendSVG.selectAll("g.sendlayer").selectAll("rect")
         .data(d=> d, e => e.data.date)
 
@@ -311,7 +311,7 @@ class Graph extends Component {
       .on("click", function () {
         update(select.property("value"), 750)
       })
-      
+
  */
   }
 
@@ -324,7 +324,7 @@ class Graph extends Component {
           <select id="year"></select>
           <input type="checkbox" id="sort" />
           Toggle sort
-        </div> 
+        </div>
         <div id="mine">
           <svg id="sendChart" width="650" height="400"></svg>
           Select year:
