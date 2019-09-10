@@ -27,7 +27,7 @@ function EmailEntry(props) {
 
   /**
    * onSubmit is only called when there aren't errors
-   * @param {Object} data 
+   * @param {Object} data
    */
   const onSubmit = async (data) => {
     if (data) {

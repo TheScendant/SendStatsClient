@@ -1,46 +1,39 @@
 
-const microGrades = ["-", "a", "b", "c", "d", "+", "/"];
+const microWeights = new Map([["-", 1], ["a", 2], ["a/b", 3], ["b", 4], ["b/c", 5], ["c", 6], ["c/d", 7], ["d", 8], ["+", 9]]);
 
 const addOrIncrement = (mapName, key) => {
     const oldValue = mapName.get(key);
-    mapName.set(key, oldValue ? oldValue + 1: 1);
+    mapName.set(key, oldValue ? oldValue + 1 : 1);
 }
 
-const clean = (grade) => {
-    for (let x = 0; x < microGrades.length; x++) {
-        grade = grade.replace(microGrades[x], "");
-    }
-    grade.replace("5","").replace(".","");
-    return grade;
+const getMacroValue = function (grade) {
+    return parseInt(grade.match(/5\.(\d+)/)[1]); // matches the number after '5.'
 }
+
+const getMicroValue = (grade) => microWeights.get(grade.match(/5\.\d+(.*)/)[1]); // matches anything after 5.numbers
 
 const gradeSorter = (a, b) => {
-    let aa = a;
-    let bb = b;
-    if (microGrades.some(micro => a.includes(micro))) {
-        aa = clean(a);
-    }
-    if (microGrades.some(micro => b.includes(micro))) {
-        bb = clean(b);
-    }
-    let intA = parseInt(aa);
-    let intB = parseInt(bb);
-
-    if (intA > intB) {
+    const macroA = getMacroValue(a);
+    const macroB = getMacroValue(b);
+    if (macroA > macroB) {
         return 1;
     }
-    if (intA < intB) {
+    if (macroA < macroB) {
         return -1;
     }
-    // intA === intB. Need to use sub grades.
-    if (! (aa.includes("/") || bb.includes("/"))) {
-        // only letters, plus and minus
-        // maybe some fancy index of logic here?
+    const microA = getMicroValue(a);
+    const microB = getMicroValue(b);
+    console.warn(`micros: ${a} ${b}`);
+    if (microA > microB) {
+        return 1;
     }
-    //ew
-
+    if (microA < microB) {
+        return -1;
+    }
+    return 0;
 }
 
 export default {
     addOrIncrement,
+    gradeSorter
 };
