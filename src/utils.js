@@ -5,24 +5,20 @@ const addOrIncrement = (mapName, key) => {
     const oldValue = mapName.get(key);
     mapName.set(key, oldValue ? oldValue + 1 : 1);
 }
-
-const getMacroValue = function (grade) {
-    return parseInt(grade.match(/5\.(\d+)/)[1]); // matches the number after '5.'
-}
-
-const getMicroValue = (grade) => microWeights.get(grade.match(/5\.\d+(.*)/)[1]); // matches anything after 5.numbers
-
+const getGradeKeys = () =>["5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "5.12", "5.13", "5.14"];
+const getMicroRating = (grade) => microWeights.get(grade.match(/5\.\d+(.*)/)[1]); // matches anything after 5.numbers
+const getMacroRating = (grade) => parseInt(grade.match(/5\.(\d+)/)[1]); // matches the number after '5'
 const gradeSorter = (a, b) => {
-    const macroA = getMacroValue(a);
-    const macroB = getMacroValue(b);
+    const macroA = getMacroRating(a);
+    const macroB = getMacroRating(b);
     if (macroA > macroB) {
         return 1;
     }
     if (macroA < macroB) {
         return -1;
     }
-    const microA = getMicroValue(a);
-    const microB = getMicroValue(b);
+    const microA = getMicroRating(a);
+    const microB = getMicroRating(b);
     console.warn(`micros: ${a} ${b}`);
     if (microA > microB) {
         return 1;
@@ -35,5 +31,8 @@ const gradeSorter = (a, b) => {
 
 export default {
     addOrIncrement,
-    gradeSorter
+    getGradeKeys,
+    getMacroRating,
+    getMicroRating,
+    gradeSorter,
 };

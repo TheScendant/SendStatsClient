@@ -2,10 +2,10 @@ import * as d3 from 'd3';
 import React, { Component } from 'react';
 import sends from './sends';
 import utils from './utils';
+import Year from './Year';
 
-import testData from './fakeClimbData'
 // import testData from './testdata'
-const { addOrIncrement, gradeSorter } = utils;
+const { getGradeKeys, getMacroRating } = utils;
 
 class Graph extends Component {
 
@@ -22,30 +22,33 @@ class Graph extends Component {
 
     for (const send of sends) {
       if (!send.rating.toLowerCase().includes("v")) { // ignore boulders for now
-        if (dateToGradeQuanities.has(send.date)) {
-          // assume that if the date is there, a grade map is too
-          const gradeMap = dateToGradeQuanities.get(send.date);
-          addOrIncrement(gradeMap, send.rating);
-          dateToGradeQuanities.set(send.date, gradeMap);
+        const year = new Date(send.date).getFullYear();
+        const macroRating = `5.${getMacroRating(send.rating)}`; // hack to strip abcd+-/
+        let yearObject;
+        if (dateToGradeQuanities.has(year)) {
+          yearObject = dateToGradeQuanities.get(year);
+          yearObject.increment(macroRating);
         } else {
-          const gradeMap = new Map();
-          gradeMap.set(send.rating, 1)
-          dateToGradeQuanities.set(send.date, gradeMap);
+          yearObject = new Year(year, macroRating);
         }
+        dateToGradeQuanities.set(year, yearObject);
       }
     }
-
     const dateGradeQuantityArray = [];
-    for (const dateKey of dateToGradeQuanities.keys()) {
-      const gradeMap = dateToGradeQuanities.get(dateKey);
-      for (const gradeKey of gradeMap.keys()) {
-        dateGradeQuantityArray.push({ date: dateKey, rating: gradeKey, quantity: gradeMap.get(gradeKey) })
+    for (const yearKey of dateToGradeQuanities.keys()) {
+      const yearObject = dateToGradeQuanities.get(yearKey);
+      const gradeKeys = getGradeKeys();
+      const year = { "Year": yearObject.getYear() };
+      for (let k = 0; k < gradeKeys.length; k++) {
+        const grade = gradeKeys[k];
+        year[grade] = yearObject.getGradeCount(grade);
       }
+      dateGradeQuantityArray.push(year);
     }
     dateGradeQuantityArray.sort((a, b) => {
-      if (a.date > b.date) {
+      if (a.Year > b.Year) {
         return 1
-      } else if (a.date < b.date) {
+      } else if (a.Year < b.Year) {
         return -1
       }
       return 0
@@ -55,12 +58,24 @@ class Graph extends Component {
 
   createGraph() {
     const dateGradeQuantityArray = this.sliceData();
-    // console.warn(dateGradeQuantityArray);
     var svg = d3.select("svg"),
       margin = { top: 20, right: 20, bottom: 30, left: 40 },
       width = +svg.attr("width") - margin.left - margin.right,
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // load the csv and create the chart
+    const data = dateGradeQuantityArray;
+
+    var keys = getGradeKeys(); //data.columns.slice(1);
+    for (const d of data) {
+      let total = 0;
+      for (let k = 0; k < keys.length; k++) {
+        const key = keys[k];
+        total += d[key];
+      }
+      d.total = total;
+    }
 
     // set x scale
     var x = d3.scaleBand()
@@ -72,44 +87,30 @@ class Graph extends Component {
     var y = d3.scaleLinear()
       .rangeRound([height, 0]);
 
+
     // set the colors
-    var z = d3.scaleOrdinal()
-      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+     var z = d3.scaleOrdinal(d3.schemeSet3);
 
-
-
-    // load the csv and create the chart
-    const data = testData;
-
-    // var keys = ["Under 5 Years", "5 to 13 Years", "14 to 17 Years", "18 to 24 Years", "25 to 44 Years", "45 to 64 Years", "65 Years and Over"]; //data.columns.slice(1);
-    var keys = ["5.8", "5.9", "5.10", "5.11", "5.12"]; //data.columns.slice(1);
-    for (const d of data) {
-      d.total = d["5.8"] + d["5.9"] + d["5.10"] + d["5.11"] + d["5.12"];
-    }
-
-    console.warn(data);
-
-    data.sort(function (a, b) { return b.total - a.total; }); // dosomethingi think i want this by date?
-    x.domain(data.map((d) => d.Date));
-    y.domain([0, d3.max(data, function (d) { return d.total; })]).nice();
+    data.sort((a, b) => b.Year - a.Year); // dosomethingi think i want this by date?
+    x.domain(data.map((d) => d.Year));
+    y.domain([0, d3.max(data, (d) => d.total)]).nice();
     z.domain(keys);
 
     g.append("g")
       .selectAll("g")
       .data(d3.stack().keys(keys)(data))
       .enter().append("g")
-      .attr("fill", function (d) { return z(d.key); })
+      .attr("fill", (d) => z(d.key))
       .selectAll("rect")
-      .data(function (d) { return d; })
+      .data((d) => d)
       .enter().append("rect")
-      .attr("x", function (d) { return x(d.data.Date); })
-      .attr("y", function (d) { return y(d[1]); })
-      .attr("height", function (d) { return y(d[0]) - y(d[1]); })
+      .attr("x", (d) => x(d.data.Year))
+      .attr("y", (d) => y(d[1]))
+      .attr("height", (d) => y(d[0]) - y(d[1]))
       .attr("width", x.bandwidth())
-      .on("mouseover", function () { tooltip.style("display", null); })
-      .on("mouseout", function () { tooltip.style("display", "none"); })
-      .on("mousemove", function (d) {
-        console.log(d);
+      .on("mouseover", () => tooltip.style("display", null))
+      .on("mouseout", () => tooltip.style("display", "none"))
+      .on("mousemove", (d) => {
         var xPosition = d3.mouse(this)[0] - 5;
         var yPosition = d3.mouse(this)[1] - 5;
         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
@@ -139,7 +140,7 @@ class Graph extends Component {
       .selectAll("g")
       .data(keys.slice().reverse())
       .enter().append("g")
-      .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+      .attr("transform", (d, i) =>`translate(0,${i* 20})`);
 
     legend.append("rect")
       .attr("x", width - 19)
@@ -151,7 +152,7 @@ class Graph extends Component {
       .attr("x", width - 24)
       .attr("y", 9.5)
       .attr("dy", "0.32em")
-      .text(function (d) { return d; });
+      .text((d) => d);
 
 
     // Prep the tooltip bits, initial display is hidden
