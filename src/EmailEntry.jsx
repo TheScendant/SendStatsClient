@@ -4,7 +4,7 @@ import './EmailEntry.css';
 
 function EmailEntry(props) {
 
-  const { setEmail } = props;
+  const { setEmail, setSends } = props;
   // Use HTML5 style validation
   const validators = useConstraints({
     email: { required: true, type: "email" },
@@ -32,8 +32,9 @@ function EmailEntry(props) {
   const onSubmit = async (data) => {
     if (data) {
       const { email } = data;
-      console.log(await callBackendAPI(data));
       setEmail(email);
+      const sends = await callBackendAPI(data)
+      setSends(JSON.parse(sends.message));
     };
   }
 

@@ -1,23 +1,24 @@
 import * as d3 from 'd3';
 import React, { Component } from 'react';
-import sends from './sends';
+// import sends from './sends';
 import utils from './utils';
 import Year from './Year';
 
-// import testData from './testdata'
 const { getGradeKeys, getMacroRating } = utils;
 
 class Graph extends Component {
 
   componentDidMount() {
-    this.createGraph();
+    console.warn("SENDS IS")
+    console.warn(this.props.sends)
+    this.createGraph(this.props.sends);
   }
 
   componentDidUpdate() {
-    this.createGraph();
+    this.createGraph(this.props.sends);
   }
 
-  sliceData() {
+  sliceData(sends) {
     const dateToGradeQuanities = new Map();
 
     for (const send of sends) {
@@ -56,8 +57,8 @@ class Graph extends Component {
     return dateGradeQuantityArray;
   }
 
-  createGraph() {
-    const dateGradeQuantityArray = this.sliceData();
+  createGraph(sends) {
+    const dateGradeQuantityArray = this.sliceData(sends);
     var svg = d3.select("svg"),
       margin = { top: 20, right: 20, bottom: 30, left: 40 },
       width = +svg.attr("width") - margin.left - margin.right,
@@ -108,14 +109,14 @@ class Graph extends Component {
       .attr("y", (d) => y(d[1]))
       .attr("height", (d) => y(d[0]) - y(d[1]))
       .attr("width", x.bandwidth())
-      .on("mouseover", () => tooltip.style("display", null))
+      /* .on("mouseover", () => tooltip.style("display", null))
       .on("mouseout", () => tooltip.style("display", "none"))
       .on("mousemove", (d) => {
         var xPosition = d3.mouse(this)[0] - 5;
         var yPosition = d3.mouse(this)[1] - 5;
         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
         tooltip.select("text").text(d[1] - d[0]);
-      });
+      }); */
 
     g.append("g")
       .attr("class", "axis")
@@ -131,6 +132,7 @@ class Graph extends Component {
       .attr("dy", "0.32em")
       .attr("fill", "#000")
       .attr("font-weight", "bold")
+      .attr("font-size", "16px")
       .attr("text-anchor", "start");
 
     var legend = g.append("g")
