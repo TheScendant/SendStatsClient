@@ -13,7 +13,7 @@ function EmailEntry(props) {
   const callBackendAPI = async (email) => {
     const response = await fetch('/email', {
       method: "POST",
-      headers : {
+      headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(email)
@@ -56,20 +56,23 @@ function EmailEntry(props) {
   if (errors) {
     reportError = <span>The error is {errors.email}</span>
   } */
+  // const spinner = <Spinner />
   return (
-    <div>
-      {/* {errorState} */}
-      {/* {reportError} */}
-      <form onSubmit={submit}>
-        <label>Enter your Mountain Project email to get started!</label>
-        <input
-          className="emailEntry"
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-        />
-        <input type="submit" />
-      </form>
+    <div id="EmailEntry">
+      <div id="FormWrapper">
+        {/* {errorState} */}
+        {/* {reportError} */}
+        <form onSubmit={submit}>
+          <label>Enter your Mountain Project email to get started!</label>
+          <input
+            className="emailEntry"
+            name="email"
+            value={values.email}
+            onChange={handleChange}
+          />
+          <input type="submit" id="SubmitButton" />
+        </form>
+      </div>
     </div>
   );
 }

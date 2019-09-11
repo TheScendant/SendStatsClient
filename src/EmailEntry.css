@@ -1,9 +1,57 @@
 .emailEntry {
   padding: 2px;
+  width: 95%;
+  box-sizing: border-box;
+  height: 2.2em;
+  font-size: 20px;
 }
-form {
+#EmailEntry, #FormWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  box-sizing: border-box;
+  color: white;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  text-align: center;
+}
+form {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  width: 75%;
+  height: 75%;
+}
+#FormWrapper, form {
+  border-radius: 8px;
+  min-width: 225px;
+  min-height: 125px;
+}
+#EmailEntry {
+  width: 100%;
+  height: 100%;
+  background-image:url('assets/images/RedRocks.jpeg');
+    background-attachment:fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#FormWrapper {
+  width: 25%;
+  height: 25%;
+  background-color: rgba(77, 53, 84, .95);
+  border: 2px solid black;
+}
+#SubmitButton {
+  width: 25%;
+  height: 20%;
+  min-width: 60px;
+  cursor: pointer;
+  border: 1px solid black;
+  background-color: #b3b3b3;
+  border-radius: 4px;
+}
+#SubmitButton:hover {
+
 }

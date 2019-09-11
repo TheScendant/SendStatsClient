@@ -65,10 +65,9 @@ class Graph extends Component {
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // load the csv and create the chart
     const data = dateGradeQuantityArray;
 
-    var keys = getGradeKeys(); //data.columns.slice(1);
+    var keys = getGradeKeys();
     for (const d of data) {
       let total = 0;
       for (let k = 0; k < keys.length; k++) {
@@ -92,7 +91,7 @@ class Graph extends Component {
     // set the colors
      var z = d3.scaleOrdinal(d3.schemeSet3);
 
-    data.sort((a, b) => b.Year - a.Year); // dosomethingi think i want this by date?
+    data.sort((a, b) => b.Year - a.Year);
     x.domain(data.map((d) => d.Year));
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
     z.domain(keys);
