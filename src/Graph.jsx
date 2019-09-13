@@ -24,6 +24,7 @@ class Graph extends Component {
   createGraph(sends) {
     const dateGradeQuantityArray = sliceData(sends, this.state.TimeSlice);
     d3.select("svg").selectAll("*").remove();
+    // dosomething implement screen resize
     var svg = d3.select("svg"),
       margin = { top: 20, right: 20, bottom: 30, left: 40 },
       width = +svg.attr("width") - margin.left - margin.right,
@@ -154,13 +155,13 @@ class Graph extends Component {
         <style>
         </style>
         <div id="main">
-          <svg width="960" height="500"></svg>
+          <svg width="1152" height="600"></svg>
         </div>
-        <label>
+        <label className="radioLabel">
           Year
           <input type="radio" name="year" checked={this.state.TimeSlice === TimeSliceEnum.YEAR} onChange={(event) => this.radioClickHandler(event)}/>
         </label>
-        <label>
+        <label className="radioLabel">
           Month
           <input type="radio" name="month" checked={this.state.TimeSlice === TimeSliceEnum.MONTH} onChange={(event) => this.radioClickHandler(event)}/>
         </label>

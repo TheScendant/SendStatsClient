@@ -28,6 +28,19 @@ const gradeSorter = (a, b) => {
     }
     return 0;
 }
+const monthSorter = (a, b) => {
+    if (a.Year < b.Year) {
+        return -1
+    } else if (a.Year > b.Year) {
+        return 1
+    } else if (a.Month < b.Month) {
+        console.warn(`${a.Month} is less than ${b.Month}`);
+        return -1;
+    } else if (b.Month > b.Month) {
+        return 1;
+    }
+    return 0;
+}
 
 export default {
     addOrIncrement,
@@ -35,4 +48,5 @@ export default {
     getMacroRating,
     getMicroRating,
     gradeSorter,
+    monthSorter,
 };

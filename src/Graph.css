@@ -1,0 +1,25 @@
+#Graph {
+  background-color: rgba(77, 53, 84, .95);
+  height: 75%;
+  width: 75%;
+  border-radius: 8px;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+text {
+  color: white;
+  fill: white;
+  font-size: 15px;
+}
+
+.axis {
+  color: white;
+  font-size: 165x;
+}
+
+.radioLabel {
+  color: white;
+}
