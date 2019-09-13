@@ -4,11 +4,15 @@ import React, { Component } from 'react';
 import utils from './utils';
 import './Graph.css'
 import TimeSlicerObject from './TimeSlicer.js';
-const {TimeSliceEnum, sliceData} = TimeSlicerObject;
+const { TimeSliceEnum, sliceData } = TimeSlicerObject;
 const { getGradeKeys } = utils;
 
 class Graph extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = { TimeSlice: TimeSliceEnum.YEAR };
+  }
   componentDidMount() {
     this.createGraph(this.props.sends);
   }
@@ -18,7 +22,7 @@ class Graph extends Component {
   }
 
   createGraph(sends) {
-    const dateGradeQuantityArray = sliceData(sends, TimeSliceEnum.YEAR);
+    const dateGradeQuantityArray = sliceData(sends, this.state.TimeSlice);
     var svg = d3.select("svg"),
       margin = { top: 20, right: 20, bottom: 30, left: 40 },
       width = +svg.attr("width") - margin.left - margin.right,
@@ -135,6 +139,14 @@ class Graph extends Component {
       .attr("font-weight", "bold");
   }
 
+  radioClickHandler(event) {
+    if (event.target.name === "year") {
+      this.setState({TimeSlice: TimeSliceEnum.YEAR});
+    } else if (event.target.name === "month") {
+      this.setState({TimeSlice: TimeSliceEnum.MONTH});
+    }
+  }
+
   render() {
     return (
       <div id="Graph">
@@ -143,6 +155,14 @@ class Graph extends Component {
         <div id="main">
           <svg width="960" height="500"></svg>
         </div>
+        <label>
+          Year
+          <input type="radio" name="year" checked={this.state.TimeSlice === TimeSliceEnum.YEAR} onChange={(event) => this.radioClickHandler(event)}/>
+        </label>
+        <label>
+          Month
+          <input type="radio" name="month" checked={this.state.TimeSlice === TimeSliceEnum.MONTH} onChange={(event) => this.radioClickHandler(event)}/>
+        </label>
       </div>
     )
   };
