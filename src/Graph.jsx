@@ -23,6 +23,7 @@ class Graph extends Component {
 
   createGraph(sends) {
     const dateGradeQuantityArray = sliceData(sends, this.state.TimeSlice);
+    d3.select("svg").selectAll("*").remove();
     var svg = d3.select("svg"),
       margin = { top: 20, right: 20, bottom: 30, left: 40 },
       width = +svg.attr("width") - margin.left - margin.right,
