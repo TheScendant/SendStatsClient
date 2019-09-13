@@ -2,15 +2,14 @@ import * as d3 from 'd3';
 import React, { Component } from 'react';
 // import sends from './sends';
 import utils from './utils';
-import Year from './Year';
-
-const { getGradeKeys, getMacroRating } = utils;
+import './Graph.css'
+import TimeSlicerObject from './TimeSlicer.js';
+const {TimeSliceEnum, sliceData} = TimeSlicerObject;
+const { getGradeKeys } = utils;
 
 class Graph extends Component {
 
   componentDidMount() {
-    console.warn("SENDS IS")
-    console.warn(this.props.sends)
     this.createGraph(this.props.sends);
   }
 
@@ -18,47 +17,8 @@ class Graph extends Component {
     this.createGraph(this.props.sends);
   }
 
-  sliceData(sends) {
-    const dateToGradeQuanities = new Map();
-
-    for (const send of sends) {
-      if (!send.rating.toLowerCase().includes("v")) { // ignore boulders for now
-        const year = new Date(send.date).getFullYear();
-        const macroRating = `5.${getMacroRating(send.rating)}`; // hack to strip abcd+-/
-        let yearObject;
-        if (dateToGradeQuanities.has(year)) {
-          yearObject = dateToGradeQuanities.get(year);
-          yearObject.increment(macroRating);
-        } else {
-          yearObject = new Year(year, macroRating);
-        }
-        dateToGradeQuanities.set(year, yearObject);
-      }
-    }
-    const dateGradeQuantityArray = [];
-    for (const yearKey of dateToGradeQuanities.keys()) {
-      const yearObject = dateToGradeQuanities.get(yearKey);
-      const gradeKeys = getGradeKeys();
-      const year = { "Year": yearObject.getYear() };
-      for (let k = 0; k < gradeKeys.length; k++) {
-        const grade = gradeKeys[k];
-        year[grade] = yearObject.getGradeCount(grade);
-      }
-      dateGradeQuantityArray.push(year);
-    }
-    dateGradeQuantityArray.sort((a, b) => {
-      if (a.Year > b.Year) {
-        return 1
-      } else if (a.Year < b.Year) {
-        return -1
-      }
-      return 0
-    })
-    return dateGradeQuantityArray;
-  }
-
   createGraph(sends) {
-    const dateGradeQuantityArray = this.sliceData(sends);
+    const dateGradeQuantityArray = sliceData(sends, TimeSliceEnum.YEAR);
     var svg = d3.select("svg"),
       margin = { top: 20, right: 20, bottom: 30, left: 40 },
       width = +svg.attr("width") - margin.left - margin.right,
@@ -89,10 +49,10 @@ class Graph extends Component {
 
 
     // set the colors
-     var z = d3.scaleOrdinal(d3.schemeSet3);
+    var z = d3.scaleOrdinal(d3.schemeSet3);
 
-    data.sort((a, b) => b.Year - a.Year);
-    x.domain(data.map((d) => d.Year));
+    data.sort((a, b) => b.TimeSegment - a.TimeSegment);
+    x.domain(data.map((d) => d.TimeSegment));
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
     z.domain(keys);
 
@@ -104,18 +64,18 @@ class Graph extends Component {
       .selectAll("rect")
       .data((d) => d)
       .enter().append("rect")
-      .attr("x", (d) => x(d.data.Year))
+      .attr("x", (d) => x(d.data.TimeSegment))
       .attr("y", (d) => y(d[1]))
       .attr("height", (d) => y(d[0]) - y(d[1]))
       .attr("width", x.bandwidth())
-      /* .on("mouseover", () => tooltip.style("display", null))
-      .on("mouseout", () => tooltip.style("display", "none"))
-      .on("mousemove", (d) => {
-        var xPosition = d3.mouse(this)[0] - 5;
-        var yPosition = d3.mouse(this)[1] - 5;
-        tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-        tooltip.select("text").text(d[1] - d[0]);
-      }); */
+    /* .on("mouseover", () => tooltip.style("display", null))
+    .on("mouseout", () => tooltip.style("display", "none"))
+    .on("mousemove", (d) => {
+      var xPosition = d3.mouse(this)[0] - 5;
+      var yPosition = d3.mouse(this)[1] - 5;
+      tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+      tooltip.select("text").text(d[1] - d[0]);
+    }); */
 
     g.append("g")
       .attr("class", "axis")
@@ -141,7 +101,7 @@ class Graph extends Component {
       .selectAll("g")
       .data(keys.slice().reverse())
       .enter().append("g")
-      .attr("transform", (d, i) =>`translate(0,${i* 20})`);
+      .attr("transform", (d, i) => `translate(0,${i * 20})`);
 
     legend.append("rect")
       .attr("x", width - 19)
@@ -177,7 +137,7 @@ class Graph extends Component {
 
   render() {
     return (
-      <div>
+      <div id="Graph">
         <style>
         </style>
         <div id="main">
