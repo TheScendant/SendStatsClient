@@ -5,7 +5,7 @@ import utils from './utils';
 import './Graph.css'
 import TimeSlicerObject from './TimeSlicer.js';
 const { TimeSliceEnum, sliceData } = TimeSlicerObject;
-const { getGradeKeys } = utils;
+const { getGradeKeys, getMacroRating } = utils;
 
 class Graph extends Component {
 
@@ -53,20 +53,19 @@ class Graph extends Component {
     var y = d3.scaleLinear()
       .rangeRound([height, 0]);
 
+    var myColor = d3.scaleLinear().domain([1,5])
+      .range(["white", "orange"]); // dosomething .domain(keys)? interpolate?
 
-    // set the colors
-    var z = d3.scaleOrdinal(d3.schemeSet3);
 
     data.sort((a, b) => b.TimeSegment - a.TimeSegment);
     x.domain(data.map((d) => d.TimeSegment));
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
-    z.domain(keys);
 
     g.append("g")
       .selectAll("g")
       .data(d3.stack().keys(keys)(data))
       .enter().append("g")
-      .attr("fill", (d) => z(d.key))
+      .attr("fill", (d) => myColor(parseInt(getMacroRating(d.key))-3))
       .selectAll("rect")
       .data((d) => d)
       .enter().append("rect")
@@ -113,7 +112,7 @@ class Graph extends Component {
       .attr("x", width - 19)
       .attr("width", 19)
       .attr("height", 19)
-      .attr("fill", z);
+      .attr("fill", d => myColor(parseInt(getMacroRating(d))-3));
 
     legend.append("text")
       .attr("x", width - 24)
