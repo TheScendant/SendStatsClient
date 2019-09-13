@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, useSettersAsEventHandler, useConstraints } from "react-uniformed";
 import './EmailEntry.css';
+import Spinner from './Spinner';
 
 function EmailEntry(props) {
 
   const { setEmail, setSends } = props;
+  const [ loading, setLoading ] = useState(false);
   // Use HTML5 style validation
   const validators = useConstraints({
     email: { required: true, type: "email" },
@@ -33,13 +35,15 @@ function EmailEntry(props) {
     if (data) {
       const { email } = data;
       setEmail(email);
+      setLoading(true);
       const sends = await callBackendAPI(data)
       setSends(JSON.parse(sends.message));
+      setLoading(false);
     };
   }
 
   // useForm holds the state of the form (ie touches, values, errors)
-  const { /* errors, hasErrors, */ setValue, submit, values, validateByName } = useForm({
+  const { errors, hasErrors, setValue, submit, values, validateByName } = useForm({
     validators,
     defaultValues: { email: "" },
     onSubmit: onSubmit,
@@ -48,30 +52,39 @@ function EmailEntry(props) {
   // compose your event handlers using useSettersAsEventHandler
   const handleChange = useSettersAsEventHandler(setValue, validateByName);
 
-  /* let errorState;
-  if (hasErrors) {
-    errorState = "There's errors";
-  }
+  /*
   let reportError;
   if (errors) {
     reportError = <span>The error is {errors.email}</span>
   } */
-  // const spinner = <Spinner />
+
+
+  let errorMessage, spinner, form;
+  if (hasErrors) {
+    // dosomething a switch on errors?
+    errorMessage = <span class="error-message">Bad email</span>;
+  }
+  // show spinner or input
+  if (loading) {
+    spinner = <Spinner />
+  } else {
+    form = (<form onSubmit={submit}>
+      {errorMessage}
+      <label>Enter your Mountain Project email to get started!</label>
+      <input
+        className="emailEntry"
+        name="email"
+        value={values.email}
+        onChange={handleChange}
+      />
+      <input type="submit" id="SubmitButton" />
+    </form>);
+  }
   return (
     <div id="EmailEntry">
       <div id="FormWrapper">
-        {/* {errorState} */}
-        {/* {reportError} */}
-        <form onSubmit={submit}>
-          <label>Enter your Mountain Project email to get started!</label>
-          <input
-            className="emailEntry"
-            name="email"
-            value={values.email}
-            onChange={handleChange}
-          />
-          <input type="submit" id="SubmitButton" />
-        </form>
+        {form}
+        {spinner}
       </div>
     </div>
   );
