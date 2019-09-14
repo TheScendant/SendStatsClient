@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
-import { useForm, useSettersAsEventHandler, useConstraints } from "react-uniformed";import Spinner from './Spinner';
+import { useForm, useSettersAsEventHandler, useConstraints } from "react-uniformed"; import Spinner from './Spinner';
 import EmailEntry from './EmailEntry';
 import UserIdEntry from './UserIdEntry';
 import './EntryForm.css'
-// dosomething make a generic Entry page and add a user id entry component.
-// one spinner to rule them all
+import utils from './utils';
+const { postJSON } = utils;
+
 function EntryForm(props) {
 
-  const { setEmail, setSends } = props;
+  const { setEmail, setSends, setUserId } = props;
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
   // Use HTML5 style validation
   const validators = useConstraints({
-    email: { required: true, type: "email" },
+    email: { required: false, type: "email" },
     userId: { required: false },
   });
 
-  const postUserId = async(userId) => {
+  const postUserId = async (userId) => {
     try {
       const response = await fetch('/userId', {
         method: "POST",
@@ -66,14 +67,15 @@ function EntryForm(props) {
       const { email, userId } = data;
       let sends;
       setLoading(true);
+      email ? setEmail(email) : setUserId(userId);
       if (email) {
         setEmail(email);
-        sends = await postEmail(data);
+        sends = await postJSON(data, '/email');
       } else if (userId) {
-        // setUserId(userId)
-        // sends = await postUserId(data) // dosomething postUserId if UserId?
+        setUserId(userId);
+        sends = await postJSON(data, '/userId');
       }
-      console.warn(sends);
+      sends = await postJSON(data);
       (sends) ? setSends(JSON.parse(sends.message)) : setNetworkError(true);
       setLoading(false);
     };
@@ -82,7 +84,7 @@ function EntryForm(props) {
   // useForm holds the state of the form (ie touches, values, errors)
   const { errors, hasErrors, setValue, submit, values, validateByName } = useForm({
     validators,
-    defaultValues: { email: "" },
+    defaultValues: { email: "", userId: "" },
     onSubmit: onSubmit,
   });
 
@@ -105,9 +107,11 @@ function EntryForm(props) {
   } else {
     form = (<form onSubmit={submit}>
       {errorMessage}
-      <label>Enter your Mountain Project email to get started!</label>
-      <EmailEntry handleChange={handleChange} values={values}/>
-      <UserIdEntry />
+      <label>Enter one of the following to get started!</label>
+      <label>Mountain Project Email:</label>
+      <EmailEntry handleChange={handleChange} values={values} />
+      <label>Mountain Project User ID:</label>
+      <UserIdEntry handleChange={handleChange} values={values} />
       {submitButton}
     </form>);
   }

@@ -21,7 +21,7 @@ const sliceData = (sends, TimeSlice) => {
 const sliceDataMonthly = (sends) => {
   const dateToGradeQuanities = new Map();
   for (const send of sends) {
-    if (!send.rating.toLowerCase().includes("v")) { // ignore boulders for now
+    if ((!send.rating.toLowerCase().includes("v")) && send.rating.toLowerCase().includes("5")) { // ignore boulders for now
       const date = new Date(send.date);
       const year = date.getFullYear();
       const month = date.getMonth();
@@ -59,7 +59,7 @@ const sliceDataMonthly = (sends) => {
 const sliceDataYearly = (sends) => {
   const dateToGradeQuanities = new Map();
   for (const send of sends) {
-    if (!send.rating.toLowerCase().includes("v")) { // ignore boulders for now
+    if ((!send.rating.toLowerCase().includes("v")) && send.rating.toLowerCase().includes("5")) { // ignore boulders for now
       const year = new Date(send.date).getFullYear();
       const macroRating = `5.${getMacroRating(send.rating)}`; // hack to strip abcd+-/
       let yearObject;

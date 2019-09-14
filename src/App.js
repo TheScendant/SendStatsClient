@@ -5,12 +5,13 @@ import Graph from './Graph';
 function App() {
 
   const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState("");
   const [sends, setSends] = useState([]);
   let graph, emailEntry;
-  if (email && sends && sends.length) {
+  if ((email || userId) && sends && sends.length) {
     graph = <Graph email={email} sends={sends}/>
   } else {
-    emailEntry = <EntryForm setEmail={setEmail} setSends={setSends}/>
+    emailEntry = <EntryForm setEmail={setEmail} setSends={setSends} setUserId={setUserId}/>
   }
   return (
     <div id="App">

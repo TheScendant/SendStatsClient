@@ -5,9 +5,9 @@ const addOrIncrement = (mapName, key) => {
     const oldValue = mapName.get(key);
     mapName.set(key, oldValue ? oldValue + 1 : 1);
 }
-const getGradeKeys = () =>["5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "5.12", "5.13", "5.14"];
+const getGradeKeys = () => ["5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "5.12", "5.13", "5.14"];
 const getMicroRating = (grade) => microWeights.get(grade.match(/5\.\d+(.*)/)[1]); // matches anything after 5.numbers
-const getMacroRating = (grade) => parseInt(grade.match(/5\.(\d+)/)[1]); // matches the number after '5'
+const getMacroRating = (grade) => { console.warn(grade); return parseInt(grade.match(/5\.(\d+)/)[1]) }; // matches the number after '5'
 const gradeSorter = (a, b) => {
     const macroA = getMacroRating(a);
     const macroB = getMacroRating(b);
@@ -19,7 +19,6 @@ const gradeSorter = (a, b) => {
     }
     const microA = getMicroRating(a);
     const microB = getMicroRating(b);
-    console.warn(`micros: ${a} ${b}`);
     if (microA > microB) {
         return 1;
     }
@@ -34,13 +33,33 @@ const monthSorter = (a, b) => {
     } else if (a.Year > b.Year) {
         return 1
     } else if (a.Month < b.Month) {
-        console.warn(`${a.Month} is less than ${b.Month}`);
         return -1;
     } else if (a.Month > b.Month) {
         return 1;
     }
     return 0;
 }
+
+const postJSON = async (data, url) => {
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        const body = await response.json();
+        if (response.status !== 200) {
+            throw Error("ERROR");
+        }
+        return body;
+    } catch (e) {
+        console.error(e);
+        return;
+    }
+};
+
 
 export default {
     addOrIncrement,
@@ -49,4 +68,5 @@ export default {
     getMicroRating,
     gradeSorter,
     monthSorter,
+    postJSON,
 };
