@@ -43,11 +43,19 @@ form {
   width: 25%;
   height: 20%;
   min-width: 60px;
-  cursor: pointer;
   border: 1px solid black;
   background-color: #b3b3b3;
   border-radius: 4px;
 }
+#SubmitButton.enabled {
+  cursor: pointer;
+}
+#SubmitButton.disabled {
+  color: #e9e9e9;
+}
 #SubmitButton:hover {
 
+}
+.error {
+  color: red;
 }

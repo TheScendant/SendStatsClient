@@ -3,28 +3,36 @@ import { useForm, useSettersAsEventHandler, useConstraints } from "react-uniform
 import './EmailEntry.css';
 import Spinner from './Spinner';
 
+// dosomething make a generic Entry page and add a user id entry component.
+// one spinner to rule them all
 function EmailEntry(props) {
 
   const { setEmail, setSends } = props;
-  const [ loading, setLoading ] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [networkError, setNetworkError] = useState(false);
   // Use HTML5 style validation
   const validators = useConstraints({
     email: { required: true, type: "email" },
   });
 
   const callBackendAPI = async (email) => {
-    const response = await fetch('/email', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(email)
-    });
-    const body = await response.json();
-    if (response.status !== 200) {
-      throw Error("ERROR");
+    try {
+      const response = await fetch('/email', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(email)
+      });
+      const body = await response.json();
+      if (response.status !== 200) {
+        throw Error("ERROR");
+      }
+      return body;
+    } catch (e) {
+      console.error(e);
+      return;
     }
-    return body;
   };
 
   /**
@@ -32,12 +40,17 @@ function EmailEntry(props) {
    * @param {Object} data
    */
   const onSubmit = async (data) => {
+    setNetworkError(false); // dosomething remove this from screen on change?
     if (data) {
       const { email } = data;
       setEmail(email);
       setLoading(true);
       const sends = await callBackendAPI(data)
-      setSends(JSON.parse(sends.message));
+      if (sends) {
+        setSends(JSON.parse(sends.message));
+      } else {
+        setNetworkError(true);
+      }
       setLoading(false);
     };
   }
@@ -59,10 +72,15 @@ function EmailEntry(props) {
   } */
 
 
-  let errorMessage, spinner, form;
+  let errorMessage, spinner, form, networkErrorMessage, submitButton;
+  if (networkError) {
+    networkErrorMessage = <span className="error">Error retreiving send data</span>
+  }
   if (hasErrors) {
-    // dosomething a switch on errors?
-    errorMessage = <span class="error-message">Bad email</span>;
+    // disable submit button maybe?
+    submitButton = <input type="submit" id="SubmitButton"  className="desabled" disabled/>
+  } else {
+    submitButton = <input type="submit" id="SubmitButton" className="enabled" />
   }
   // show spinner or input
   if (loading) {
@@ -77,12 +95,13 @@ function EmailEntry(props) {
         value={values.email}
         onChange={handleChange}
       />
-      <input type="submit" id="SubmitButton" />
+      {submitButton}
     </form>);
   }
   return (
     <div id="EmailEntry">
       <div id="FormWrapper">
+        {networkErrorMessage}
         {form}
         {spinner}
       </div>
