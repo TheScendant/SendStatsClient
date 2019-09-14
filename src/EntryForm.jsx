@@ -17,46 +17,6 @@ function EntryForm(props) {
     userId: { required: false },
   });
 
-  const postUserId = async (userId) => {
-    try {
-      const response = await fetch('/userId', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userId)
-      });
-      const body = await response.json();
-      if (response.status !== 200) {
-        throw Error("ERROR");
-      }
-      return body;
-    } catch (e) {
-      console.error(e);
-      return;
-    }
-  }
-
-  const postEmail = async (email) => {
-    try {
-      const response = await fetch('/email', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(email)
-      });
-      const body = await response.json();
-      if (response.status !== 200) {
-        throw Error("ERROR");
-      }
-      return body;
-    } catch (e) {
-      console.error(e);
-      return;
-    }
-  };
-
   /**
    * onSubmit is only called when there aren't errors
    * @param {Object} data
@@ -65,17 +25,17 @@ function EntryForm(props) {
     setNetworkError(false); // dosomething remove this from screen on change?
     if (data) {
       const { email, userId } = data;
-      let sends;
+      let sends, url;
       setLoading(true);
       email ? setEmail(email) : setUserId(userId);
       if (email) {
         setEmail(email);
-        sends = await postJSON(data, '/email');
+        url = '/email';
       } else if (userId) {
         setUserId(userId);
-        sends = await postJSON(data, '/userId');
+        url = '/userId';
       }
-      sends = await postJSON(data);
+      sends = await postJSON(data, url);
       (sends) ? setSends(JSON.parse(sends.message)) : setNetworkError(true);
       setLoading(false);
     };
