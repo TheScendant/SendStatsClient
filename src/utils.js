@@ -7,7 +7,7 @@ const addOrIncrement = (mapName, key) => {
 }
 const getGradeKeys = () => ["5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "5.12", "5.13", "5.14"];
 const getMicroRating = (grade) => microWeights.get(grade.match(/5\.\d+(.*)/)[1]); // matches anything after 5.numbers
-const getMacroRating = (grade) => parseInt(grade.match(/5\.(\d+)/)[1]; // matches the number after '5'
+const getMacroRating = (grade) => parseInt(grade.match(/5\.(\d+)/)[1]); // matches the number after '5'
 const gradeSorter = (a, b) => {
     const macroA = getMacroRating(a);
     const macroB = getMacroRating(b);
