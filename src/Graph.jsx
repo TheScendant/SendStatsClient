@@ -158,11 +158,11 @@ class Graph extends Component {
         </div>
         <label className="radioLabel">
           Year
-          <input type="radio" name="year" checked={this.state.TimeSlice === TimeSliceEnum.YEAR} onChange={(event) => this.radioClickHandler(event)}/>
+          <input type="radio" name="year" className="radio" checked={this.state.TimeSlice === TimeSliceEnum.YEAR} onChange={(event) => this.radioClickHandler(event)}/>
         </label>
         <label className="radioLabel">
           Month
-          <input type="radio" name="month" checked={this.state.TimeSlice === TimeSliceEnum.MONTH} onChange={(event) => this.radioClickHandler(event)}/>
+          <input type="radio" name="month" className="radio" checked={this.state.TimeSlice === TimeSliceEnum.MONTH} onChange={(event) => this.radioClickHandler(event)}/>
         </label>
       </div>
     )

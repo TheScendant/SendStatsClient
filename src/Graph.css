@@ -20,6 +20,9 @@ text {
   font-size: 165x;
 }
 
+.radio {
+  cursor: pointer;
+}
 .radioLabel {
   color: white;
 }

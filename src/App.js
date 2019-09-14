@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import EmailEntry from './EmailEntry';
+import EntryForm from './EntryForm';
 import Graph from './Graph';
 function App() {
 
@@ -10,7 +10,7 @@ function App() {
   if (email && sends && sends.length) {
     graph = <Graph email={email} sends={sends}/>
   } else {
-    emailEntry = <EmailEntry setEmail={setEmail} setSends={setSends}/>
+    emailEntry = <EntryForm setEmail={setEmail} setSends={setSends}/>
   }
   return (
     <div id="App">

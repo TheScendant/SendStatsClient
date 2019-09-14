@@ -36,7 +36,7 @@ const monthSorter = (a, b) => {
     } else if (a.Month < b.Month) {
         console.warn(`${a.Month} is less than ${b.Month}`);
         return -1;
-    } else if (b.Month > b.Month) {
+    } else if (a.Month > b.Month) {
         return 1;
     }
     return 0;
