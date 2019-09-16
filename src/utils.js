@@ -17,8 +17,8 @@ const gradeSorter = (a, b) => {
     if (macroA < macroB) {
         return -1;
     }
-    const microA = getMicroRating(a);
-    const microB = getMicroRating(b);
+    let microA = getMicroRating(a) || 5.5;
+    let microB = getMicroRating(b) || 5.5;
     if (microA > microB) {
         return 1;
     }
