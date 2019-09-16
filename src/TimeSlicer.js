@@ -1,6 +1,6 @@
 import Year from './Year';
 import Month from './Month';
-import { getGradeKeys, getMacroRating, monthSorter } from './utils';
+import { getGradeKeys, getMacroRating, isValidRating, monthSorter } from './utils';
 
 const TimeSliceEnum = {
   YEAR: 'YEAR',
@@ -20,7 +20,7 @@ const sliceData = (sends, TimeSlice) => {
 const sliceDataMonthly = (sends) => {
   const dateToGradeQuanities = new Map();
   for (const send of sends) {
-    if ((!send.rating.toLowerCase().includes("v")) && send.rating.toLowerCase().includes("5")) { // ignore boulders for now
+    if (isValidRating(send)) { // ignore boulders for now
       const date = new Date(send.date);
       const year = date.getFullYear();
       const month = date.getMonth();
@@ -58,7 +58,7 @@ const sliceDataMonthly = (sends) => {
 const sliceDataYearly = (sends) => {
   const dateToGradeQuanities = new Map();
   for (const send of sends) {
-    if ((!send.rating.toLowerCase().includes("v")) && send.rating.toLowerCase().includes("5")) { // ignore boulders for now
+    if (isValidRating(send)) { // ignore boulders for now
       const year = new Date(send.date).getFullYear();
       const macroRating = `5.${getMacroRating(send.rating)}`; // hack to strip abcd+-/
       let yearObject;

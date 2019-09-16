@@ -21,6 +21,7 @@ class Graph extends Component {
 
   createGraph(sends) {
     const dateGradeQuantityArray = sliceData(sends, this.state.TimeSlice);
+    // {TimeSegment: value, gradeA: quantity, gradeB: quantity }
     d3.select("svg").selectAll("*").remove();
     // dosomething implement screen resize
     var svg = d3.select("svg"),

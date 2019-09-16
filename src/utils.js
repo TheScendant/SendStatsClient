@@ -60,6 +60,8 @@ const postJSON = async (data, url) => {
     }
 };
 
+const isValidRating = (send) => ((!send.rating.toLowerCase().includes("v")) && send.rating.toLowerCase().includes("5"))
+
 
 export {
     addOrIncrement,
@@ -67,6 +69,7 @@ export {
     getMacroRating,
     getMicroRating,
     gradeSorter,
+    isValidRating,
     monthSorter,
     postJSON,
 };
