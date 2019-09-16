@@ -1,7 +1,6 @@
-import utils from './utils';
 import Year from './Year';
 import Month from './Month';
-const { getGradeKeys, getMacroRating, monthSorter } = utils;
+import { getGradeKeys, getMacroRating, monthSorter } from './utils';
 
 const TimeSliceEnum = {
   YEAR: 'YEAR',
@@ -94,7 +93,7 @@ const sliceDataYearly = (sends) => {
   return dateGradeQuantityArray;
 }
 
-export default {
+export {
   sliceData,
   TimeSliceEnum,
 }

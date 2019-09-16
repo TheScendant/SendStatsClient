@@ -1,11 +1,9 @@
 import * as d3 from 'd3';
 import React, { Component } from 'react';
 // import sends from './sends';
-import utils from './utils';
 import './Graph.css'
-import TimeSlicerObject from './TimeSlicer.js';
-const { TimeSliceEnum, sliceData } = TimeSlicerObject;
-const { getGradeKeys, getMacroRating } = utils;
+import { TimeSliceEnum, sliceData } from './TimeSlicer.js';
+import { getGradeKeys, getMacroRating } from './utils';
 
 class Graph extends Component {
 
@@ -33,7 +31,7 @@ class Graph extends Component {
 
     const data = dateGradeQuantityArray;
 
-    var keys = getGradeKeys();
+    var keys = getGradeKeys(); // what if we get keys from the data set?
     for (const d of data) {
       let total = 0;
       for (let k = 0; k < keys.length; k++) {

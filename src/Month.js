@@ -1,5 +1,4 @@
-import utils from './utils';
-const {getGradeKeys} = utils;
+import { getGradeKeys } from './utils';
 
 export default class Month {
   constructor(date, grade) {
@@ -7,7 +6,7 @@ export default class Month {
     this.year = dateObj.getFullYear();
     this.month = dateObj.getMonth() + 1; // handle Date Object oddity
     const keys = getGradeKeys();
-    for (let k = 0; k < keys.length; k+=1) {
+    for (let k = 0; k < keys.length; k += 1) {
       const key = keys[k];
       this[key] = 0;
     }

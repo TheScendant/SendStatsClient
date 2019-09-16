@@ -61,7 +61,7 @@ const postJSON = async (data, url) => {
 };
 
 
-export default {
+export {
     addOrIncrement,
     getGradeKeys,
     getMacroRating,

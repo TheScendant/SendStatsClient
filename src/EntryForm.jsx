@@ -3,8 +3,7 @@ import { useForm, useSettersAsEventHandler, useConstraints } from "react-uniform
 import EmailEntry from './EmailEntry';
 import UserIdEntry from './UserIdEntry';
 import './EntryForm.css'
-import utils from './utils';
-const { postJSON } = utils;
+import { postJSON } from './utils';
 
 function EntryForm(props) {
 

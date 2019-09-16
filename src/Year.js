@@ -1,11 +1,10 @@
-import utils from './utils';
-const {getGradeKeys} = utils;
+import { getGradeKeys } from './utils';
 
 export default class Year {
   constructor(year, grade) {
     this.year = year;
     const keys = getGradeKeys();
-    for (let k = 0; k < keys.length; k+=1) {
+    for (let k = 0; k < keys.length; k += 1) {
       const key = keys[k];
       this[key] = 0;
     }
