@@ -44,9 +44,7 @@ class Pyramid extends Component {
   render() {
     return (
       <div id="Pyramid">
-        <style>
-        </style>
-        <div id="main">
+        <div id="main-pyramid">
           {/* <svg width="1152" height="600"></svg> */}
         </div>
       </div>

@@ -150,9 +150,7 @@ class Graph extends Component {
   render() {
     return (
       <div id="Graph">
-        <style>
-        </style>
-        <div id="main">
+        <div id="main-graph">
           <svg width="1152" height="600"></svg>
         </div>
         <label className="radioLabel">
