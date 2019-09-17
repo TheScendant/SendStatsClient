@@ -24,17 +24,15 @@ function EntryForm(props) {
     setNetworkError(false); // dosomething remove this from screen on change?
     if (data) {
       const { email, userId } = data;
-      let sends, url;
+      let sends;
       setLoading(true);
       email ? setEmail(email) : setUserId(userId);
       if (email) {
         setEmail(email);
-        url = '/email';
       } else if (userId) {
         setUserId(userId);
-        url = '/userId';
       }
-      sends = await postJSON(data, url);
+      sends = await postJSON(data, '/sendData');
       (sends) ? setSends(JSON.parse(sends.message)) : setNetworkError(true);
       setLoading(false);
     };
