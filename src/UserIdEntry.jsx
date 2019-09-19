@@ -1,4 +1,5 @@
 import React from 'react';
+import './UserIdEntry.css';
 
 function UserIdEntry(props) {
   const { handleChange, values } = props;
