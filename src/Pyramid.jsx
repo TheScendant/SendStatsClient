@@ -28,7 +28,7 @@ class Pyramid extends Component {
 
     var myColor = d3.scaleLinear().domain([1,5]).range(["white", "orange"]);
 
-    d3.select("#main")
+    d3.select("#main-pyramid  ")
       .selectAll("div")
       .data(gradeObjects, (d) => d.grade)
       .enter()
