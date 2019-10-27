@@ -1,10 +1,9 @@
 import * as d3 from 'd3';
 import React, { Component } from 'react';
 // import sends from './sends';
-import './Graph.css'
+import './Pyramid.css'
 import { sliceData } from './GradeSlicer.js';
 import { TimeSliceEnum } from './TimeSlicer.js';
-import { getGradeKeys, getMacroRating } from './utils';
 
 class Pyramid extends Component {
 
@@ -52,7 +51,7 @@ class Pyramid extends Component {
     var y = d3.scaleLinear()
       .rangeRound([height, 0]);
 
-    var myColor = d3.scaleLinear().domain([2014,2019])
+    var myColor = d3.scaleLinear().domain([2016,2019])
       .range(["white", "orange"]); // dosomething .domain(keys)? interpolate?
 
 
@@ -122,8 +121,8 @@ class Pyramid extends Component {
 
   render() {
     return (
-      <div id="Graph">
-        <div id="main-graph">
+      <div id="Pyramid">
+        <div id="main-pyramid">
           <svg width="1152" height="600"></svg>
         </div>
         <label className="radioLabel">
