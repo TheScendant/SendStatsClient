@@ -52,7 +52,7 @@ class Pyramid extends Component {
       .rangeRound([height, 0]);
 
     var myColor = d3.scaleLinear().domain([2016,2019])
-      .range(["white", "orange"]); // dosomething .domain(keys)? interpolate?
+      .range(["white", "red"]); // dosomething .domain(keys)? interpolate?
 
 
     x.domain(data.map((d) => d.grade));

@@ -9,7 +9,7 @@ class Graph extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { TimeSlice: TimeSliceEnum.YEAR };
+    this.state = { TimeSlice: TimeSliceEnum.MONTH };
   }
   componentDidMount() {
     this.createGraph(this.props.sends);
