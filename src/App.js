@@ -7,16 +7,16 @@ function App() {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [sends, setSends] = useState([]);
-  let mainPage, emailEntry;
+  let mainPage, entryForm;
   if ((email || userId) && sends && sends.length) {
     mainPage = <MainPage email={email} sends={sends}/>
   } else {
-    emailEntry = <EntryForm setEmail={setEmail} setSends={setSends} setUserId={setUserId}/>
+    entryForm = <EntryForm setEmail={setEmail} setSends={setSends} setUserId={setUserId}/>
   }
   return (
     <div id="App">
       {mainPage}
-      {emailEntry}
+      {entryForm}
     </div>
   );
 }

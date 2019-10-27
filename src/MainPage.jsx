@@ -21,8 +21,8 @@ function MainPage(props) {
   return (
     <div id="MainPage">
       <div id="graph-selection">
-          <span id="set-graph" className={isSelected(useGraph)} onClick={(e) => {setUseGraph(e.target.id === "set-graph")}}>Grades by Time</span>
-          <span id="set-pyramid" className={isSelected(!useGraph)} onClick={(e) => {setUseGraph(e.target.id === "set-graph")}}>Time by Grades</span>
+        <span id="set-graph" className={isSelected(useGraph)} onClick={(e) => { setUseGraph(e.target.id === "set-graph") }}>Grades by Time</span>
+        <span id="set-pyramid" className={isSelected(!useGraph)} onClick={(e) => { setUseGraph(e.target.id === "set-graph") }}>Time by Grades</span>
       </div>
       {visual}
     </div>

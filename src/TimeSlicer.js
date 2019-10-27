@@ -41,7 +41,7 @@ const sliceDataMonthly = (sends) => {
     const monthObject = dateToGradeQuanities.get(timeKey);
     const gradeKeys = getGradeKeys();
     const month = {
-      TimeSegment: `${monthObject.getMonth()}/${monthObject.getYear()}`,
+      TimeSegment: `${monthObject.getMonth()}/${monthObject.getYear().toString().slice(2,4)}`,
       Year: parseInt(monthObject.getYear()),
       Month: parseInt(monthObject.getMonth()),
     }; // add 1 to month

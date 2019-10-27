@@ -51,7 +51,8 @@ class Pyramid extends Component {
     var y = d3.scaleLinear()
       .rangeRound([height, 0]);
 
-    var myColor = d3.scaleLinear().domain([2016,2019])
+    const startYear = years.sort()[0];
+    var myColor = d3.scaleLinear().domain([startYear,2019])
       .range(["white", "red"]); // dosomething .domain(keys)? interpolate?
 
 
@@ -122,6 +123,7 @@ class Pyramid extends Component {
   render() {
     return (
       <div id="Pyramid">
+       {/*  <VisualTitle /> */}
         <div id="main-pyramid">
           <svg width="1152" height="600"></svg>
         </div>
