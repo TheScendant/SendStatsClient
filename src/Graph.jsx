@@ -9,7 +9,13 @@ class Graph extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { TimeSlice: TimeSliceEnum.MONTH };
+    this.state = {
+      TimeSlice: TimeSliceEnum.MONTH,
+      zoomTransform: null,
+    };
+    this.zoom = d3.zoom()
+      .scaleExtent([-5, 5])
+      .on("zoom", this.zoomed.bind(this))
   }
   componentDidMount() {
     this.createGraph(this.props.sends);
@@ -17,6 +23,15 @@ class Graph extends Component {
 
   componentDidUpdate() {
     this.createGraph(this.props.sends);
+  }
+
+  zoomed() {
+    if (d3.event && d3.event.transform) {
+      this.setState({
+        zoomTransform: d3.event.transform
+      });
+      console.warn(d3.event.transform)
+    }
   }
 
   createGraph(sends) {
@@ -137,6 +152,9 @@ class Graph extends Component {
       .style("text-anchor", "middle")
       .attr("font-size", "12px")
       .attr("font-weight", "bold");
+
+
+    svg.call(this.zoom)
   }
 
   radioClickHandler(event) {
@@ -151,7 +169,7 @@ class Graph extends Component {
     return (
       <div id="Graph">
         <div id="main-graph">
-          <svg width="1152" height="600"></svg>
+          <svg width="1152" height="600" reef="graphSVG"></svg>
         </div>
         <label className="radioLabel">
           Year
