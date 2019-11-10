@@ -15,21 +15,27 @@ class SimpleMovingMedian extends Component {
     this.createGraph(this.props.sends);
   }
 
-  calcSMM(sends) {
+  calcSMM(sends, hardestRedpoint) {
     const grades = sends.map(s => s.rating);
     grades.sort((a, b) => gradeSorter(a,b));
     const median = grades[4];
-    return {median, date: sends[sends.length-1].date}
+    const last = grades[grades.length - 1];
+    const val = gradeSorter(hardestRedpoint, last);
+    if (val === 1) {
+      hardestRedpoint = last;
+    }
+    return {date: sends[sends.length-1].date, hardestRedpoint, median}
   }
 
   makeDataPoints(sends) {
     const dataPoints = [];
     let x = 9; // pointer
     if (sends.length > x) {
+      let hardestRedpoint = sends[0].rating;
       const window = sends.slice(0, x);
       while (x < sends.length) {
         for (let i = x; i< sends.length; x++) {
-          const smm = this.calcSMM(window);
+          const smm = this.calcSMM(window, hardestRedpoint);
           dataPoints.push(smm);
           // queueue
           window.push(sends[x]);
@@ -41,13 +47,15 @@ class SimpleMovingMedian extends Component {
   }
 
   createGraph(sends) {
+    sends = sends.filter(s => !s.rating.toUpperCase().includes("V"))
+    sends.sort((a,b) => new Date(a) - new Date(b)); // dosomething sort by date
     const dataPoints = this.makeDataPoints(sends);
     var margin = {top: 50, right: 50, bottom: 50, left: 50}
   , width = window.innerWidth - margin.left - margin.right // Use the window's width
   , height = window.innerHeight - margin.top - margin.bottom; // Use the window's height
 
   // The number of datapoints
-var n = 21;
+var n = dataPoints.length;
 
 // 5. X scale will use the index of our data
 var xScale = d3.scaleLinear()
@@ -69,7 +77,7 @@ var line = d3.line()
 var dataset = d3.range(n).map(function(d) { return {"y": d3.randomUniform(1)() } })
 
 // 1. Add the SVG to the page and employ #2
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#cookies").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -108,11 +116,7 @@ svg.selectAll(".dot")
   }
   render() {
     return (
-      <div id="Graph">
-        <div id="main-graph">
-          <svg width="1152" height="600" reef="graphSVG"></svg>
-        </div>
-        {dataPoints}
+      <div id="cookies">
       </div>
     )
   };
