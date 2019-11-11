@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { Component } from 'react';
-import { gradeSorter } from './utils';
+import { getGradeKeys, gradeSorter } from './utils';
 
 class SimpleMovingMedian extends Component {
 
@@ -16,11 +16,12 @@ class SimpleMovingMedian extends Component {
   }
 
   calcSMM(sends, hardestRedpoint) {
-    const grades = sends.map(s => s.rating);
+    console.warn(sends);
+    const grades = sends.map(s => s && s.rating); // dosomething bandaid ?
     grades.sort((a, b) => gradeSorter(a,b));
     const median = grades[4];
     const last = grades[grades.length - 1];
-    const val = gradeSorter(hardestRedpoint, last);
+    const val = gradeSorter(last, hardestRedpoint);
     if (val === 1) {
       hardestRedpoint = last;
     }
@@ -33,14 +34,13 @@ class SimpleMovingMedian extends Component {
     if (sends.length > x) {
       let hardestRedpoint = sends[0].rating;
       const window = sends.slice(0, x);
-      while (x < sends.length) {
-        for (let i = x; i< sends.length; x++) {
-          const smm = this.calcSMM(window, hardestRedpoint);
-          dataPoints.push(smm);
-          // queueue
-          window.push(sends[x]);
-          window.shift();
-        }
+      for (let i = x; i< sends.length; i++) {
+        const smm = this.calcSMM(window, hardestRedpoint);
+        hardestRedpoint = smm.hardestRedpoint;
+        dataPoints.push(smm);
+        // queueue
+        window.push(sends[i]);
+        window.shift();
       }
     }
     return dataPoints;
@@ -48,7 +48,7 @@ class SimpleMovingMedian extends Component {
 
   createGraph(sends) {
     sends = sends.filter(s => !s.rating.toUpperCase().includes("V"))
-    sends.sort((a,b) => new Date(a) - new Date(b)); // dosomething sort by date
+    sends.sort((a,b) => new Date(a.date) - new Date(b.date)); // dosomething sort by date
     const dataPoints = this.makeDataPoints(sends);
     var margin = {top: 50, right: 50, bottom: 50, left: 50}
   , width = window.innerWidth - margin.left - margin.right // Use the window's width
@@ -58,23 +58,32 @@ class SimpleMovingMedian extends Component {
 var n = dataPoints.length;
 
 // 5. X scale will use the index of our data
+const start = new Date(dataPoints[0].date).getTime();
+const end = new Date(dataPoints[dataPoints.length-1].date).getTime();
 var xScale = d3.scaleLinear()
-    .domain([0, n-1]) // input
+    .domain([start, end]) // input
     .range([0, width]); // output
+
+
+  const keys = getGradeKeys();
 
 // 6. Y scale will use the randomly generate number
 var yScale = d3.scaleLinear()
-    .domain([0, 1]) // input
+    .domain(keys) // input
     .range([height, 0]); // output
 
 // 7. d3's line generator
 var line = d3.line()
-    .x(function(d, i) { return xScale(i); }) // set the x values for the line generator
-    .y(function(d) { return yScale(d.y); }) // set the y values for the line generator
+    .x(function(d) {
+       const x = xScale(new Date(d.date).getTime());
+       console.warn(x);
+       return x;
+      }) // set the x values for the line generator
+    .y(function(d) {
+      return yScale(d.median);
+     }) // set the y values for the line generator
     .curve(d3.curveMonotoneX) // apply smoothing to the line
 
-// 8. An array of objects of length N. Each object has key -> value pair, the key being "y" and the value is a random number
-var dataset = d3.range(n).map(function(d) { return {"y": d3.randomUniform(1)() } })
 
 // 1. Add the SVG to the page and employ #2
 var svg = d3.select("#cookies").append("svg")
@@ -96,23 +105,23 @@ svg.append("g")
 
 // 9. Append the path, bind the data, and call the line generator
 svg.append("path")
-    .datum(dataset) // 10. Binds data to the line
+    .datum(dataPoints) // 10. Binds data to the line
     .attr("class", "line") // Assign a class for styling
     .attr("d", line); // 11. Calls the line generator
 
 // 12. Appends a circle for each datapoint
-svg.selectAll(".dot")
-    .data(dataset)
+/* svg.selectAll(".dot")
+    .data(dataPoints)
   .enter().append("circle") // Uses the enter().append() method
     .attr("class", "dot") // Assign a class for styling
     .attr("cx", function(d, i) { return xScale(i) })
     .attr("cy", function(d) { return yScale(d.y) })
-    .attr("r", 5)
-      .on("mouseover", function(a, b, c) {
+    .attr("r", 5) */
+    /* .on("mouseover", function(a, b, c) {
   			console.log(a)
         this.attr('class', 'focus')
 		})
-
+ */
   }
   render() {
     return (
