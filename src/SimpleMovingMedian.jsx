@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { Component } from 'react';
-import { getGradeKeys, gradeSorter } from './utils';
+import { getGradeKeys, getMacroRating, gradeSorter } from './utils';
 
 class SimpleMovingMedian extends Component {
 
@@ -16,7 +16,6 @@ class SimpleMovingMedian extends Component {
   }
 
   calcSMM(sends, hardestRedpoint) {
-    console.warn(sends);
     const grades = sends.map(s => s && s.rating); // dosomething bandaid ?
     grades.sort((a, b) => gradeSorter(a,b));
     const median = grades[4];
@@ -61,26 +60,28 @@ var n = dataPoints.length;
 const start = new Date(dataPoints[0].date).getTime();
 const end = new Date(dataPoints[dataPoints.length-1].date).getTime();
 var xScale = d3.scaleLinear()
-    .domain([start, end]) // input
+    .domain([0, dataPoints.length -1])
     .range([0, width]); // output
 
 
-  const keys = getGradeKeys();
 
+const keys = getGradeKeys();
+console.warn(getMacroRating("5.10b"));
 // 6. Y scale will use the randomly generate number
 var yScale = d3.scaleLinear()
-    .domain(keys) // input
-    .range([height, 0]); // output
+    .domain([getMacroRating(keys[0]), getMacroRating(keys[keys.length-1])]) // input
+    .range([0, height]); // output
 
 // 7. d3's line generator
 var line = d3.line()
-    .x(function(d) {
+    .x(function(d, i) {
        const x = xScale(new Date(d.date).getTime());
-       console.warn(x);
-       return x;
+       return xScale(i);
       }) // set the x values for the line generator
     .y(function(d) {
-      return yScale(d.median);
+      const grade = getMacroRating(d.median);
+      console.warn(yScale(grade));
+      return yScale(grade);
      }) // set the y values for the line generator
     .curve(d3.curveMonotoneX) // apply smoothing to the line
 
