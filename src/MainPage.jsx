@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Graph from './Graph';
 import Pyramid from './Pyramid';
 import SimpleMovingMedian from './SimpleMovingMedian';
+import TestScroll from './test-scroll';
 import './MainPage.css';
 
 
@@ -16,7 +17,8 @@ function MainPage(props) {
     visual = <Pyramid email={email} sends={sends} />
   } */
 
-  visual = <SimpleMovingMedian email={email} sends={sends} />
+  // visual = <SimpleMovingMedian email={email} sends={sends} />
+  visual = <TestScroll email={email} sends={sends} />
 
   const isSelected = (val) => {
     return val ? "selected" : "";
