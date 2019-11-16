@@ -1,11 +1,14 @@
 import * as d3 from 'd3';
 import React, { Component } from 'react';
-import { getGradeKeys, getMacroRating, gradeSorter } from './utils';
-
+import { getGradeKeys, getMacroRating, gradesToInts, gradeSorter } from './utils';
+import './SimpleMovingMedian.css';
 class SimpleMovingMedian extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      windowSize: 9
+    }
   }
   componentDidMount() {
     this.createGraph(this.props.sends);
@@ -23,13 +26,14 @@ class SimpleMovingMedian extends Component {
     const val = gradeSorter(last, hardestRedpoint);
     if (val === 1) {
       hardestRedpoint = last;
+      console.warn(`New hardest of ${hardestRedpoint}`);
     }
     return { date: sends[sends.length - 1].date, hardestRedpoint, median }
   }
 
   makeDataPoints(sends) {
     const dataPoints = [];
-    let x = 9; // pointer
+    let x = this.state.windowSize; // pointer
     if (sends.length > x) {
       let hardestRedpoint = sends[0].rating;
       const window = sends.slice(0, x);
@@ -46,50 +50,33 @@ class SimpleMovingMedian extends Component {
   }
 
   createGraph(sends) {
+    // I'm so sorry
+    d3.select("svg").selectAll("*").remove();
+
     sends = sends.filter(s => !s.rating.toUpperCase().includes("V"))
     sends.sort((a, b) => new Date(a.date) - new Date(b.date)); // dosomething sort by date
     const dataPoints = this.makeDataPoints(sends);
-    var margin = { top: 50, right: 50, bottom: 50, left: 50 }
-      , width = window.innerWidth - margin.left - margin.right // Use the window's width
-      , height = window.innerHeight - margin.top - margin.bottom; // Use the window's height
 
-    // The number of datapoints
-    var n = dataPoints.length;
+    const svg = d3.select("svg");
+    var margin = { top: 20, right: 20, bottom: 30, left: 40 },
+      width = svg.attr("width") - margin.left - margin.right,
+      height = svg.attr("height") - margin.top - margin.bottom;
 
     // 5. X scale will use the index of our data
-    const start = new Date(dataPoints[0].date).getTime();
-    const end = new Date(dataPoints[dataPoints.length - 1].date).getTime();
     var xScale = d3.scaleLinear()
-      .domain([0, dataPoints.length - 1])
+      .domain([0, dataPoints.length - 1]).nice()
       .range([0, width]); // output
 
-
-
     const keys = getGradeKeys();
-    console.warn(getMacroRating("5.10b"));
+
     // 6. Y scale will use the randomly generate number
     var yScale = d3.scaleLinear()
-      .domain([getMacroRating(keys[0]), getMacroRating(keys[keys.length - 1])]) // input
+      .domain([gradesToInts(keys[0]), gradesToInts(keys[keys.length - 1])]).nice() // input
       .range([height, 0]); // output
 
-    // 7. d3's line generator
-    var line = d3.line()
-      .x(function (d, i) {
-        const x = xScale(new Date(d.date).getTime());
-        return xScale(i);
-      }) // set the x values for the line generator
-      .y(function (d) {
-        const grade = getMacroRating(d.median);
-        console.warn(yScale(grade));
-        return yScale(grade);
-      }) // set the y values for the line generator
-      .curve(d3.curveMonotoneX) // apply smoothing to the line
-
-
     // 1. Add the SVG to the page and employ #2
-    var svg = d3.select("#cookies").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+
+    svg
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -120,35 +107,56 @@ class SimpleMovingMedian extends Component {
         return xScale(i);
       })
       .attr("cy", function (d) {
-        const grade = getMacroRating(d.median);
-        console.warn(yScale(grade));
+        const grade = gradesToInts(d.median);
         return yScale(grade);
       })
       .attr("r", 5)
-    /* .on("mouseover", function(a, b, c) {
-  			console.log(a)
-        this.attr('class', 'focus')
-		})
-  */
- svg.selectAll("hardest-dot")
- .data(dataPoints)
-      .enter().append("circle") // Uses the enter().append() method
+    svg.selectAll("hardest-dot")
+      .data(dataPoints)
+      .enter().append("circle")
       .attr("class", "hardest-dot") // Assign a class for styling
       .attr("cx", function (d, i) {
         const x = xScale(new Date(d.date).getTime());
         return xScale(i);
       })
       .attr("cy", function (d) {
-        const grade = getMacroRating(d.hardestRedpoint);
-        console.warn(yScale(grade));
+        const grade = gradesToInts(d.hardestRedpoint);
         return yScale(grade);
       })
       .attr("r", 3)
       .attr("fill", "red")
   }
+
+  radioClickHandler(event) {
+    if (event.target.name === "five") {
+      this.setState({ windowSize: 5 });
+    } else if (event.target.name === "nine") {
+      this.setState({ windowSize: 9 });
+    } else {
+      this.setState({ windowSize: 14 });
+    }
+  }
   render() {
     return (
-      <div id="cookies">
+      <div id="MedianGraph">
+        <div id="main-median-graph">
+          <svg width="1152" height="600" windowSize={this.state.windowSize}></svg>
+        </div>
+        <span id="labels-title">Median Sample Size</span>
+        <div id="labels">
+          <label className="radioLabel">
+            5
+          <input type="radio" name="five" className="radio" checked={this.state.windowSize === 5} onChange={(event) => this.radioClickHandler(event)} />
+          </label>
+          <label className="radioLabel">
+            9
+          <input type="radio" name="nine" className="radio" checked={this.state.windowSize === 9} onChange={(event) => this.radioClickHandler(event)} />
+          </label>
+          <label className="radioLabel">
+            15
+          <input type="radio" name="fifteen" className="radio" checked={this.state.windowSize === 14} onChange={(event) => this.radioClickHandler(event)} />
+          </label>
+        </div>
       </div>
     )
   };

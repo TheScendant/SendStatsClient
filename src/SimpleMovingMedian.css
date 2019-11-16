@@ -1,4 +1,4 @@
-#Pyramid {
+#MedianGraph {
   background-color: rgba(77, 53, 84, .95);
   height: 90%;
   width: 90%;
@@ -9,4 +9,17 @@
   align-items: center;
   flex-direction: column;
   justify-content: center;
+}
+
+#labels {
+  display: flex;
+  width: 30%;
+  min-width: 100px;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+#labels-title {
+  color: white;
 }

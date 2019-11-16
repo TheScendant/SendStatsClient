@@ -15,7 +15,7 @@
   flex-direction: column;
 }
 
-#set-graph, #set-pyramid {
+#TIME_GRAPH, #PYRAMID, #MEDIAN {
   cursor: pointer;
   border: 1px solid black;
   background-color: rgba(77, 53, 84, .95);
@@ -26,6 +26,6 @@
   align-items: center;
   height: 100%;
 }
-#set-graph.selected, #set-pyramid.selected {
+#TIME_GRAPH.selected, #PYRAMID.selected, #MEDIAN.selected{
   background-color: rgba(120, 85, 131, 0.95);
 }
