@@ -1,6 +1,6 @@
 import Year from './Year';
 import Month from './Month';
-import { getGradeKeys, getMacroRating, isValidRating, monthSorter } from './utils';
+import { isValidRating, monthSorter } from './utils';
 
 const TimeSliceEnum = {
   YEAR: 'YEAR',

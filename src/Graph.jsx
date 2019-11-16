@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import sends from './sends';
 import './Graph.css'
 import { TimeSliceEnum, sliceData } from './TimeSlicer.js';
-import { getGradeKeys, getMacroRating, gradesByTimeColoring, gradeSorter } from './utils';
+import { gradesByTimeColoring, gradeSorter } from './utils';
 
 class Graph extends Component {
 
