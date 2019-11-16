@@ -1,4 +1,5 @@
 
+import * as d3 from 'd3';
 const microWeights = new Map([["-", 1], ["a", 2], ["a/b", 3], ["b", 4], ["b/c", 5], ["c", 6], ["c/d", 7], ["d", 8], ["+", 9]]);
 
 const addOrIncrement = (mapName, key) => {
@@ -70,12 +71,35 @@ const postJSON = async (data, url) => {
 
 const isValidRating = (send) => ((!send.rating.toLowerCase().includes("v")) && send.rating.toLowerCase().includes("5"))
 
+/* const singlesColoring = d3.schemeRdPu[9];
+const tensColoring = d3.schemeBlues[9];
+const elevensColoring = d3.schemeGreens[9];
+const twelevesColoring = d3.schemeReds[9];
+const thirteensColoring = d3.schemeBrBG[9];
+ */
+
+
+const gradesByTimeColoring = (grade, hardest) => {
+    // const softest = ratings[0];
+    const maxSpectral = gradesToInts(hardest);
+    let numb = gradesToInts(grade);
+    if (numb < 100) {
+        numb = numb / 10.0;
+    } else {
+        numb = numb - 90;
+    }
+
+    numb = numb / (maxSpectral - 90);
+    console.warn(numb, grade)
+    return d3.interpolateSpectral(numb);
+}
 
 export {
     addOrIncrement,
     getGradeKeys,
     getMacroRating,
     getMicroRating,
+    gradesByTimeColoring,
     gradesToInts,
     gradeSorter,
     isValidRating,

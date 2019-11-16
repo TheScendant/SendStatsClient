@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import sends from './sends';
 import './Graph.css'
 import { TimeSliceEnum, sliceData } from './TimeSlicer.js';
-import { getGradeKeys, getMacroRating } from './utils';
+import { getGradeKeys, getMacroRating, gradesByTimeColoring, gradeSorter } from './utils';
 
 class Graph extends Component {
 
@@ -35,7 +35,7 @@ class Graph extends Component {
   }
 
   createGraph(sends) {
-    const dateGradeQuantityArray = sliceData(sends, this.state.TimeSlice);
+    const [ratings, dateGradeQuantityArray] = sliceData(sends, this.state.TimeSlice);
     // {TimeSegment: value, gradeA: quantity, gradeB: quantity }
     d3.select("svg").selectAll("*").remove();
     // dosomething implement screen resize
@@ -47,7 +47,7 @@ class Graph extends Component {
 
     const data = dateGradeQuantityArray;
 
-    var keys = getGradeKeys(); // what if we get keys from the data set?
+    var keys = ratings.sort((a,b) => gradeSorter(a,b));
     for (const d of data) {
       let total = 0;
       for (let k = 0; k < keys.length; k++) {
@@ -56,6 +56,8 @@ class Graph extends Component {
       }
       d.total = total;
     }
+
+    const HARDEST_GRADE = keys[keys.length - 1];
 
     // set x scale
     var x = d3.scaleBand()
@@ -67,26 +69,24 @@ class Graph extends Component {
     var y = d3.scaleLinear()
       .rangeRound([height, 0]);
 
-    var myColor = d3.scaleLinear().domain([1,5])
-      .range(["white", "orange"]); // dosomething .domain(keys)? interpolate?
-
-
     data.sort((a, b) => b.TimeSegment - a.TimeSegment);
     x.domain(data.map((d) => d.TimeSegment));
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
 
     g.append("g")
       .selectAll("g")
-      .data(d3.stack().keys(keys)(data))
-      .enter().append("g")
-      .attr("fill", (d) => myColor(parseInt(getMacroRating(d.key))-3))
-      .selectAll("rect")
-      .data((d) => d)
-      .enter().append("rect")
-      .attr("x", (d) => x(d.data.TimeSegment))
-      .attr("y", (d) => y(d[1]))
-      .attr("height", (d) => y(d[0]) - y(d[1]))
-      .attr("width", x.bandwidth())
+        .data(d3.stack().keys(keys)(data))
+        .enter()
+          .append("g")
+          .attr("fill", (d) => gradesByTimeColoring(d.key, HARDEST_GRADE))
+          .selectAll("rect")
+            .data((d) => d)
+            .enter()
+              .append("rect")
+              .attr("x", (d) => x(d.data.TimeSegment))
+              .attr("y", (d) => y(d[1]))
+              .attr("height", (d) => y(d[0]) - y(d[1]))
+              .attr("width", x.bandwidth())
     /* .on("mouseover", () => tooltip.style("display", null))
     .on("mouseout", () => tooltip.style("display", "none"))
     .on("mousemove", (d) => {
@@ -126,7 +126,7 @@ class Graph extends Component {
       .attr("x", width - 19)
       .attr("width", 19)
       .attr("height", 19)
-      .attr("fill", d => myColor(parseInt(getMacroRating(d))-3));
+      .attr("fill", d => gradesByTimeColoring(d, HARDEST_GRADE));
 
     legend.append("text")
       .attr("x", width - 24)

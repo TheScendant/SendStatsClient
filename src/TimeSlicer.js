@@ -19,19 +19,23 @@ const sliceData = (sends, TimeSlice) => {
 
 const sliceDataMonthly = (sends) => {
   const dateToGradeQuanities = new Map();
+  const ratings = [];
   for (const send of sends) {
     if (isValidRating(send)) { // ignore boulders for now
       const date = new Date(send.date);
       const year = date.getFullYear();
       const month = date.getMonth();
       const timeKey = `${month}${year}`;
-      const macroRating = `5.${getMacroRating(send.rating)}`; // hack to strip abcd+-/
+      const {rating} = send;
       let monthObject;
+      if (!ratings.includes(rating)) {
+        ratings.push(rating);
+      }
       if (dateToGradeQuanities.has(timeKey)) {
         monthObject = dateToGradeQuanities.get(timeKey);
-        monthObject.increment(macroRating);
+        monthObject.increment(rating);
       } else {
-        monthObject = new Month(date, macroRating);
+        monthObject = new Month(date, rating);
       }
       dateToGradeQuanities.set(timeKey, monthObject);
     }
@@ -39,34 +43,38 @@ const sliceDataMonthly = (sends) => {
   const dateGradeQuantityArray = [];
   for (const timeKey of dateToGradeQuanities.keys()) {
     const monthObject = dateToGradeQuanities.get(timeKey);
-    const gradeKeys = getGradeKeys();
     const month = {
       TimeSegment: `${monthObject.getMonth()}/${monthObject.getYear().toString().slice(2,4)}`,
       Year: parseInt(monthObject.getYear()),
       Month: parseInt(monthObject.getMonth()),
     }; // add 1 to month
-    for (let k = 0; k < gradeKeys.length; k++) {
-      const grade = gradeKeys[k];
-      month[grade] = monthObject.getGradeCount(grade);
+    for (let k = 0; k < ratings.length; k++) {
+      const grade = ratings[k];
+      let gradeCount = monthObject.getGradeCount(grade);
+      month[grade] = gradeCount ? gradeCount : 0;
     }
     dateGradeQuantityArray.push(month);
   }
   dateGradeQuantityArray.sort((a, b) => monthSorter(a, b));
-  return dateGradeQuantityArray;
+  return [ratings, dateGradeQuantityArray];
 }
 
 const sliceDataYearly = (sends) => {
   const dateToGradeQuanities = new Map();
+  const ratings = [];
   for (const send of sends) {
     if (isValidRating(send)) { // ignore boulders for now
       const year = new Date(send.date).getFullYear();
-      const macroRating = `5.${getMacroRating(send.rating)}`; // hack to strip abcd+-/
+      const {rating} = send;
+      if (!ratings.includes(rating)) {
+        ratings.push(rating);
+      }
       let yearObject;
       if (dateToGradeQuanities.has(year)) {
         yearObject = dateToGradeQuanities.get(year);
-        yearObject.increment(macroRating);
+        yearObject.increment(rating);
       } else {
-        yearObject = new Year(year, macroRating);
+        yearObject = new Year(year, rating);
       }
       dateToGradeQuanities.set(year, yearObject);
     }
@@ -74,11 +82,11 @@ const sliceDataYearly = (sends) => {
   const dateGradeQuantityArray = [];
   for (const yearKey of dateToGradeQuanities.keys()) {
     const yearObject = dateToGradeQuanities.get(yearKey);
-    const gradeKeys = getGradeKeys();
     const year = { TimeSegment: yearObject.getYear() };
-    for (let k = 0; k < gradeKeys.length; k++) {
-      const grade = gradeKeys[k];
-      year[grade] = yearObject.getGradeCount(grade);
+    for (let k = 0; k < ratings.length; k++) {
+      const grade = ratings[k];
+      let gradeCount = yearObject.getGradeCount(grade);
+      year[grade] = gradeCount ? gradeCount : 0;
     }
     dateGradeQuantityArray.push(year);
   }
@@ -90,7 +98,7 @@ const sliceDataYearly = (sends) => {
     }
     return 0
   })
-  return dateGradeQuantityArray;
+  return [ratings, dateGradeQuantityArray];
 }
 
 export {
