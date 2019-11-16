@@ -11,14 +11,14 @@ function MainPage(props) {
   const { email, sends } = props;
   const [useGraph, setUseGraph] = useState(false);
   let visual;
- /*  if (useGraph) {
+  if (useGraph) {
     visual = <Graph email={email} sends={sends} />
   } else {
     visual = <Pyramid email={email} sends={sends} />
-  } */
+  }
 
   // visual = <SimpleMovingMedian email={email} sends={sends} />
-  visual = <TestScroll email={email} sends={sends} />
+  //visual = <TestScroll email={email} sends={sends} />
 
   const isSelected = (val) => {
     return val ? "selected" : "";
