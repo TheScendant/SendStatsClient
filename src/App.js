@@ -7,12 +7,14 @@ function App() {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [sends, setSends] = useState([]);
+  const [userData, setUserData] = useState("");
   let mainPage, entryForm;
-  if ((email || userId) && sends && sends.length) {
-    mainPage = <MainPage email={email} sends={sends}/>
+  if ((email || userId) && sends && sends.length && userData) {
+    mainPage = <MainPage email={email} sends={sends} userData={userData}/>
   } else {
-    entryForm = <EntryForm setEmail={setEmail} setSends={setSends} setUserId={setUserId}/>
+    entryForm = <EntryForm setEmail={setEmail} setSends={setSends} setUserId={setUserId} setUserData={setUserData}/>
   }
+
   return (
     <div id="App">
       {mainPage}

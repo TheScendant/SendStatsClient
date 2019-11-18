@@ -7,7 +7,7 @@ import { postJSON } from './utils';
 
 function EntryForm(props) {
 
-  const { setEmail, setSends, setUserId } = props;
+  const { setEmail, setSends, setUserData, setUserId } = props;
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
   // Use HTML5 style validation
@@ -24,16 +24,21 @@ function EntryForm(props) {
     setNetworkError(false); // dosomething remove this from screen on change?
     if (data) {
       const { email, userId } = data;
-      let sends;
+      let sends, userData;
       setLoading(true);
-      email ? setEmail(email) : setUserId(userId);
       if (email) {
         setEmail(email);
       } else if (userId) {
         setUserId(userId);
       }
       sends = await postJSON(data, '/sendData');
-      (sends) ? setSends(JSON.parse(sends.message)) : setNetworkError(true);
+      userData = await postJSON(data, '/userData');
+      if (sends && userData) {
+        setSends(JSON.parse(sends.message));
+        setUserData(JSON.parse(userData.message));
+      } else {
+        setNetworkError(true);
+      }
       setLoading(false);
     };
   }

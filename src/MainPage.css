@@ -29,3 +29,7 @@
 #TIME_GRAPH.selected, #PYRAMID.selected, #MEDIAN.selected{
   background-color: rgba(120, 85, 131, 0.95);
 }
+
+#name {
+  color: white;
+}

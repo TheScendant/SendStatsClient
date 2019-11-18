@@ -11,8 +11,8 @@ import classNames from 'classnames';
 class MainPage extends Component {
   constructor(props) {
     super(props);
-    const { email, sends } = props;
-
+    const { email, sends, userData } = props;
+    console.warn(userData)
     this.GRAPH_ENUM = {
       TIME_GRAPH: "TIME_GRAPH",
       PYRAMID: "PYRAMID",
@@ -20,8 +20,9 @@ class MainPage extends Component {
     };
 
     this.state = {
-      email: email,
-      sends: sends,
+      email,
+      sends,
+      userData,
       graphType: this.GRAPH_ENUM.PYRAMID,
     };
 
@@ -36,6 +37,7 @@ class MainPage extends Component {
       return {
         email: this.state.email,
         sends: this.state.sends,
+        userData: this.state.userData,
         graphType: graphType,
       }
   });
@@ -64,6 +66,8 @@ class MainPage extends Component {
     });
     console.warn(time_graph_class, pyramid_class, median_class)
 
+    const {name} = this.state.userData;
+
     return (
 
       <div id="MainPage">
@@ -72,6 +76,7 @@ class MainPage extends Component {
           <span id={this.GRAPH_ENUM.PYRAMID} className={pyramid_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Time by Grades</span>
           <span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>
         </div>
+        <span id="name">{name}</span>
         {visual}
       </div>
     );
