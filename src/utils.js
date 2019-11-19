@@ -83,6 +83,12 @@ const gradesByTimeColoring = (grade, hardest) => {
     // const softest = ratings[0];
     const maxSpectral = gradesToInts(hardest);
     let numb = gradesToInts(grade);
+    /*
+     5.0 - 5.9 becomes 0 - 9
+     5.10 => 10
+     5.11 => 20
+     5.12 => 30
+    */
     if (numb < 100) {
         numb = numb / 10.0;
     } else {
