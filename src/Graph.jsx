@@ -59,6 +59,18 @@ class Graph extends Component {
 
     const HARDEST_GRADE = keys[keys.length - 1];
 
+    let numBars = data.length;
+    let barWidth = Math.round(width / numBars);
+
+    const MIN_BAR_WIDTH = 150;
+
+    if (barWidth < MIN_BAR_WIDTH) {
+      barWidth = MIN_BAR_WIDTH;
+      numBars = Math.floor(width / barWidth);
+    }
+
+    console.warn(numBars, data.length);
+
     // set x scale
     var x = d3.scaleBand()
       .rangeRound([0, width])
@@ -70,12 +82,15 @@ class Graph extends Component {
       .rangeRound([height, 0]);
 
     data.sort((a, b) => b.TimeSegment - a.TimeSegment);
-    x.domain(data.map((d) => d.TimeSegment));
+
+    console.warn(data.slice(0, numBars).map((d) => d.TimeSegment))
+
+    x.domain(data.slice(0, numBars).map((d) => d.TimeSegment));
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
 
     g.append("g")
       .selectAll("g")
-        .data(d3.stack().keys(keys)(data))
+        .data(d3.stack().keys(keys)(data.slice(0, numBars)))
         .enter()
           .append("g")
           .attr("fill", (d) => gradesByTimeColoring(d.key, HARDEST_GRADE))
