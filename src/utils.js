@@ -96,7 +96,6 @@ const gradesByTimeColoring = (grade, hardest) => {
     }
 
     numb = numb / (maxSpectral - 90);
-    console.warn(numb, grade)
     return d3.interpolateSpectral(numb);
 }
 

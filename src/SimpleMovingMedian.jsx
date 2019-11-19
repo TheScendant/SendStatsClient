@@ -26,7 +26,6 @@ class SimpleMovingMedian extends Component {
     const val = gradeSorter(last, hardestRedpoint);
     if (val === 1) {
       hardestRedpoint = last;
-      console.warn(`New hardest of ${hardestRedpoint}`);
     }
     return { date: sends[sends.length - 1].date, hardestRedpoint, median }
   }

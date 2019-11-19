@@ -23,7 +23,7 @@ class MainPage extends Component {
       email,
       sends,
       userData,
-      graphType: this.GRAPH_ENUM.PYRAMID,
+      graphType: this.GRAPH_ENUM.TIME_GRAPH,
     };
 
   }
