@@ -1,42 +1,45 @@
 import * as d3 from "d3";
 import React, { Component } from "react";
 import "./test-scroll.css";
+import { TimeSliceEnum, sliceData } from './TimeSlicer.js';
+import { gradesByTimeColoring, gradeSorter } from './utils';
 
 class TestScroll extends Component {
 
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      TimeSlice: TimeSliceEnum.MONTH,
+      zoomTransform: null,
+    };
+ /*    this.zoom = d3.zoom()
+      .scaleExtent([-5, 5])
+      .on("zoom", this.zoomed.bind(this)) */
+  }
+
   componentDidMount() {
-    this.createGraph();
+    this.createGraph(this.props.sends);
   }
 
   componentDidUpdate() {
-    this.createGraph();
+    this.createGraph(this.props.sends);
   }
 
-  createGraph() {
-    var DATA_COUNT = 50;
-    var MAX_LABEL_LENGTH = 30;
-    var data = [];
+  createGraph(sends) {
+    const [ratings, dateGradeQuantityArray] = sliceData(sends, this.state.TimeSlice);
+    const data = dateGradeQuantityArray;
 
-    for (var i = 0; i < DATA_COUNT; i++) {
-      var datum = {};
-      datum.label = stringGen(MAX_LABEL_LENGTH);
-      datum.value = Math.floor(Math.random() * 600);
-      data.push(datum);
-    }
-
-    function stringGen(maxLength) {
-      var text = "";
-      var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
-
-      for (var i = 0; i < getRandomArbitrary(1, maxLength); i++) {
-        text += charset.charAt(Math.floor(Math.random() * charset.length));
+    var keys = ratings.sort((a,b) => gradeSorter(a,b));
+    for (const d of data) {
+      let total = 0;
+      for (let k = 0; k < keys.length; k++) {
+        const key = keys[k];
+        total += d[key];
       }
-      return text;
+      d.total = total;
     }
 
-    function getRandomArbitrary(min, max) {
-      return Math.round(Math.random() * (max - min) + min);
-    }
 
     var margin = { top: 20, right: 10, bottom: 20, left: 40 };
     var marginOverview = { top: 30, right: 10, bottom: 20, left: 40 };
@@ -45,13 +48,17 @@ class TestScroll extends Component {
     var height = 400 - margin.top - margin.bottom - selectorHeight;
     var heightOverview = 80 - marginOverview.top - marginOverview.bottom;
 
-    var maxLength = d3.max(
-      data.map(function (d) {
-        return d.label.length;
-      })
-    );
-    var barWidth = maxLength * 7;
-    var numBars = Math.round(width / barWidth);
+
+    let numBars = data.length;
+    let barWidth = Math.round(width / numBars);
+
+    const MIN_BAR_WIDTH = 150;
+
+    if (barWidth < MIN_BAR_WIDTH) {
+      barWidth = MIN_BAR_WIDTH;
+      numBars = Math.floor(width / barWidth);
+    }
+
     var isScrollDisplayed = barWidth * data.length > width;
 
     console.log(isScrollDisplayed);
@@ -60,7 +67,7 @@ class TestScroll extends Component {
       .scaleBand()
       .domain(
         data.slice(0, numBars).map(function (d) {
-          return d.label;
+          return d.TimeSegment;
         })
       )
       .range([0, width]);
@@ -70,7 +77,7 @@ class TestScroll extends Component {
       .domain([
         0,
         d3.max(data, function (d) {
-          return d.value;
+          return d.total;
         })
       ])
       .range([height, 0]);
@@ -104,20 +111,20 @@ class TestScroll extends Component {
     bars
       .selectAll("rect")
       .data(data.slice(0, numBars), function (d) {
-        return d.label;
+        return d.TimeSegment;
       })
       .enter()
       .append("rect")
       .attr("class", "bar")
       .attr("x", function (d) {
-        return xscale(d.label);
+        return xscale(d.TimeSegment);
       })
       .attr("y", function (d) {
-        return yscale(d.value);
+        return yscale(d.total);
       })
       .attr("width", xscale.bandwidth())
       .attr("height", function (d) {
-        return height - yscale(d.value);
+        return height - yscale(d.total);
       });
 
     if (isScrollDisplayed) {
@@ -125,7 +132,7 @@ class TestScroll extends Component {
         .scaleBand()
         .domain(
           data.map(function (d) {
-            return d.label;
+            return d.TimeSegment;
           })
         )
         .range([0, width]);
@@ -139,16 +146,16 @@ class TestScroll extends Component {
         .append("rect")
         .classed("subBar", true)
         .attr("height", function (d) {
-          return heightOverview - yOverview(d.value);
+          return heightOverview - yOverview(d.total);
         })
         .attr("width", function (d) {
           return xOverview.bandwidth();
         })
         .attr("x", function (d) {
-          return xOverview(d.label);
+          return xOverview(d.TimeSegment);
         })
         .attr("y", function (d) {
-          return height + heightOverview + yOverview(d.value);
+          return height + heightOverview + yOverview(d.total);
         });
 
       var displayed = d3
@@ -190,17 +197,17 @@ class TestScroll extends Component {
 
       xscale.domain(
         new_data.map(function (d) {
-          return d.label;
+          return d.TimeSegment;
         })
       );
       diagram.select(".x.axis").call(xAxis);
 
       rects = bars.selectAll("rect").data(new_data, function (d) {
-        return d.label;
+        return d.TimeSegment;
       });
 
       rects.attr("x", function (d) {
-        return xscale(d.label);
+        return xscale(d.TimeSegment);
       });
 
       // 	  rects.attr("transform", function(d) { return "translate(" + xscale(d.label) + ",0)"; })
@@ -210,14 +217,14 @@ class TestScroll extends Component {
         .append("rect")
         .attr("class", "bar")
         .attr("x", function (d) {
-          return xscale(d.label);
+          return xscale(d.TimeSegment);
         })
         .attr("y", function (d) {
-          return yscale(d.value);
+          return yscale(d.total);
         })
         .attr("width", xscale.bandwidth())
         .attr("height", function (d) {
-          return height - yscale(d.value);
+          return height - yscale(d.total);
         });
 
       rects.exit().remove();
