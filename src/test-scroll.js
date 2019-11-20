@@ -3,7 +3,16 @@ import React, { Component } from "react";
 import "./test-scroll.css";
 
 class TestScroll extends Component {
-  render() {
+
+  componentDidMount() {
+    this.createGraph();
+  }
+
+  componentDidUpdate() {
+    this.createGraph();
+  }
+
+  createGraph() {
     var DATA_COUNT = 50;
     var MAX_LABEL_LENGTH = 30;
     var data = [];
@@ -37,7 +46,7 @@ class TestScroll extends Component {
     var heightOverview = 80 - marginOverview.top - marginOverview.bottom;
 
     var maxLength = d3.max(
-      data.map(function(d) {
+      data.map(function (d) {
         return d.label.length;
       })
     );
@@ -50,7 +59,7 @@ class TestScroll extends Component {
     var xscale = d3
       .scaleBand()
       .domain(
-        data.slice(0, numBars).map(function(d) {
+        data.slice(0, numBars).map(function (d) {
           return d.label;
         })
       )
@@ -60,7 +69,7 @@ class TestScroll extends Component {
       .scaleLinear()
       .domain([
         0,
-        d3.max(data, function(d) {
+        d3.max(data, function (d) {
           return d.value;
         })
       ])
@@ -94,20 +103,20 @@ class TestScroll extends Component {
 
     bars
       .selectAll("rect")
-      .data(data.slice(0, numBars), function(d) {
+      .data(data.slice(0, numBars), function (d) {
         return d.label;
       })
       .enter()
       .append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) {
+      .attr("x", function (d) {
         return xscale(d.label);
       })
-      .attr("y", function(d) {
+      .attr("y", function (d) {
         return yscale(d.value);
       })
       .attr("width", xscale.bandwidth())
-      .attr("height", function(d) {
+      .attr("height", function (d) {
         return height - yscale(d.value);
       });
 
@@ -115,7 +124,7 @@ class TestScroll extends Component {
       var xOverview = d3
         .scaleBand()
         .domain(
-          data.map(function(d) {
+          data.map(function (d) {
             return d.label;
           })
         )
@@ -129,16 +138,16 @@ class TestScroll extends Component {
         .enter()
         .append("rect")
         .classed("subBar", true)
-        .attr("height", function(d) {
+        .attr("height", function (d) {
           return heightOverview - yOverview(d.value);
         })
-        .attr("width", function(d) {
+        .attr("width", function (d) {
           return xOverview.bandwidth();
         })
-        .attr("x", function(d) {
+        .attr("x", function (d) {
           return xOverview(d.label);
         })
-        .attr("y", function(d) {
+        .attr("y", function (d) {
           return height + heightOverview + yOverview(d.value);
         });
 
@@ -180,17 +189,17 @@ class TestScroll extends Component {
       new_data = data.slice(nf, nf + numBars);
 
       xscale.domain(
-        new_data.map(function(d) {
+        new_data.map(function (d) {
           return d.label;
         })
       );
       diagram.select(".x.axis").call(xAxis);
 
-      rects = bars.selectAll("rect").data(new_data, function(d) {
+      rects = bars.selectAll("rect").data(new_data, function (d) {
         return d.label;
       });
 
-      rects.attr("x", function(d) {
+      rects.attr("x", function (d) {
         return xscale(d.label);
       });
 
@@ -200,19 +209,22 @@ class TestScroll extends Component {
         .enter()
         .append("rect")
         .attr("class", "bar")
-        .attr("x", function(d) {
+        .attr("x", function (d) {
           return xscale(d.label);
         })
-        .attr("y", function(d) {
+        .attr("y", function (d) {
           return yscale(d.value);
         })
         .attr("width", xscale.bandwidth())
-        .attr("height", function(d) {
+        .attr("height", function (d) {
           return height - yscale(d.value);
         });
 
       rects.exit().remove();
     }
+
+  }
+  render() {
 
     return <div id="burn"></div>;
   }
