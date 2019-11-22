@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import React, { Component } from "react";
 import "./test-scroll.css";
 import { TimeSliceEnum, sliceData } from './TimeSlicer.js';
-import { gradesByTimeColoring, gradeSorter } from './utils';
+import { gradeSorter } from './utils';
 
 class TestScroll extends Component {
 

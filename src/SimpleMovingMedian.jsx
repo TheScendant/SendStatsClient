@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { Component } from 'react';
-import { getGradeKeys, getMacroRating, gradesToInts, gradeSorter } from './utils';
+import { getGradeKeys, gradesToInts, gradeSorter } from './utils';
 import './SimpleMovingMedian.css';
 class SimpleMovingMedian extends Component {
 
@@ -102,7 +102,7 @@ class SimpleMovingMedian extends Component {
       .enter().append("circle") // Uses the enter().append() method
       .attr("class", "median-dot") // Assign a class for styling
       .attr("cx", function (d, i) {
-        const x = xScale(new Date(d.date).getTime());
+        // const x = xScale(new Date(d.date).getTime());
         return xScale(i);
       })
       .attr("cy", function (d) {
@@ -115,7 +115,7 @@ class SimpleMovingMedian extends Component {
       .enter().append("circle")
       .attr("class", "hardest-dot") // Assign a class for styling
       .attr("cx", function (d, i) {
-        const x = xScale(new Date(d.date).getTime());
+        // const x = xScale(new Date(d.date).getTime());
         return xScale(i);
       })
       .attr("cy", function (d) {

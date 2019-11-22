@@ -1,6 +1,6 @@
 import { gradeSorter, isValidRating } from './utils';
 import Grade from './Grade';
-import Year from './Year';
+// import Year from './Year';
 
 const TimeSliceEnum = {
   YEAR: 'YEAR',

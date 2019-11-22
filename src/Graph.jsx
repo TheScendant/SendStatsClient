@@ -93,8 +93,8 @@ class Graph extends Component {
 
     x.domain(data.slice(0, numBars).map((d) => d.TimeSegment));
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
-
-    g.append("g")
+    const staxG = g.append("g")
+    staxG
       .selectAll("g")
         .data(d3.stack().keys(keys)(data.slice(0, numBars)))
         .enter()
@@ -118,12 +118,12 @@ class Graph extends Component {
     }); */
 
     g.append("g")
-      .attr("class", "axis")
+      .attr("class", "x-axis")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x));
 
     g.append("g")
-      .attr("class", "axis")
+      .attr("class", "y-axis")
       .call(d3.axisLeft(y).ticks(null, "s"))
       .append("text")
       .attr("x", 2)
@@ -201,8 +201,15 @@ class Graph extends Component {
             .attr("x", (d) => subx(d.data.TimeSegment))
             .attr("y", (d) => suby(d[1]))
             .attr("height", (d) => suby(d[0]) - suby(d[1]))
-            .attr("width", subx.bandwidth())
-    const windowRect = subg.append("rect")
+            .attr("width", subx.bandwidth());
+
+    var displayed = d3
+        .scaleQuantize()
+        .domain([0, width])
+        .range(d3.range(data.length));
+
+
+    subg.append("rect")
       .attr("width", SLIDER_RECT_WIDTH)
       .attr("height", SUB_HEIGHT)
       .attr("x", 0)
@@ -215,6 +222,40 @@ class Graph extends Component {
 
         const newX = Math.min(Math.max(d3.event.dx + currX, 0), svg.attr("width")- SLIDER_RECT_WIDTH - margin.right)
         theRect.attr("x", newX)
+
+        const f =  displayed(currX);
+        const nf = displayed(newX);
+
+        if (f === nf) {
+          return;
+        }
+
+
+        x.domain(data.slice(nf, nf + numBars).map(d => d.TimeSegment));
+
+        // dosomething learn d3
+        staxG.selectAll("*").remove();
+
+        g.selectAll(".x-axis").call(d3.axisBottom(x))
+
+        staxG.selectAll("g")
+          .data(d3.stack().keys(keys)(data.slice(nf, nf+ numBars)))
+          .enter()
+            .append("g")
+            .attr("fill", (d) => gradesByTimeColoring(d.key, HARDEST_GRADE))
+            .selectAll("rect")
+              .data((d) => d)
+              .enter()
+                .append("rect")
+                .attr("x", (d) => {
+                  console.warn(x(d.data.TimeSegment))
+                  return x(d.data.TimeSegment)
+                })
+                .attr("y", (d) => y(d[1]))
+                .attr("height", (d) => y(d[0]) - y(d[1]))
+                .attr("width", x.bandwidth())
+              .exit().remove()
+        staxG.exit().remove();
       }
     svg.call(this.zoom)
   }
