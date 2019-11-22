@@ -24,7 +24,7 @@ class MainPage extends Component {
       email,
       sends,
       userData,
-      graphType: this.GRAPH_ENUM.SCROLL,
+      graphType: this.GRAPH_ENUM.TIME_GRAPH,
     };
 
   }
