@@ -28,3 +28,7 @@ text {
 .radioLabel {
   color: white;
 }
+
+#slider-rect {
+  cursor: pointer;
+}

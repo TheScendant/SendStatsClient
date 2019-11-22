@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Graph from './Graph';
 import Pyramid from './Pyramid';
 import SimpleMovingMedian from './SimpleMovingMedian';
-import TestScroll from './test-scroll';
 import './MainPage.css';
 import classNames from 'classnames';
 
@@ -50,10 +49,9 @@ class MainPage extends Component {
       visual = <Graph email={this.state.email} sends={this.state.sends} />
     } else if (graphType === this.GRAPH_ENUM.PYRAMID) {
       visual = <Pyramid email={this.state.email} sends={this.state.sends} />
-    } else {
+    } else if (graphType === this.GRAPH_ENUM.MEDIAN){
       visual = <SimpleMovingMedian email={this.state.email} sends={this.state.sends} />
     }
-    //visual = <TestScroll email={email} sends={sends} />
 
     const time_graph_class = classNames({
       'selected': this.state.graphType === this.GRAPH_ENUM.TIME_GRAPH,
@@ -64,7 +62,6 @@ class MainPage extends Component {
     const median_class = classNames({
       'selected': this.state.graphType === this.GRAPH_ENUM.MEDIAN,
     });
-    console.warn(time_graph_class, pyramid_class, median_class)
 
     const {name} = this.state.userData;
 

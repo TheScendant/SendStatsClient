@@ -44,7 +44,8 @@ function EntryForm(props) {
   }
 
   // useForm holds the state of the form (ie touches, values, errors)
-  const { errors, hasErrors, setValue, submit, values, validateByName } = useForm({
+  //const { errors, hasErrors, setValue, submit, values, validateByName } = useForm({
+  const { hasErrors, setValue, submit, values, validateByName } = useForm({
     validators,
     defaultValues: { email: "", userId: "" },
     onSubmit: onSubmit,
