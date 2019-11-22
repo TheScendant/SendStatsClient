@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Graph from './Graph';
 import Pyramid from './Pyramid';
 import SimpleMovingMedian from './SimpleMovingMedian';
-import TestScroll from './test-scroll';
 import './MainPage.css';
 import classNames from 'classnames';
 
@@ -17,7 +16,6 @@ class MainPage extends Component {
       TIME_GRAPH: "TIME_GRAPH",
       PYRAMID: "PYRAMID",
       MEDIAN: "MEDIAN",
-      SCROLL: "SCROLL",
     };
 
     this.state = {
@@ -53,8 +51,6 @@ class MainPage extends Component {
       visual = <Pyramid email={this.state.email} sends={this.state.sends} />
     } else if (graphType === this.GRAPH_ENUM.MEDIAN){
       visual = <SimpleMovingMedian email={this.state.email} sends={this.state.sends} />
-    } else {
-      visual = <TestScroll email={this.state.email} sends={this.state.sends} />
     }
 
     const time_graph_class = classNames({
@@ -67,10 +63,6 @@ class MainPage extends Component {
       'selected': this.state.graphType === this.GRAPH_ENUM.MEDIAN,
     });
 
-    const scroll_class = classNames({
-      'selected': this.state.graphType === this.GRAPH_ENUM.MEDIAN,
-    });
-
     const {name} = this.state.userData;
 
     return (
@@ -80,7 +72,6 @@ class MainPage extends Component {
           <span id={this.GRAPH_ENUM.TIME_GRAPH} className={time_graph_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Grades by Time</span>
           <span id={this.GRAPH_ENUM.PYRAMID} className={pyramid_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Time by Grades</span>
           <span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>
-          <span id={this.GRAPH_ENUM.SCROLL} className={scroll_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Scroll</span>
         </div>
         <span id="name">{name}</span>
         {visual}

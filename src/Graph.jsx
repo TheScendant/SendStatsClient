@@ -68,7 +68,7 @@ class Graph extends Component {
     let numBars = data.length;
     let barWidth = Math.round(width / numBars);
 
-    const MIN_BAR_WIDTH = 150;
+    const MIN_BAR_WIDTH = 60; // dosomething this should be calculated
 
     if (barWidth < MIN_BAR_WIDTH) {
       barWidth = MIN_BAR_WIDTH;
@@ -188,7 +188,7 @@ class Graph extends Component {
     subx.domain(data.map((d) => d.TimeSegment));
     suby.domain([0, d3.max(data, (d) => d.total)]).nice();
 
-    const SLIDER_RECT_WIDTH = (subx.bandwidth() + 3) * numBars;
+    const SLIDER_RECT_WIDTH = (subx.bandwidth() + 3) * numBars; //dosomething this is hacky
     subg.selectAll("g")
       .data(d3.stack().keys(keys)(data))
       .enter()
@@ -212,6 +212,7 @@ class Graph extends Component {
     subg.append("rect")
       .attr("width", SLIDER_RECT_WIDTH)
       .attr("height", SUB_HEIGHT)
+      .attr("id", "slider-rect")
       .attr("x", 0)
       .attr("fill", "rgba(255,182,193,.4)")
       .call(d3.drag().on("drag", (d,i,l) => moveTheRect(d,i,l)))
@@ -247,10 +248,7 @@ class Graph extends Component {
               .data((d) => d)
               .enter()
                 .append("rect")
-                .attr("x", (d) => {
-                  console.warn(x(d.data.TimeSegment))
-                  return x(d.data.TimeSegment)
-                })
+                .attr("x", (d) => x(d.data.TimeSegment))
                 .attr("y", (d) => y(d[1]))
                 .attr("height", (d) => y(d[0]) - y(d[1]))
                 .attr("width", x.bandwidth())
@@ -276,7 +274,7 @@ class Graph extends Component {
     return (
       <div id="Graph">
         <div id="main-graph">
-          <svg width="1152" height="600" reef="graphSVG"></svg>
+          <svg width="1152" height="600" ref="graphSVG"></svg>
         </div>
         <label className="radioLabel">
           Year
