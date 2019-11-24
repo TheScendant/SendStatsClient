@@ -4,7 +4,7 @@ export default class Year {
     this.increment(grade);
   }
   increment(grade) {
-    this[grade] = this[grade] ? this.grade + 1 : 1;
+    this[grade] = this[grade] ? this[grade] + 1 : 1;
   }
   getYear() {
     return this.year;

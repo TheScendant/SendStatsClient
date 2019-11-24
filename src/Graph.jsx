@@ -87,12 +87,6 @@ class Graph extends Component {
         .attr("transform", `translate(${margin.left}, ${subMargin.top})`);
     }
 
-
-
-
-
-
-
     // set x scale
     var x = d3.scaleBand()
       .rangeRound([0, width])
