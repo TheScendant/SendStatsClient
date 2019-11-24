@@ -68,20 +68,21 @@ class Graph extends Component {
     // dosomething implement screen resize
     const LEGEND_WIDTH = 50;
     const svg = d3.select("svg");
+    const SVG_RECT = svg.node().getBoundingClientRect();
     const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-    const width = svg.attr("width") - margin.left - margin.right - LEGEND_WIDTH; // main graph width
+    const width = SVG_RECT.width - margin.left - margin.right - LEGEND_WIDTH; // main graph width
 
     const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     const [addScroll, numBars] = this.requiresScroll(data.length, width)
 
-    let height = svg.attr("height") - margin.top - margin.bottom;
+    let height = SVG_RECT.height - margin.top - margin.bottom;
     let SUB_HEIGHT, subg, subMargin;
     if (addScroll) {
       SUB_HEIGHT = 100;
       height -= SUB_HEIGHT; // main graph height
-      subMargin = { top: svg.attr("height") - margin.top - SUB_HEIGHT + margin.bottom }
+      subMargin = { top: SVG_RECT.height - margin.top - SUB_HEIGHT + margin.bottom }
       subg = svg.append("g")
         .attr("height", SUB_HEIGHT)
         .attr("transform", `translate(${margin.left}, ${subMargin.top})`);
@@ -231,7 +232,7 @@ class Graph extends Component {
         const theRect = d3.select(l[i]);
         const currX = parseFloat(theRect.attr("x"));
 
-        const newX = Math.min(Math.max(d3.event.dx + currX, 0), svg.attr("width") - SLIDER_RECT_WIDTH - margin.right)
+        const newX = Math.min(Math.max(d3.event.dx + currX, 0), SVG_RECT.width - SLIDER_RECT_WIDTH - margin.right)
         theRect.attr("x", newX)
 
         const f = displayed(currX);
@@ -284,9 +285,7 @@ class Graph extends Component {
   render() {
     return (
       <div id="Graph">
-        <div id="main-graph">
-          <svg width="1152" height="600" ref="graphSVG"></svg>
-        </div>
+        <svg id="time-graph"></svg>
         <label className="radioLabel">
           Year
           <input type="radio" name="year" className="radio" checked={this.state.TimeSlice === TimeSliceEnum.YEAR} onChange={(event) => this.radioClickHandler(event)} />

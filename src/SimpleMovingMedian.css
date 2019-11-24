@@ -23,3 +23,8 @@
 #labels-title {
   color: white;
 }
+
+#median-graph {
+  width: 90%;
+  height: 90%;
+}

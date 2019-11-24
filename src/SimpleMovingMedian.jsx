@@ -7,7 +7,7 @@ class SimpleMovingMedian extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      windowSize: 9
+      windowsize: 9
     }
   }
   componentDidMount() {
@@ -32,7 +32,7 @@ class SimpleMovingMedian extends Component {
 
   makeDataPoints(sends) {
     const dataPoints = [];
-    let x = this.state.windowSize; // pointer
+    let x = this.state.windowsize; // pointer
     if (sends.length > x) {
       let hardestRedpoint = sends[0].rating;
       const window = sends.slice(0, x);
@@ -57,9 +57,11 @@ class SimpleMovingMedian extends Component {
     const dataPoints = this.makeDataPoints(sends);
 
     const svg = d3.select("svg");
-    var margin = { top: 20, right: 20, bottom: 30, left: 40 },
-      width = svg.attr("width") - margin.left - margin.right,
-      height = svg.attr("height") - margin.top - margin.bottom;
+    const SVG_RECT = svg.node().getBoundingClientRect();
+
+    const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+    const width = SVG_RECT.width- margin.left - margin.right;
+    const height = SVG_RECT.height- margin.top - margin.bottom;
 
     // 5. X scale will use the index of our data
     var xScale = d3.scaleLinear()
@@ -128,32 +130,30 @@ class SimpleMovingMedian extends Component {
 
   radioClickHandler(event) {
     if (event.target.name === "five") {
-      this.setState({ windowSize: 5 });
+      this.setState({ windowsize: 5 });
     } else if (event.target.name === "nine") {
-      this.setState({ windowSize: 9 });
+      this.setState({ windowsize: 9 });
     } else {
-      this.setState({ windowSize: 14 });
+      this.setState({ windowsize: 14 });
     }
   }
   render() {
     return (
       <div id="MedianGraph">
-        <div id="main-median-graph">
-          <svg width="1152" height="600" windowSize={this.state.windowSize}></svg>
-        </div>
+        <svg id="median-graph" windowsize={this.state.windowsize}></svg>
         <span id="labels-title">Median Sample Size</span>
         <div id="labels">
           <label className="radioLabel">
             5
-          <input type="radio" name="five" className="radio" checked={this.state.windowSize === 5} onChange={(event) => this.radioClickHandler(event)} />
+          <input type="radio" name="five" className="radio" checked={this.state.windowsize === 5} onChange={(event) => this.radioClickHandler(event)} />
           </label>
           <label className="radioLabel">
             9
-          <input type="radio" name="nine" className="radio" checked={this.state.windowSize === 9} onChange={(event) => this.radioClickHandler(event)} />
+          <input type="radio" name="nine" className="radio" checked={this.state.windowsize === 9} onChange={(event) => this.radioClickHandler(event)} />
           </label>
           <label className="radioLabel">
             15
-          <input type="radio" name="fifteen" className="radio" checked={this.state.windowSize === 14} onChange={(event) => this.radioClickHandler(event)} />
+          <input type="radio" name="fifteen" className="radio" checked={this.state.windowsize === 14} onChange={(event) => this.radioClickHandler(event)} />
           </label>
         </div>
       </div>

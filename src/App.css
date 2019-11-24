@@ -3,6 +3,8 @@ html, body, #root {
   width: 100%;
 }
 
+
+
 #App {
   display: flex;
   flex-direction: column;

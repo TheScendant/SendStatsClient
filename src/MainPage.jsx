@@ -4,14 +4,13 @@ import Pyramid from './Pyramid';
 import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
 import classNames from 'classnames';
-
+import {gradeSorter, isValidRating} from './utils';
 
 
 class MainPage extends Component {
   constructor(props) {
     super(props);
     const { email, sends, userData } = props;
-    console.warn(userData)
     this.GRAPH_ENUM = {
       TIME_GRAPH: "TIME_GRAPH",
       PYRAMID: "PYRAMID",
@@ -25,10 +24,34 @@ class MainPage extends Component {
       graphType: this.GRAPH_ENUM.TIME_GRAPH,
     };
 
+    this.hardestObject = this.getHardests();
   }
-  isSelected(val, val2) {
-    console.warn(val, val2);
-    return val ? "selected" : "";
+
+  getHardests() {
+    const hardestObject = {
+      onsight: {rating: "5.0"},
+      flash: {rating: "5.0"},
+      redpoint: {rating: "5.0"}
+    }
+    for (const send of this.state.sends) {
+      if (isValidRating(send)) {
+        const leadStyle = send.leadStyle.toLowerCase();
+        if (leadStyle === "onsight") {
+          if (gradeSorter(send.rating, hardestObject.onsight.rating) === 1) {
+            hardestObject.onsight = send;
+          }
+        } else if (leadStyle === "flash") {
+          if (gradeSorter(send.rating, hardestObject.flash.rating) === 1) {
+            hardestObject.flash = send;
+          }
+        } else if (leadStyle === "redpoint") {
+          if (gradeSorter(send.rating, hardestObject.redpoint.rating) === 1) {
+            hardestObject.redpoint = send;
+          }
+        }
+      }
+    }
+    return hardestObject;
   }
 
   setGraphType(graphType) {
@@ -64,16 +87,23 @@ class MainPage extends Component {
     });
 
     const {name} = this.state.userData;
+    const {onsight, flash, redpoint} = this.hardestObject;
 
     return (
-
       <div id="MainPage">
+        <div id="main-page-header">
+          <span id="name">Send Stats for {name}</span>
+          <div id="hardests">
+            <span id="hardest-onsight">Hardest Onsight: {onsight.name} -- {onsight.rating}</span>
+            <span id="hardest-flash">Hardest Flash: {flash.name} -- {flash.rating}</span>
+            <span id="hardest-redpoint">Hardest Redpoint: {redpoint.name} -- {redpoint.rating}</span>
+          </div>
+        </div>
         <div id="graph-selection">
           <span id={this.GRAPH_ENUM.TIME_GRAPH} className={time_graph_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Grades by Time</span>
           <span id={this.GRAPH_ENUM.PYRAMID} className={pyramid_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Time by Grades</span>
           <span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>
         </div>
-        <span id="name">{name}</span>
         {visual}
       </div>
     );

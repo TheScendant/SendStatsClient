@@ -24,11 +24,13 @@ class Pyramid extends Component {
     // {TimeSegment: value, gradeA: quantity, gradeB: quantity }
     d3.select("svg").selectAll("*").remove();
     // dosomething implement screen resize
-    var svg = d3.select("svg"),
-      margin = { top: 20, right: 20, bottom: 30, left: 40 },
-      width = +svg.attr("width") - margin.left - margin.right,
-      height = +svg.attr("height") - margin.top - margin.bottom,
-      g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    const svg = d3.select("svg");
+    const SVG_RECT = svg.node().getBoundingClientRect();
+
+    const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+    const width = SVG_RECT.width- margin.left - margin.right;
+    const height = SVG_RECT.height- margin.top - margin.bottom;
+    const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     const data = gradeDateQuantityArray;
 
@@ -123,10 +125,7 @@ class Pyramid extends Component {
   render() {
     return (
       <div id="Pyramid">
-       {/*  <VisualTitle /> */}
-        <div id="main-pyramid">
-          <svg width="1152" height="600"></svg>
-        </div>
+        <svg id="pyramid-graph"></svg>
         <label className="radioLabel">
           Year
           <input type="radio" name="year" className="radio" checked={this.state.TimeSlice === TimeSliceEnum.YEAR} onChange={(event) => this.radioClickHandler(event)}/>
