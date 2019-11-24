@@ -104,7 +104,9 @@ class MainPage extends Component {
           <span id={this.GRAPH_ENUM.PYRAMID} className={pyramid_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Time by Grades</span>
           <span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>
         </div>
-        {visual}
+        <div id="visual-wrapper">
+          {visual}
+        </div>
       </div>
     );
   }

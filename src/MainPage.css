@@ -8,12 +8,21 @@
 }
 
 #MainPage {
-  width: 100%;
+  width: 90%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background-color: rgba(77, 53, 84, .95);
+}
+
+#visual-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #main-page-header {
