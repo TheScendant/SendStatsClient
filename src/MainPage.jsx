@@ -94,9 +94,24 @@ class MainPage extends Component {
         <div id="main-page-header">
           <span id="name">Send Stats for {name}</span>
           <div id="hardests">
-            <span id="hardest-onsight">Hardest Onsight: {onsight.name} -- {onsight.rating}</span>
-            <span id="hardest-flash">Hardest Flash: {flash.name} -- {flash.rating}</span>
-            <span id="hardest-redpoint">Hardest Redpoint: {redpoint.name} -- {redpoint.rating}</span>
+            <div>
+              <span id="hardest-onsight">Hardest Onsight:</span>
+              <a href={`https://www.mountainproject.com/route/${onsight.routeId}`}>
+                {onsight.name} -- {onsight.rating}
+              </a>
+            </div>
+            <div>
+              <span id="hardest-flash">Hardest Flash: </span>
+              <a href={`https://www.mountainproject.com/route/${flash.routeId}`}>
+                {flash.name} -- {flash.rating}
+              </a>
+            </div>
+            <div>
+              <span id="hardest-redpoint">Hardest Redpoint: </span>
+              <a href={`https://www.mountainproject.com/route/${redpoint.routeId}`}>
+                {redpoint.name} -- {redpoint.rating}
+              </a>
+            </div>
           </div>
         </div>
         <div id="graph-selection">
