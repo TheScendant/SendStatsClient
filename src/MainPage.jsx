@@ -95,20 +95,20 @@ class MainPage extends Component {
           <span id="name">Send Stats for {name}</span>
           <div id="hardests">
             <div class="hard-send">
-              <span id="hardest-onsight">Hardest Onsight:</span>
-              <a href={`https://www.mountainproject.com/route/${onsight.routeId}`}>
+              <span class="hard-send-type" id="hardest-onsight">Hardest Onsight:</span>
+              <a class="hard-send-type" href={`https://www.mountainproject.com/route/${onsight.routeId}`}>
                 {onsight.name} -- {onsight.rating}
               </a>
             </div>
             <div class="hard-send">
-              <span id="hardest-flash">Hardest Flash:</span>
-              <a href={`https://www.mountainproject.com/route/${flash.routeId}`}>
+              <span class="hard-send-type" id="hardest-flash">Hardest Flash:</span>
+              <a class="hard-send-type" href={`https://www.mountainproject.com/route/${flash.routeId}`}>
                 {flash.name} -- {flash.rating}
               </a>
             </div>
             <div class="hard-send">
-              <span id="hardest-redpoint">Hardest Redpoint:</span>
-              <a href={`https://www.mountainproject.com/route/${redpoint.routeId}`}>
+              <span class="hard-send-type" id="hardest-redpoint">Hardest Redpoint:</span>
+              <a  class="hard-send-type" href={`https://www.mountainproject.com/route/${redpoint.routeId}`}>
                 {redpoint.name} -- {redpoint.rating}
               </a>
             </div>
