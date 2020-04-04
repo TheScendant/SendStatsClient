@@ -111,6 +111,7 @@ class Graph extends Component {
       .enter()
       .append("g")
       .attr("fill", (d) => gradesByTimeColoring(d.key, HARDEST_GRADE))
+      .attr("class", "g-rect")
       .selectAll("rect")
       .data((d) => d)
       .enter()

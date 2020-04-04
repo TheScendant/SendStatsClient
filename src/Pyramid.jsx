@@ -25,11 +25,12 @@ class Pyramid extends Component {
     // {TimeSegment: value, gradeA: quantity, gradeB: quantity }
     d3.select("svg").selectAll("*").remove();
     // dosomething implement screen resize
+    const LEGEND_WIDTH = 50;
     const svg = d3.select("svg");
     const SVG_RECT = svg.node().getBoundingClientRect();
 
     const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-    const width = SVG_RECT.width- margin.left - margin.right;
+    const width = SVG_RECT.width- margin.left - margin.right - LEGEND_WIDTH;
     const height = SVG_RECT.height- margin.top - margin.bottom;
     const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -76,12 +77,12 @@ class Pyramid extends Component {
       .attr("width", x.bandwidth())
 
     g.append("g")
-      .attr("class", "axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("class", "x-axis")
+      .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(x));
 
     g.append("g")
-      .attr("class", "axis")
+      .attr("class", "y-axis")
       .call(d3.axisLeft(y).ticks(null, "s"))
       .append("text")
       .attr("x", 2)
@@ -99,7 +100,7 @@ class Pyramid extends Component {
       .selectAll("g")
       .data(years.slice().reverse())
       .enter().append("g")
-      .attr("transform", (d, i) => `translate(0,${i * 20})`);
+      .attr("transform", (d, i) => `translate(0,${LEGEND_WIDTH}, ${i * 20})`);
 
     legend.append("rect")
       .attr("x", width - 19)

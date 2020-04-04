@@ -23,7 +23,7 @@ text {
   font-size: 15px;
 }
 
-.axis {
+.x-axis, .y-axis {
   color: white;
   font-size: 165x;
 }

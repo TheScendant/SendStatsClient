@@ -81,3 +81,7 @@ a:hover {
 .hard-send-type {
   width: 15em;
 }
+
+.g-rect {
+  stroke: rgba(77,53,84,.95);
+}

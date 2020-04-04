@@ -88,6 +88,8 @@ const gradesByTimeColoring = (grade, hardest) => {
      5.10 => 10
      5.11 => 20
      5.12 => 30
+     5.13 => 40
+     5.14 => 50
     */
     if (numb < 100) {
         numb = numb / 10.0;

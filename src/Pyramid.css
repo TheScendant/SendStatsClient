@@ -10,7 +10,13 @@
   flex-direction: column;
   justify-content: center;
 }
+
 #pyramid-graph {
   width: 90%;
   height: 90%;
+}
+
+.x-axis, .y-axis {
+  color: white;
+  font-size: 165x;
 }
