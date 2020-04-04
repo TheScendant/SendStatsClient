@@ -25,6 +25,7 @@ class MainPage extends Component {
     };
 
     this.hardestObject = this.getHardests();
+    this.year = (new Date()).getFullYear();
   }
 
   getHardests() {
@@ -71,7 +72,7 @@ class MainPage extends Component {
     if (graphType === this.GRAPH_ENUM.TIME_GRAPH) {
       visual = <Graph email={this.state.email} sends={this.state.sends} />
     } else if (graphType === this.GRAPH_ENUM.PYRAMID) {
-      visual = <Pyramid email={this.state.email} sends={this.state.sends} />
+      visual = <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
     } else if (graphType === this.GRAPH_ENUM.MEDIAN){
       visual = <SimpleMovingMedian email={this.state.email} sends={this.state.sends} />
     }

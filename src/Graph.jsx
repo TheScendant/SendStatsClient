@@ -6,7 +6,7 @@ import { sliceData, TimeSliceEnum } from './TimeSlicer.js';
 import { gradesByTimeColoring, gradeSorter } from './utils';
 
 class Graph extends Component {
-
+  // grades by time
   constructor(props) {
     super(props);
     this.state = {

@@ -6,10 +6,11 @@ import { sliceData } from './GradeSlicer.js';
 import { TimeSliceEnum } from './TimeSlicer.js';
 
 class Pyramid extends Component {
-
+  // time by grades
   constructor(props) {
     super(props);
     this.state = { TimeSlice: TimeSliceEnum.YEAR };
+    this.year = props.year;
   }
   componentDidMount() {
     this.createGraph(this.props.sends);
@@ -54,7 +55,7 @@ class Pyramid extends Component {
       .rangeRound([height, 0]);
 
     const startYear = years.sort()[0];
-    var myColor = d3.scaleLinear().domain([startYear,2019])
+    var myColor = d3.scaleLinear().domain([startYear, this.year])
       .range(["white", "red"]); // dosomething .domain(keys)? interpolate?
 
 
