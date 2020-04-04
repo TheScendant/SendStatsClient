@@ -5,7 +5,7 @@ import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
 import classNames from 'classnames';
 import {gradeSorter, isValidRating} from './utils';
-
+import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
 
 class MainPage extends Component {
   constructor(props) {
@@ -92,7 +92,19 @@ class MainPage extends Component {
 
     return (
       <div id="MainPage">
-        <div id="main-page-header">
+        <Router>
+          <Link to="/timeByGrades"> Time By Grades </Link>
+          <Link to="/gradesByTime"> Grades By Time </Link>
+          <Switch>
+            <Route path="/timeByGrades" exact={true}>
+              <Graph email={this.state.email} sends={this.state.sends} />
+            </Route>
+            <Route path="/gradesByTime" exact={true}>
+              <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
+            </Route>
+          </Switch>
+        </Router>
+        {/* <div id="main-page-header">
           <span id="name">Send Stats for {name}</span>
           <div id="hardests">
             <div className="hard-send">
@@ -118,11 +130,11 @@ class MainPage extends Component {
         <div id="graph-selection">
           <span id={this.GRAPH_ENUM.TIME_GRAPH} className={time_graph_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Grades by Time</span>
           <span id={this.GRAPH_ENUM.PYRAMID} className={pyramid_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Time by Grades</span>
-          <span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>
+    {/*<span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>
         </div>
         <div id="visual-wrapper">
           {visual}
-        </div>
+    </div>*/}
       </div>
     );
   }
