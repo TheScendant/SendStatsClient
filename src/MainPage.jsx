@@ -4,9 +4,8 @@ import Pyramid from './Pyramid';
 import MainPageHeader from './MainPageHeader';
 import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
-import classNames from 'classnames';
 import { gradeSorter, isValidRating } from './utils';
-import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Redirect, Route, Switch } from 'react-router-dom';
 
 class MainPage extends Component {
   constructor(props) {
@@ -90,6 +89,7 @@ class MainPage extends Component {
             <Route path="/gradesByTime" exact={true}>
               <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
             </Route>
+            <Redirect exact from="/" to="timeByGrades" />
           </Switch>
         </Router>
         {/*
