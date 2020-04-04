@@ -83,20 +83,17 @@ class MainPage extends Component {
             {/*<span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>*/}
           </div>
           <Switch>
-            <Route path="/timeByGrades" exact={true}>
-              <Graph email={this.state.email} sends={this.state.sends} />
-            </Route>
-            <Route path="/gradesByTime" exact={true}>
-              <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
-            </Route>
-            <Redirect exact from="/" to="timeByGrades" />
+            <div id="visual-wrapper">
+              <Route path="/timeByGrades" exact={true}>
+                <Graph email={this.state.email} sends={this.state.sends} />
+              </Route>
+              <Route path="/gradesByTime" exact={true}>
+                <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
+              </Route>
+              <Redirect exact from="/" to="timeByGrades" />
+            </div>
           </Switch>
         </Router>
-        {/*
-
-        <div id="visual-wrapper">
-          {visual}
-    </div>*/}
       </div>
     );
   }
