@@ -100,7 +100,7 @@ class Pyramid extends Component {
       .selectAll("g")
       .data(years.slice().reverse())
       .enter().append("g")
-      .attr("transform", (d, i) => `translate(0,${LEGEND_WIDTH}, ${i * 20})`);
+      .attr("transform", (d, i) => `translate(${LEGEND_WIDTH}, ${i * 20})`);
 
     legend.append("rect")
       .attr("x", width - 19)
