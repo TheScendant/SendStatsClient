@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Graph from './Graph';
 import Pyramid from './Pyramid';
+import MainPageHeader from './MainPageHeader';
 import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
 import classNames from 'classnames';
@@ -88,10 +89,10 @@ class MainPage extends Component {
     });
 
     const {name} = this.state.userData;
-    const {onsight, flash, redpoint} = this.hardestObject;
 
     return (
       <div id="MainPage">
+        <MainPageHeader hardestObject={this.hardestObject} name={name}/>
         <Router>
           <Link to="/timeByGrades"> Time By Grades </Link>
           <Link to="/gradesByTime"> Grades By Time </Link>
@@ -104,29 +105,7 @@ class MainPage extends Component {
             </Route>
           </Switch>
         </Router>
-        {/* <div id="main-page-header">
-          <span id="name">Send Stats for {name}</span>
-          <div id="hardests">
-            <div className="hard-send">
-              <span className="hard-send-type" id="hardest-onsight">Hardest Onsight:</span>
-              <a className="hard-send-type" href={`https://www.mountainproject.com/route/${onsight.routeId}`}>
-                {onsight.name} -- {onsight.rating}
-              </a>
-            </div>
-            <div className="hard-send">
-              <span className="hard-send-type" id="hardest-flash">Hardest Flash:</span>
-              <a className="hard-send-type" href={`https://www.mountainproject.com/route/${flash.routeId}`}>
-                {flash.name} -- {flash.rating}
-              </a>
-            </div>
-            <div className="hard-send">
-              <span className="hard-send-type" id="hardest-redpoint">Hardest Redpoint:</span>
-              <a className="hard-send-type" href={`https://www.mountainproject.com/route/${redpoint.routeId}`}>
-                {redpoint.name} -- {redpoint.rating}
-              </a>
-            </div>
-          </div>
-        </div>
+        {/*
         <div id="graph-selection">
           <span id={this.GRAPH_ENUM.TIME_GRAPH} className={time_graph_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Grades by Time</span>
           <span id={this.GRAPH_ENUM.PYRAMID} className={pyramid_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Time by Grades</span>
