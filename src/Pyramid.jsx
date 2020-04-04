@@ -128,14 +128,14 @@ class Pyramid extends Component {
     return (
       <div id="Pyramid">
         <svg id="pyramid-graph"></svg>
-        <label className="radioLabel">
+        {/* <label className="radioLabel">
           Year
           <input type="radio" name="year" className="radio" checked={this.state.TimeSlice === TimeSliceEnum.YEAR} onChange={(event) => this.radioClickHandler(event)}/>
         </label>
         <label className="radioLabel">
           Month
           <input type="radio" name="month" className="radio" checked={this.state.TimeSlice === TimeSliceEnum.MONTH} onChange={(event) => this.radioClickHandler(event)}/>
-        </label>
+        </label> */}
       </div>
     )
   };

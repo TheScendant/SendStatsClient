@@ -74,12 +74,8 @@ class MainPage extends Component {
         <MainPageHeader hardestObject={this.hardestObject} name={name} />
         <Router>
           <div id="graph-selection">
-            <Link to="/timeByGrades">
-              <span id="TIME_GRAPH">Grades by Time</span>
-            </Link>
-            <Link to="/gradesByTime">
-              <span id="PYRAMID">Time by Grades</span>
-            </Link>
+              <span id="TIME_GRAPH"><Link to="/timeByGrades">Grades by Time</Link></span>
+              <span id="PYRAMID"><Link to="/gradesByTime">Time by Grades</Link></span>
             {/*<span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>*/}
           </div>
           <Switch>
