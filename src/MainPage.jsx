@@ -5,8 +5,8 @@ import MainPageHeader from './MainPageHeader';
 import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
 import classNames from 'classnames';
-import {gradeSorter, isValidRating} from './utils';
-import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
+import { gradeSorter, isValidRating } from './utils';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 
 class MainPage extends Component {
   constructor(props) {
@@ -31,9 +31,9 @@ class MainPage extends Component {
 
   getHardests() {
     const hardestObject = {
-      onsight: {rating: "5.0"},
-      flash: {rating: "5.0"},
-      redpoint: {rating: "5.0"}
+      onsight: { rating: "5.0" },
+      flash: { rating: "5.0" },
+      redpoint: { rating: "5.0" }
     }
     for (const send of this.state.sends) {
       if (isValidRating(send)) {
@@ -57,45 +57,32 @@ class MainPage extends Component {
   }
 
   setGraphType(graphType) {
-    this.setState(function() {
+    this.setState(function () {
       return {
         email: this.state.email,
         sends: this.state.sends,
         userData: this.state.userData,
         graphType: graphType,
       }
-  });
+    });
   }
 
   render() {
-    let visual;
-    const {graphType} = this.state;
-    if (graphType === this.GRAPH_ENUM.TIME_GRAPH) {
-      visual = <Graph email={this.state.email} sends={this.state.sends} />
-    } else if (graphType === this.GRAPH_ENUM.PYRAMID) {
-      visual = <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
-    } else if (graphType === this.GRAPH_ENUM.MEDIAN){
-      visual = <SimpleMovingMedian email={this.state.email} sends={this.state.sends} />
-    }
-
-    const time_graph_class = classNames({
-      'selected': this.state.graphType === this.GRAPH_ENUM.TIME_GRAPH,
-    });
-    const pyramid_class = classNames({
-      'selected': this.state.graphType === this.GRAPH_ENUM.PYRAMID,
-    });
-    const median_class = classNames({
-      'selected': this.state.graphType === this.GRAPH_ENUM.MEDIAN,
-    });
-
-    const {name} = this.state.userData;
+    const { name } = this.state.userData;
 
     return (
       <div id="MainPage">
-        <MainPageHeader hardestObject={this.hardestObject} name={name}/>
+        <MainPageHeader hardestObject={this.hardestObject} name={name} />
         <Router>
-          <Link to="/timeByGrades"> Time By Grades </Link>
-          <Link to="/gradesByTime"> Grades By Time </Link>
+          <div id="graph-selection">
+            <Link to="/timeByGrades">
+              <span id="TIME_GRAPH">Grades by Time</span>
+            </Link>
+            <Link to="/gradesByTime">
+              <span id="PYRAMID">Time by Grades</span>
+            </Link>
+            {/*<span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>*/}
+          </div>
           <Switch>
             <Route path="/timeByGrades" exact={true}>
               <Graph email={this.state.email} sends={this.state.sends} />
@@ -106,11 +93,7 @@ class MainPage extends Component {
           </Switch>
         </Router>
         {/*
-        <div id="graph-selection">
-          <span id={this.GRAPH_ENUM.TIME_GRAPH} className={time_graph_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Grades by Time</span>
-          <span id={this.GRAPH_ENUM.PYRAMID} className={pyramid_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Time by Grades</span>
-    {/*<span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>
-        </div>
+
         <div id="visual-wrapper">
           {visual}
     </div>*/}
