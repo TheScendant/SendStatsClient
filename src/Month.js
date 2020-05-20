@@ -18,7 +18,9 @@ export default class Month {
     return this[grade];
   }
 
+  // this actually determines the x value of the bar on the page
+  // place on graph at first of month
   getDateObj() {
-    return this.dateObj;
+    return new Date(`${this.month}/1/${this.year}`);
   }
 }

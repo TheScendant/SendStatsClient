@@ -14,6 +14,6 @@ export default class Year {
     return this[grade];
   }
   getDateObj() {
-    return this.dateObj;
+    return new Date(`1/1/${this.year}`)
   }
 }

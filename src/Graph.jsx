@@ -89,8 +89,13 @@ class Graph extends Component {
     }
 
     const dates = sends.map(({ date }) => new Date(date));
-    const timeBounds = [Math.min(...dates), Math.max(...dates)];
 
+    const minDate = new Date(Math.min(...dates));
+    const maxDate = new Date(Math.max(...dates));
+
+    const correctedMinDate = new Date(`1/1/${minDate.getFullYear()}`);
+    const correctedMaxDate = new Date(`12/31/${maxDate.getFullYear()}`);
+    const timeBounds = [correctedMinDate, correctedMaxDate];
     const x = d3.scaleTime().domain(timeBounds).rangeRound([0, width])
 
     // set y scale
@@ -99,9 +104,6 @@ class Graph extends Component {
 
     data.sort((a, b) => b.TimeSegment - a.TimeSegment);
 
-    // console.warn(data.slice(0, numBars).map((d) => d.TimeSegment))
-
-    // x.domain(data.slice(0, numBars).map((d) => d.TimeSegment));
     let barWidth;
     if (this.state.TimeSlice === TimeSliceEnum.MONTH) {
       barWidth = x(new Date("02-01-2020")) - x(new Date("01-01-2020"))
@@ -126,14 +128,6 @@ class Graph extends Component {
       .attr("y", (d) => y(d[1]))
       .attr("height", (d) => y(d[0]) - y(d[1]))
       .attr("width", barWidth)
-    /* .on("mouseover", () => tooltip.style("display", null))
-    .on("mouseout", () => tooltip.style("display", "none"))
-    .on("mousemove", (d) => {
-      var xPosition = d3.mouse(this)[0] - 5;
-      var yPosition = d3.mouse(this)[1] - 5;
-      tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-      tooltip.select("text").text(d[1] - d[0]);
-    }); */
 
     g.append("g")
       .attr("class", "x-axis")
