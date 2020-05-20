@@ -1,8 +1,8 @@
 export default class Month {
   constructor(date, grade) {
-    const dateObj = new Date(date);
-    this.year = dateObj.getFullYear();
-    this.month = dateObj.getMonth() + 1; // handle Date Object oddity
+    this.dateObj = new Date(date);
+    this.year = this.dateObj.getFullYear();
+    this.month = this.dateObj.getMonth() + 1; // handle Date Object oddity
     this.increment(grade);
   }
   increment(grade) {
@@ -16,5 +16,9 @@ export default class Month {
   }
   getGradeCount(grade) {
     return this[grade];
+  }
+
+  getDateObj() {
+    return this.dateObj;
   }
 }

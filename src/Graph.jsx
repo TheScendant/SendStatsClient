@@ -89,10 +89,15 @@ class Graph extends Component {
     }
 
     // set x scale
-    var x = d3.scaleBand()
+    /* var x = d3.scaleBand()
       .rangeRound([0, width])
       .paddingInner(0.05)
-      .align(0.1);
+      .align(0.1); */
+
+    const dates = sends.map(({date}) => new Date(date));
+    const timeBounds = [Math.min(...dates), Math.max(...dates)];
+
+    const x = d3.scaleTime().domain(timeBounds).rangeRound([0, width])
 
     // set y scale
     var y = d3.scaleLinear()
@@ -102,7 +107,7 @@ class Graph extends Component {
 
     // console.warn(data.slice(0, numBars).map((d) => d.TimeSegment))
 
-    x.domain(data.slice(0, numBars).map((d) => d.TimeSegment));
+    // x.domain(data.slice(0, numBars).map((d) => d.TimeSegment));
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
     const staxG = g.append("g")
     staxG
@@ -116,10 +121,10 @@ class Graph extends Component {
       .data((d) => d)
       .enter()
       .append("rect")
-      .attr("x", (d) => x(d.data.TimeSegment))
+      .attr("x", (d) => x(d.data.TimeSegment.getTime()))
       .attr("y", (d) => y(d[1]))
       .attr("height", (d) => y(d[0]) - y(d[1]))
-      .attr("width", x.bandwidth())
+      .attr("width", 10)
     /* .on("mouseover", () => tooltip.style("display", null))
     .on("mouseout", () => tooltip.style("display", "none"))
     .on("mousemove", (d) => {
