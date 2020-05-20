@@ -69,7 +69,7 @@ const postJSON = async (data, url) => {
     }
 };
 
-const isValidRating = (send) => ((!send.rating.toLowerCase().includes("v")) && send.rating.toLowerCase().includes("5"))
+const isValidRating = (send) => ((!send.rating.toLowerCase().includes("v")) && !send.rating.toLowerCase().includes("w") && send.rating.toLowerCase().includes("5"))
 
 /* const singlesColoring = d3.schemeRdPu[9];
 const tensColoring = d3.schemeBlues[9];

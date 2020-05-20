@@ -74,8 +74,8 @@ class MainPage extends Component {
         <Router>
           <div id="graph-selection">
               <span id="HOME"><Link to="/">SendStats</Link></span>
-              <span id="TIME_GRAPH"><Link to="/timeByGrades">Grades by Time</Link></span>
-              <span id="PYRAMID"><Link to="/gradesByTime">Time by Grades</Link></span>
+              <span id="TIME_GRAPH"><Link to="/timeByGrades">Sends Over Time</Link></span>
+              <span id="PYRAMID"><Link to="/gradesByTime">Grade Pyramid</Link></span>
           </div>
           {/* <MainPageHeader hardestObject={this.hardestObject} name={name} /> */}
           <Switch>

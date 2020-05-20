@@ -88,13 +88,7 @@ class Graph extends Component {
         .attr("transform", `translate(${margin.left}, ${subMargin.top})`);
     }
 
-    // set x scale
-    /* var x = d3.scaleBand()
-      .rangeRound([0, width])
-      .paddingInner(0.05)
-      .align(0.1); */
-
-    const dates = sends.map(({date}) => new Date(date));
+    const dates = sends.map(({ date }) => new Date(date));
     const timeBounds = [Math.min(...dates), Math.max(...dates)];
 
     const x = d3.scaleTime().domain(timeBounds).rangeRound([0, width])
@@ -108,6 +102,13 @@ class Graph extends Component {
     // console.warn(data.slice(0, numBars).map((d) => d.TimeSegment))
 
     // x.domain(data.slice(0, numBars).map((d) => d.TimeSegment));
+    let barWidth;
+    if (this.state.TimeSlice === TimeSliceEnum.MONTH) {
+      barWidth = x(new Date("02-01-2020")) - x(new Date("01-01-2020"))
+    } else {
+      barWidth = x(new Date("01-01-2020")) - x(new Date("01-01-2019"))
+    }
+
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
     const staxG = g.append("g")
     staxG
@@ -124,7 +125,7 @@ class Graph extends Component {
       .attr("x", (d) => x(d.data.TimeSegment.getTime()))
       .attr("y", (d) => y(d[1]))
       .attr("height", (d) => y(d[0]) - y(d[1]))
-      .attr("width", 10)
+      .attr("width", barWidth)
     /* .on("mouseover", () => tooltip.style("display", null))
     .on("mouseout", () => tooltip.style("display", "none"))
     .on("mousemove", (d) => {
