@@ -14,7 +14,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: rgba(77, 53, 84, .95);
+  /* background-color: rgb(77, 53, 84); */
+  background-color: rgb(129, 28, 28);
 }
 
 #visual-wrapper {
@@ -26,7 +27,7 @@
 }
 
 #main-page-header {
-  background-color: rgba(77, 53, 84, .95);
+  background-color: rgb(77, 53, 84);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,7 +46,7 @@
 #TIME_GRAPH, #PYRAMID, #MEDIAN {
   cursor: pointer;
   border: 1px solid black;
-  background-color: rgba(77, 53, 84, .95);
+  background-color: rgb(77, 53, 84);
   width: 50%;
   display: flex;
   flex-direction: column;
@@ -83,5 +84,5 @@ a:hover {
 }
 
 .g-rect {
-  stroke: rgba(77,53,84,.95);
+  stroke: rgba(139, 80, 156);
 }

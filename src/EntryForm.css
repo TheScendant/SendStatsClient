@@ -18,7 +18,7 @@ form {
   height: 75%;
 }
 #FormWrapper, form,  #EntryForm {
-  border-radius: 8px;
+  border-radius: 2px;
   min-width: 275px;
   min-height: 275px;
 }
