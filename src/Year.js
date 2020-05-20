@@ -1,6 +1,7 @@
 export default class Year {
-  constructor(year, grade) {
-    this.year = year;
+  constructor(date, grade) {
+    this.dateObj = date;
+    this.year = date.getFullYear();
     this.increment(grade);
   }
   increment(grade) {
@@ -11,5 +12,8 @@ export default class Year {
   }
   getGradeCount(grade) {
     return this[grade];
+  }
+  getDateObj() {
+    return this.dateObj;
   }
 }

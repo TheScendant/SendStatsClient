@@ -66,7 +66,7 @@ class Graph extends Component {
 
 
     // dosomething implement screen resize
-    const LEGEND_WIDTH = 50;
+    const LEGEND_WIDTH = 150;
     const svg = d3.select("svg");
     const SVG_RECT = svg.node().getBoundingClientRect();
     const margin = { top: 20, right: 20, bottom: 30, left: 40 };

@@ -64,7 +64,8 @@ const sliceDataYearly = (sends) => {
   const ratings = [];
   for (const send of sends) {
     if (isValidRating(send)) { // ignore boulders for now
-      const year = new Date(send.date).getFullYear();
+      const date = new Date(send.date)
+      const year = date.getFullYear();
       const {rating} = send;
       if (!ratings.includes(rating)) {
         ratings.push(rating);
@@ -74,7 +75,7 @@ const sliceDataYearly = (sends) => {
         yearObject = dateToGradeQuanities.get(year);
         yearObject.increment(rating);
       } else {
-        yearObject = new Year(year, rating);
+        yearObject = new Year(date, rating);
       }
       dateToGradeQuanities.set(year, yearObject);
     }
@@ -82,7 +83,7 @@ const sliceDataYearly = (sends) => {
   const dateGradeQuantityArray = [];
   for (const yearKey of dateToGradeQuanities.keys()) {
     const yearObject = dateToGradeQuanities.get(yearKey);
-    const year = { TimeSegment: yearObject.getYear() };
+    const year = { TimeSegment: yearObject.getDateObj() };
     for (let k = 0; k < ratings.length; k++) {
       const grade = ratings[k];
       let gradeCount = yearObject.getGradeCount(grade);
