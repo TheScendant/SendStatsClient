@@ -1,18 +1,9 @@
-/*
-$color1: rgba(77, 53, 84, 1);
-$color2: rgba(244, 96, 54, 1);
-$color3: rgba(91, 133, 170, 1);
-$color4: rgba(65, 71, 112, 1);
-$color5: rgba(23, 17, 35, 1);
-*/
-
-#graph-selection {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 90%;
-  height: 5%;
-  color: white;
+:root {
+  --color1: rgba(77, 53, 84, 1);
+  --color2: rgba(244, 96, 54, 1);
+  --color3: rgba(91, 133, 170, 1);
+  --color4: rgba(65, 71, 112, 1);
+  --color5: rgba(23, 17, 35, 1);
 }
 
 #MainPage {
@@ -22,8 +13,7 @@ $color5: rgba(23, 17, 35, 1);
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  /* background-color: rgb(77, 53, 84); */
-  background-color: rgb(129, 28, 28);
+  background-color: var(--color4);
 }
 
 #visual-wrapper {
@@ -35,9 +25,24 @@ $color5: rgba(23, 17, 35, 1);
 }
 
 #main-page-header {
-  background-color: rgb(77, 53, 84);
+  background-color: var(--color4);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 7em;
+  width: 90%
+}
+
+.logo {
+  position: relative;
+  right: 25%;
+  color: limegreen;
+}
+
+#send-stats-summary {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   height: 7em;
@@ -51,16 +56,34 @@ $color5: rgba(23, 17, 35, 1);
   color: white;
 }
 
-#TIME_GRAPH, #PYRAMID, #MEDIAN {
-  cursor: pointer;
-  border: 1px solid black;
-  background-color: rgb(77, 53, 84);
-  width: 50%;
+#graph-selection {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 5%;
+  color: white;
+  background-color: var(--color1);
+}
+
+#TIME_GRAPH, #PYRAMID, #HOME {
+  cursor: pointer;
+  margin-left: 30px;
   height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+#TIME_GRAPH > a, #PYRAMID > a {
+  text-decoration: none;
+}
+
+#HOME > a {
+  color: var(--color2);
+  text-decoration: none;
+  font-weight: 1000;
+  font-size: 14pt;
 }
 
 #TIME_GRAPH.selected, #PYRAMID.selected, #MEDIAN.selected {
@@ -75,8 +98,8 @@ a, a:visited, a:link {
   color: white;
 }
 
-a:hover {
-  color: orange;
+#TIME_GRAPH:hover, #PYRAMID:hover {
+  background-color: var(--color2);
 }
 
 .hard-send {

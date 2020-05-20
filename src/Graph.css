@@ -1,5 +1,5 @@
 #Graph {
-  background-color: rgba(77, 53, 84, .95);
+  background-color: var(--color1);
   height: 90%;
   width: 90%;
   border-bottom-left-radius: 4px;

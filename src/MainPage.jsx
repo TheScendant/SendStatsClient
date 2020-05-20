@@ -71,13 +71,13 @@ class MainPage extends Component {
 
     return (
       <div id="MainPage">
-        <MainPageHeader hardestObject={this.hardestObject} name={name} />
         <Router>
           <div id="graph-selection">
+              <span id="HOME"><Link to="/">SendStats</Link></span>
               <span id="TIME_GRAPH"><Link to="/timeByGrades">Grades by Time</Link></span>
               <span id="PYRAMID"><Link to="/gradesByTime">Time by Grades</Link></span>
-            {/*<span id={this.GRAPH_ENUM.MEDIAN} className={median_class} onClick={(e) => { this.setGraphType(e.target.id) }}>Median vs Max</span>*/}
           </div>
+          {/* <MainPageHeader hardestObject={this.hardestObject} name={name} /> */}
           <Switch>
             <div id="visual-wrapper">
               <Route path="/timeByGrades" exact={true}>
@@ -86,7 +86,7 @@ class MainPage extends Component {
               <Route path="/gradesByTime" exact={true}>
                 <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
               </Route>
-              <Redirect exact from="/" to="timeByGrades" />
+              {/* <Redirect exact from="/" to="timeByGrades" /> */}
             </div>
           </Switch>
         </Router>
