@@ -34,17 +34,15 @@ class Graph extends Component {
     }
   }
 
-  requiresScroll(numBars, width) {
+  calcTimeBounds(sends) {
+    const dates = sends.map(({ date }) => new Date(date));
 
-    let barWidth = Math.round(width / numBars);
-    const MIN_BAR_WIDTH = 10; // dosomething this should be calculated
-    let addScroll = false
-    if (barWidth < MIN_BAR_WIDTH) {
-      barWidth = MIN_BAR_WIDTH;
-      numBars = Math.floor(width / barWidth);
-      addScroll = true;
-    }
-    return [addScroll, numBars];
+    const minDate = new Date(Math.min(...dates));
+    const maxDate = new Date(Math.max(...dates));
+
+    const correctedMinDate = new Date(`1/1/${minDate.getFullYear()}`);
+    const correctedMaxDate = new Date(`12/31/${maxDate.getFullYear()}`);
+    return [correctedMinDate, correctedMaxDate];
   }
 
   createGraph(sends) {
@@ -75,27 +73,9 @@ class Graph extends Component {
     const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const [addScroll, numBars] = this.requiresScroll(data.length, width)
-
     let height = SVG_RECT.height - margin.top - margin.bottom;
-    let SUB_HEIGHT, subg, subMargin;
-    if (addScroll) {
-      SUB_HEIGHT = 100;
-      height -= SUB_HEIGHT; // main graph height
-      subMargin = { top: SVG_RECT.height - margin.top - SUB_HEIGHT + margin.bottom }
-      subg = svg.append("g")
-        .attr("height", SUB_HEIGHT)
-        .attr("transform", `translate(${margin.left}, ${subMargin.top})`);
-    }
 
-    const dates = sends.map(({ date }) => new Date(date));
-
-    const minDate = new Date(Math.min(...dates));
-    const maxDate = new Date(Math.max(...dates));
-
-    const correctedMinDate = new Date(`1/1/${minDate.getFullYear()}`);
-    const correctedMaxDate = new Date(`12/31/${maxDate.getFullYear()}`);
-    const timeBounds = [correctedMinDate, correctedMaxDate];
+    const timeBounds = this.calcTimeBounds(sends);
     const x = d3.scaleTime().domain(timeBounds).rangeRound([0, width])
 
     // set y scale
@@ -115,7 +95,7 @@ class Graph extends Component {
     const staxG = g.append("g")
     staxG
       .selectAll("g")
-      .data(d3.stack().keys(keys)(data.slice(0, numBars)))
+      .data(d3.stack().keys(keys)(data))
       .enter()
       .append("g")
       .attr("fill", (d) => gradesByTimeColoring(d.key, HARDEST_GRADE))
@@ -167,7 +147,6 @@ class Graph extends Component {
       .attr("dy", "0.32em")
       .text((d) => d);
 
-
     // Prep the tooltip bits, initial display is hidden
     var tooltip = svg.append("g")
       .attr("class", "tooltip")
@@ -186,94 +165,7 @@ class Graph extends Component {
       .attr("font-size", "12px")
       .attr("font-weight", "bold");
 
-    if (addScroll) {
-      // set x scale
-      const subx = d3.scaleBand()
-        .rangeRound([0, width])
-        .paddingInner(0.05)
-        .align(0.1);
-
-      // set y scale
-      const suby = d3.scaleLinear()
-        .rangeRound([SUB_HEIGHT - margin.bottom, 0]);
-
-      subx.domain(data.map((d) => d.TimeSegment));
-      suby.domain([0, d3.max(data, (d) => d.total)]).nice();
-
-      const SLIDER_RECT_WIDTH = (subx.bandwidth() + 3) * numBars; //dosomething this is hacky
-      subg.selectAll("g")
-        .data(d3.stack().keys(keys)(data))
-        .enter()
-        .append("g")
-        .attr("fill", (d) => gradesByTimeColoring(d.key, HARDEST_GRADE))
-        .selectAll("rect")
-        .data((d) => d)
-        .enter()
-        .append("rect")
-        .attr("x", (d) => subx(d.data.TimeSegment))
-        .attr("y", (d) => suby(d[1]))
-        .attr("height", (d) => suby(d[0]) - suby(d[1]))
-        .attr("width", subx.bandwidth());
-
-      var displayed = d3
-        .scaleQuantize()
-        .domain([0, width])
-        .range(d3.range(data.length));
-
-
-      subg.append("rect")
-        .attr("width", SLIDER_RECT_WIDTH)
-        .attr("height", SUB_HEIGHT)
-        .attr("id", "slider-rect")
-        .attr("x", 0)
-        .attr("fill", "rgba(255,182,193,.4)")
-        .call(d3.drag().on("drag", (d, i, l) => moveTheRect(d, i, l)))
-
-      function moveTheRect(d, i, l) {
-        const theRect = d3.select(l[i]);
-        const currX = parseFloat(theRect.attr("x"));
-
-        const newX = Math.min(Math.max(d3.event.dx + currX, 0), SVG_RECT.width - SLIDER_RECT_WIDTH - margin.right)
-        theRect.attr("x", newX)
-
-        const f = displayed(currX);
-        const nf = displayed(newX);
-
-        if (f === nf) {
-          return;
-        }
-
-
-        x.domain(data.slice(nf, nf + numBars).map(d => d.TimeSegment));
-
-        // dosomething learn d3
-        staxG.selectAll("*").remove();
-
-        g.selectAll(".x-axis").call(d3.axisBottom(x))
-
-        staxG.selectAll("g")
-          .data(d3.stack().keys(keys)(data.slice(nf, nf + numBars)))
-          .enter()
-          .append("g")
-          .attr("fill", (d) => gradesByTimeColoring(d.key, HARDEST_GRADE))
-          .selectAll("rect")
-          .data((d) => d)
-          .enter()
-          .append("rect")
-          .attr("x", (d) => x(d.data.TimeSegment))
-          .attr("y", (d) => y(d[1]))
-          .attr("height", (d) => y(d[0]) - y(d[1]))
-          .attr("width", x.bandwidth())
-          .exit().remove()
-        staxG.exit().remove();
-      }
-    }
-    // svg.call(this.zoom) dosomething dragging on main graph?
   }
-
-
-
-
 
   radioClickHandler(event) {
     if (event.target.name === "year") {

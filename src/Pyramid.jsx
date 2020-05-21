@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import './Pyramid.css'
 import { sliceData } from './GradeSlicer.js';
 import { TimeSliceEnum } from './TimeSlicer.js';
+import { getGradeKeys } from './utils';
 
 class Pyramid extends Component {
   // time by grades

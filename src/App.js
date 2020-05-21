@@ -10,7 +10,7 @@ function App() {
   const [userData, setUserData] = useState("");
   let mainPage, entryForm;
   if ((email || userId) && sends && sends.length && userData) {
-    mainPage = <MainPage email={email} sends={sends} userData={userData}/>
+    mainPage = <MainPage email={email} sends={sends} userData={userData} setSends={setSends}/>
   } else {
     entryForm = <EntryForm setEmail={setEmail} setSends={setSends} setUserId={setUserId} setUserData={setUserData}/>
   }

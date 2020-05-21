@@ -10,7 +10,8 @@ import { BrowserRouter as Router, Link, Redirect, Route, Switch } from 'react-ro
 class MainPage extends Component {
   constructor(props) {
     super(props);
-    const { email, sends, userData } = props;
+    const { email, sends, userData, setSends} = props;
+    this.setSends = setSends;
     this.GRAPH_ENUM = {
       TIME_GRAPH: "TIME_GRAPH",
       PYRAMID: "PYRAMID",
@@ -36,6 +37,7 @@ class MainPage extends Component {
     }
     for (const send of this.state.sends) {
       if (isValidRating(send)) {
+        console.warn(send)
         const leadStyle = send.leadStyle.toLowerCase();
         if (leadStyle === "onsight") {
           if (gradeSorter(send.rating, hardestObject.onsight.rating) === 1) {
@@ -65,7 +67,9 @@ class MainPage extends Component {
       }
     });
   }
-
+  goHome() {
+    this.setSends([]);
+  }
   render() {
     const { name } = this.state.userData;
 
@@ -73,7 +77,7 @@ class MainPage extends Component {
       <div id="MainPage">
         <Router>
           <div id="graph-selection">
-              <span id="HOME"><Link to="/">SendStats</Link></span>
+              <span id="HOME" onClick={this.goHome.bind(this)}><a>SendStats</a></span>
               <span id="TIME_GRAPH"><Link to="/timeByGrades">Sends Over Time</Link></span>
               <span id="PYRAMID"><Link to="/gradesByTime">Grade Pyramid</Link></span>
           </div>
@@ -86,7 +90,7 @@ class MainPage extends Component {
               <Route path="/gradesByTime" exact={true}>
                 <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
               </Route>
-              {/* <Redirect exact from="/" to="timeByGrades" /> */}
+              <Redirect exact from="/" to="timeByGrades" />
             </div>
           </Switch>
         </Router>
