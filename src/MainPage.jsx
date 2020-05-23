@@ -37,7 +37,6 @@ class MainPage extends Component {
     }
     for (const send of this.state.sends) {
       if (isValidRating(send)) {
-        console.warn(send)
         const leadStyle = send.leadStyle.toLowerCase();
         if (leadStyle === "onsight") {
           if (gradeSorter(send.rating, hardestObject.onsight.rating) === 1) {

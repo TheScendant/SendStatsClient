@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import './Pyramid.css'
 import { sliceData } from './GradeSlicer.js';
 import { TimeSliceEnum } from './TimeSlicer.js';
-import { getGradeKeys } from './utils';
+import { getAllGrades } from './utils';
 
 class Pyramid extends Component {
   // time by grades
@@ -61,7 +61,8 @@ class Pyramid extends Component {
       .range(["white", "red"]); // dosomething .domain(keys)? interpolate?
 
 
-    x.domain(data.map((d) => d.grade));
+    // x.domain(data.map((d) => d.grade));
+    x.domain(getAllGrades());
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
 
     g.append("g")
