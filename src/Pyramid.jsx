@@ -21,7 +21,13 @@ class Pyramid extends Component {
     this.createGraph(this.props.sends);
   }
 
+  zoomed() {
+    console.warn('yeet')
+  }
   createGraph(sends) {
+
+    const yeet = d3.zoom().on("zoom", this.zoomed.bind(this));
+
     const [gradeDateQuantityArray, years] = sliceData(sends, this.state.TimeSlice);
     // {TimeSegment: value, gradeA: quantity, gradeB: quantity }
     d3.select("svg").selectAll("*").remove();
@@ -33,7 +39,7 @@ class Pyramid extends Component {
     const margin = { top: 20, right: 20, bottom: 30, left: 40 };
     const width = SVG_RECT.width- margin.left - margin.right - LEGEND_WIDTH;
     const height = SVG_RECT.height- margin.top - margin.bottom;
-    const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").call(yeet);
 
     const data = gradeDateQuantityArray;
 

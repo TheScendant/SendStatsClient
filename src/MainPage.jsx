@@ -22,7 +22,7 @@ class MainPage extends Component {
       email,
       sends,
       userData,
-      graphType: this.GRAPH_ENUM.TIME_GRAPH,
+      graphType: this.GRAPH_ENUM.PYRAMID,
     };
 
     this.hardestObject = this.getHardests();
