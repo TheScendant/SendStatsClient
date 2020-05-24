@@ -4,7 +4,6 @@ function MainPageHeader({ hardestObject, name }) {
   return (
     <div id="main-page-header">
       <div id="sent-stats-summary">
-        <span id="name">Send Stats for {name}</span>
         <div id="hardests">
           <div className="hard-send">
             <span className="hard-send-type" id="hardest-onsight">Hardest Onsight:</span>

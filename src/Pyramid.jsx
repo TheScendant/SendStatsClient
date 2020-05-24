@@ -41,7 +41,8 @@ class Pyramid extends Component {
     const margin = { top: 20, right: 20, bottom: 30, left: 40 };
     const width = SVG_RECT.width- margin.left - margin.right - LEGEND_WIDTH;
     const height = SVG_RECT.height- margin.top - margin.bottom;
-    const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .attr("id", "g");
 
     const data = gradeDateQuantityArray;
 
@@ -86,11 +87,13 @@ class Pyramid extends Component {
       .attr("y", (d) => y(d[1]))
       .attr("height", (d) => y(d[0]) - y(d[1]))
       .attr("width", x.bandwidth())
+      .attr("id", "dataG");
 
     const xAxis = g.append("g");
     xAxis
       .attr("class", "x-axis")
       .attr("transform", `translate(0,${height})`)
+      .attr("id", "xAxis")
       .call(d3.axisBottom(x));
 
     const yAxis = g.append("g");
@@ -104,6 +107,7 @@ class Pyramid extends Component {
       .attr("fill", "#000")
       .attr("font-weight", "bold")
       .attr("font-size", "16px")
+      .attr("id", "yAxis")
       .attr("text-anchor", "start");
 
 

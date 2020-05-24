@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Link, Redirect, Route, Switch } from 'react-ro
 class MainPage extends Component {
   constructor(props) {
     super(props);
-    const { email, sends, userData, setSends} = props;
+    const { email, sends, userData, setSends } = props;
     this.setSends = setSends;
     this.GRAPH_ENUM = {
       TIME_GRAPH: "TIME_GRAPH",
@@ -76,13 +76,19 @@ class MainPage extends Component {
       <div id="MainPage">
         <Router>
           <div id="graph-selection">
+            <div id="link-list">
               <span id="HOME" onClick={this.goHome.bind(this)}><a>SendStats</a></span>
+              <span id="SUMMARY"><Link to="/summary">Sends Summary</Link></span>
               <span id="TIME_GRAPH"><Link to="/timeByGrades">Sends Over Time</Link></span>
               <span id="PYRAMID"><Link to="/gradesByTime">Grade Pyramid</Link></span>
+            </div>
+            <span>{name}</span>
           </div>
-          {/* <MainPageHeader hardestObject={this.hardestObject} name={name} /> */}
-          <Switch>
-            <div id="visual-wrapper">
+          <div id="visual-wrapper">
+            <Switch>
+              <Route path="/summary" exact={true}>
+              <MainPageHeader hardestObject={this.hardestObject} name={name} />
+          </Route>
               <Route path="/timeByGrades" exact={true}>
                 <Graph email={this.state.email} sends={this.state.sends} />
               </Route>
@@ -90,8 +96,8 @@ class MainPage extends Component {
                 <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
               </Route>
               <Redirect exact from="/" to="gradesByTime" />
-            </div>
-          </Switch>
+            </Switch>
+          </div>
         </Router>
       </div>
     );

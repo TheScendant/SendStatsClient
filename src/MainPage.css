@@ -25,13 +25,15 @@
 }
 
 #main-page-header {
-  background-color: var(--color4);
+  background-color: var(--color1);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   height: 7em;
-  width: 90%
+  width: 90%;
+  height: 90%;
+  border: 2px solid black;
 }
 
 .logo {
@@ -66,7 +68,17 @@
   background-color: var(--color1);
 }
 
-#TIME_GRAPH, #PYRAMID, #HOME {
+#link-list {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 90%;
+  height: 100%;
+  color: white;
+  background-color: var(--color1);
+}
+
+#TIME_GRAPH, #PYRAMID, #HOME, #SUMMARY {
   cursor: pointer;
   margin-left: 30px;
   height: 100%;
@@ -75,7 +87,7 @@
   padding: 0px 4px;
 }
 
-#TIME_GRAPH > a, #PYRAMID > a {
+#TIME_GRAPH > a, #PYRAMID > a, #SUMMARY > a {
   text-decoration: none;
   height: 100%;
   display: flex;
@@ -89,7 +101,7 @@
   font-size: 14pt;
 }
 
-#TIME_GRAPH.selected, #PYRAMID.selected, #MEDIAN.selected {
+#TIME_GRAPH.selected, #PYRAMID.selected, #MEDIAN.selected, #SUMMARY.selected {
   background-color: rgba(120, 85, 131, 0.95);
 }
 
