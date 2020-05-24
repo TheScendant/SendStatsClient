@@ -21,6 +21,6 @@
   font-size: 165x;
 }
 
-#pyramid-graph > g > g.x-axis > g:nth-child(2n) text {
+#pyramid-graph > g > g.x-axis > g:nth-child(2n+1) text {
   display: none;
 }

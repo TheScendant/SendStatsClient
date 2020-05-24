@@ -168,11 +168,7 @@ class Graph extends Component {
   }
 
   radioClickHandler(event) {
-    if (event.target.name === "year") {
-      this.setState({ TimeSlice: TimeSliceEnum.YEAR });
-    } else if (event.target.name === "month") {
-      this.setState({ TimeSlice: TimeSliceEnum.MONTH });
-    }
+    this.setState(event.target.name === "year" ? {TimeSlice: TimeSliceEnum.YEAR} : {TimeSlice: TimeSliceEnum.MONTH});
   }
 
   render() {

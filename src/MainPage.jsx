@@ -89,7 +89,7 @@ class MainPage extends Component {
               <Route path="/gradesByTime" exact={true}>
                 <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
               </Route>
-              <Redirect exact from="/" to="timeByGrades" />
+              <Redirect exact from="/" to="gradesByTime" />
             </div>
           </Switch>
         </Router>

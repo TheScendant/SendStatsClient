@@ -21,25 +21,27 @@ class Pyramid extends Component {
     this.createGraph(this.props.sends);
   }
 
-  zoomed() {
-    console.warn('yeet')
-  }
   createGraph(sends) {
 
-    const yeet = d3.zoom().on("zoom", this.zoomed.bind(this));
+    const yeet = d3.zoom().on("zoom", (e) => {
+      // dataG.attr("transform", d3.event.transform)
+      const xTransform = Math.max( Math.min(d3.event.transform.x, 0) , (bitter - width) * -1);
+      xAxis.attr("transform", `translate(${xTransform},${height})`)
+      dataG.attr("transform", `translate(${xTransform},0)`)
+    });
 
     const [gradeDateQuantityArray, years] = sliceData(sends, this.state.TimeSlice);
     // {TimeSegment: value, gradeA: quantity, gradeB: quantity }
     d3.select("svg").selectAll("*").remove();
     // dosomething implement screen resize
     const LEGEND_WIDTH = 50;
-    const svg = d3.select("svg");
+    const svg = d3.select("svg").call(yeet);
     const SVG_RECT = svg.node().getBoundingClientRect();
 
     const margin = { top: 20, right: 20, bottom: 30, left: 40 };
     const width = SVG_RECT.width- margin.left - margin.right - LEGEND_WIDTH;
     const height = SVG_RECT.height- margin.top - margin.bottom;
-    const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").call(yeet);
+    const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     const data = gradeDateQuantityArray;
 
@@ -54,7 +56,7 @@ class Pyramid extends Component {
 
     // set x scale
     var x = d3.scaleBand()
-      .rangeRound([0, width])
+      .rangeRound([0, data.length * 80])
       .paddingInner(0.05)
       .align(0.1);
 
@@ -71,7 +73,8 @@ class Pyramid extends Component {
     x.domain(getAllGrades());
     y.domain([0, d3.max(data, (d) => d.total)]).nice();
 
-    g.append("g")
+    const dataG = g.append("g");
+    dataG
       .selectAll("g")
       .data(d3.stack().keys(years)(data))
       .enter().append("g")
@@ -84,12 +87,14 @@ class Pyramid extends Component {
       .attr("height", (d) => y(d[0]) - y(d[1]))
       .attr("width", x.bandwidth())
 
-    g.append("g")
+    const xAxis = g.append("g");
+    xAxis
       .attr("class", "x-axis")
       .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(x));
 
-    g.append("g")
+    const yAxis = g.append("g");
+    yAxis
       .attr("class", "y-axis")
       .call(d3.axisLeft(y).ticks(null, "s"))
       .append("text")
@@ -100,6 +105,9 @@ class Pyramid extends Component {
       .attr("font-weight", "bold")
       .attr("font-size", "16px")
       .attr("text-anchor", "start");
+
+
+    const bitter = xAxis.node().getBBox().width;
 
     var legend = g.append("g")
       .attr("font-family", "sans-serif")
@@ -125,11 +133,7 @@ class Pyramid extends Component {
   }
 
   radioClickHandler(event) {
-    if (event.target.name === "year") {
-      this.setState({TimeSlice: TimeSliceEnum.YEAR});
-    } else if (event.target.name === "month") {
-      this.setState({TimeSlice: TimeSliceEnum.MONTH});
-    }
+    this.setState(event.target.name === "year" ? {TimeSlice: TimeSliceEnum.YEAR} : {TimeSlice: TimeSliceEnum.MONTH});
   }
 
   render() {
