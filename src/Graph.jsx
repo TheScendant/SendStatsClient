@@ -32,9 +32,12 @@ function Graph({ sends }) {
 
   useEffect(() => {
     if (currSends && svgRef.current) {
+      console.warn(currSends)
       const [ratings, dateGradeQuantityArray] = sliceData(currSends, timeSlice);
 
       const data = dateGradeQuantityArray;
+
+      console.warn(data);
       var keys = ratings.sort((a, b) => gradeSorter(a, b));
       for (const d of data) {
         let total = 0;
