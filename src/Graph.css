@@ -36,3 +36,10 @@ text {
 #slider-rect {
   cursor: pointer;
 }
+
+#sends-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}

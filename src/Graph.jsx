@@ -32,12 +32,10 @@ function Graph({ sends }) {
 
   useEffect(() => {
     if (currSends && svgRef.current) {
-      console.warn(currSends)
       const [ratings, dateGradeQuantityArray] = sliceData(currSends, timeSlice);
 
       const data = dateGradeQuantityArray;
 
-      console.warn(data);
       var keys = ratings.sort((a, b) => gradeSorter(a, b));
       for (const d of data) {
         let total = 0;
@@ -163,27 +161,31 @@ function Graph({ sends }) {
 
   return (
     <div id="Graph">
-      <svg id="time-graph" ref={svgRef}/>
-      <label className="radioLabel">
-        Year
+      <svg id="time-graph" ref={svgRef} />
+      <div id="time-filter">
+        <label className="radioLabel">
+          Year
           <input type="radio" name="year" className="radio" checked={timeSlice === TimeSliceEnum.YEAR} onChange={radioClickHandler} />
-      </label>
-      <label className="radioLabel">
-        Month
+        </label>
+        <label className="radioLabel">
+          Month
           <input type="radio" name="month" className="radio" checked={timeSlice === TimeSliceEnum.MONTH} onChange={radioClickHandler} />
-      </label>
-      <label className="sendType">
-        Redpoints / Pinkpoints
         </label>
-      <input type="checkbox" checked={redpoints} onChange={(e) => setRedpoints(e.target.checked)}/>
-      <label className="sendType">
-        Flashes
+      </div>
+      <div id="sends-filter">
+        <label className="sendType">
+          Redpoints / Pinkpoints
         </label>
-      <input type="checkbox" checked={flashes} onChange={(e) => setFlashes(e.target.checked)}/>
-      <label className="sendType">
-        Onsights
+        <input type="checkbox" checked={redpoints} onChange={(e) => setRedpoints(e.target.checked)} />
+        <label className="sendType">
+          Flashes
         </label>
-      <input type="checkbox" checked={onsights} onChange={(e) => setOnsights(e.target.checked)}/>
+        <input type="checkbox" checked={flashes} onChange={(e) => setFlashes(e.target.checked)} />
+        <label className="sendType">
+          Onsights
+        </label>
+        <input type="checkbox" checked={onsights} onChange={(e) => setOnsights(e.target.checked)} />
+      </div>
     </div>
   )
 }

@@ -7,7 +7,7 @@ import './MainPage.css';
 import { gradeSorter, isValidRating } from './utils';
 import { BrowserRouter as Router, Link, Redirect, Route, Switch } from 'react-router-dom';
 import { Button, Drawer, Icon } from '@material-ui/core';
-import {Menu as MenuIcon} from '@material-ui/icons/';
+import { Menu as MenuIcon } from '@material-ui/icons/';
 
 function MainPage({ email, sends, userData, setSends }) {
 
@@ -42,9 +42,10 @@ function MainPage({ email, sends, userData, setSends }) {
     TIME_GRAPH: "TIME_GRAPH",
     PYRAMID: "PYRAMID",
     MEDIAN: "MEDIAN",
+    SUMMARY: "SUMMARY",
   };
 
-  const graphType = GRAPH_ENUM.PYRAMID;
+  const [graphType, setGraphType] = useState(GRAPH_ENUM.PYRAMID);
 
   const hardestObject = getHardests(sends);
   const year = (new Date()).getFullYear();
@@ -56,21 +57,32 @@ function MainPage({ email, sends, userData, setSends }) {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+
+  const handleRouteChange = (e) => {
+    setDrawerOpen(false)
+  }
+
   return (
     <div id="MainPage">
       <div id="graph-selection">
         <Button onClick={(e) => setDrawerOpen(!drawerOpen)}>
-          <MenuIcon />
+          <MenuIcon className="menu-icon"/>
         </Button>
         <span id="HOME" onClick={goHome}><a>SendStats</a></span>
       </div>
       <Router>
         <Drawer anchor={'left'} open={drawerOpen} onClose={(e) => setDrawerOpen(false)}>
           <div id="link-list">
-            <span>Navigation</span>
-            <span id="SUMMARY"><Link to="/summary">Sends Summary</Link></span>
-            <span id="TIME_GRAPH"><Link to="/timeByGrades">Sends Over Time</Link></span>
-            <span id="PYRAMID"><Link to="/gradesByTime">Grade Pyramid</Link></span>
+            <div id="LL_TITLE">Navigation</div>
+            <span id="SUMMARY" onClick={handleRouteChange}>
+              <Link to="/summary">Sends Summary</Link>
+            </span>
+            <span id="TIME_GRAPH" onClick={handleRouteChange}>
+              <Link to="/timeByGrades">Sends Over Time</Link>
+            </span>
+            <span id="PYRAMID" onClick={handleRouteChange}>
+              <Link to="/gradePyramid">Grade Pyramid</Link>
+            </span>
           </div>
           <span>{name}</span>
         </Drawer>
@@ -82,10 +94,10 @@ function MainPage({ email, sends, userData, setSends }) {
             <Route path="/timeByGrades" exact={true}>
               <Graph email={email} sends={sends} />
             </Route>
-            <Route path="/gradesByTime" exact={true}>
+            <Route path="/gradePyramid" exact={true}>
               <Pyramid email={email} sends={sends} year={year} />
             </Route>
-            <Redirect exact from="/" to="gradesByTime" />
+            <Redirect exact from="/" to="gradePyramid" />
           </Switch>
         </div>
       </Router>
