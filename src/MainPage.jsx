@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import Graph from './Graph';
 import Pyramid from './Pyramid';
 import MainPageHeader from './MainPageHeader';
-import SimpleMovingMedian from './SimpleMovingMedian';
+// import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
 import { gradeSorter, isValidRating } from './utils';
 import { BrowserRouter as Router, Link, Redirect, Route, Switch } from 'react-router-dom';
-import { Button, Drawer, Icon } from '@material-ui/core';
+import { Button, Drawer } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons/';
 
 function MainPage({ email, sends, userData, setSends }) {
@@ -38,14 +38,13 @@ function MainPage({ email, sends, userData, setSends }) {
     return hardestObject;
   }
 
-  const GRAPH_ENUM = {
+/*   const GRAPH_ENUM = {
     TIME_GRAPH: "TIME_GRAPH",
     PYRAMID: "PYRAMID",
     MEDIAN: "MEDIAN",
     SUMMARY: "SUMMARY",
-  };
+  }; */
 
-  const [graphType, setGraphType] = useState(GRAPH_ENUM.PYRAMID);
 
   const hardestObject = getHardests(sends);
   const year = (new Date()).getFullYear();
@@ -59,7 +58,7 @@ function MainPage({ email, sends, userData, setSends }) {
 
 
   const handleRouteChange = (e) => {
-    setDrawerOpen(false)
+    // setDrawerOpen(false)
   }
 
   return (
@@ -68,7 +67,7 @@ function MainPage({ email, sends, userData, setSends }) {
         <Button onClick={(e) => setDrawerOpen(!drawerOpen)}>
           <MenuIcon className="menu-icon"/>
         </Button>
-        <span id="HOME" onClick={goHome}><a>SendStats</a></span>
+        <span id="HOME" onClick={goHome}><a href="/">SendStats</a></span>
       </div>
       <Router>
         <Drawer anchor={'left'} open={drawerOpen} onClose={(e) => setDrawerOpen(false)}>

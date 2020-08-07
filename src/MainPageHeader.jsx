@@ -1,8 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+//import { useSelector } from 'react-redux';
+
 function MainPageHeader({ hardestObject, name }) {
   const { onsight, flash, redpoint } = hardestObject;
-  const email = useSelector(state => state.userData.email);
+  // const email = useSelector(state => state.userData.email);
   return (
     <div id="main-page-header">
       {/* Email is {email} */}

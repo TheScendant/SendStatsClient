@@ -153,7 +153,7 @@ function Graph({ sends }) {
         .attr("font-size", "12px")
         .attr("font-weight", "bold");
     }
-  }, [currSends, svgRef.current])
+  }, [currSends, timeSlice])
 
   const radioClickHandler = (event) => {
     setTimeSlice(event.target.name === "year" ? TimeSliceEnum.YEAR : TimeSliceEnum.MONTH);
