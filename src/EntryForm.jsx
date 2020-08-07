@@ -4,9 +4,10 @@ import EmailEntry from './EmailEntry';
 import UserIdEntry from './UserIdEntry';
 import './EntryForm.css'
 import { postJSON } from './utils';
+import { useDispatch } from 'react-redux';
+import { setUserEmail } from './userSlice';
 
 function EntryForm(props) {
-
   const { setEmail, setSends, setUserData, setUserId } = props;
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
@@ -15,6 +16,8 @@ function EntryForm(props) {
     email: { required: false, type: "email" },
     userId: { required: false },
   });
+  const dispatch = useDispatch();
+
 
   /**
    * onSubmit is only called when there aren't errors
@@ -34,6 +37,7 @@ function EntryForm(props) {
       sends = await postJSON(data, '/sendData');
       userData = await postJSON(data, '/userData');
       if (sends && userData) {
+        dispatch(setUserEmail(email));
         setSends(JSON.parse(sends.message));
         setUserData(JSON.parse(userData.message));
       } else {
