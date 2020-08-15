@@ -30,10 +30,25 @@ function Graph({ sends }) {
     return [correctedMinDate, correctedMaxDate];
   }
 
+  const calcMonthDifferences = (start, stop) => {
+    if (timeSlice === TimeSliceEnum.YEAR) {
+      return (stop.getYear() - start.getYear()) + 1; // giggles
+    } else {
+      const yearsAsMonths = ((stop.getYear() - start.getYear()) + 1) * 12;
+      const months = (stop.getMonth() - start.getMonth())
+      return months + yearsAsMonths;
+    }
+  }
+
   useEffect(() => {
     if (currSends && svgRef.current) {
-      const [ratings, dateGradeQuantityArray] = sliceData(currSends, timeSlice);
+      const yeet = d3.zoom().on("zoom", (e) => {
+        const xTransform = Math.max(Math.min(d3.event.transform.x, 0), (bitter - width) * -1);
+        xAxis.attr("transform", `translate(${xTransform},${height})`)
+        staxG.attr("transform", `translate(${xTransform},0)`)
+      })
 
+      const [ratings, dateGradeQuantityArray] = sliceData(currSends, timeSlice);
       const data = dateGradeQuantityArray;
 
       var keys = ratings.sort((a, b) => gradeSorter(a, b));
@@ -49,10 +64,9 @@ function Graph({ sends }) {
 
       d3.select(svgRef.current).selectAll("*").remove();
 
-
       // dosomething implement screen resize
       const LEGEND_WIDTH = 50;
-      const svg = d3.select(svgRef.current);
+      const svg = d3.select(svgRef.current).call(yeet);
 
       const SVG_RECT = svg.node().getBoundingClientRect();
       const margin = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -61,10 +75,14 @@ function Graph({ sends }) {
       const g = svg.append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-      let height = SVG_RECT.height - margin.top - margin.bottom;
+      const height = SVG_RECT.height - margin.top - margin.bottom;
 
       const timeBounds = calcTimeBounds(currSends);
-      const x = d3.scaleTime().domain(timeBounds).rangeRound([0, width])
+
+      const timeLength = calcMonthDifferences(timeBounds[0], timeBounds[1]);
+      // timeLength = # of year or # of months
+      const barWidth = 25;
+      const x = d3.scaleTime().domain(timeBounds).rangeRound([0, timeLength * barWidth])
 
       // set y scale
       var y = d3.scaleLinear()
@@ -72,12 +90,6 @@ function Graph({ sends }) {
 
       data.sort((a, b) => b.TimeSegment - a.TimeSegment);
 
-      let barWidth;
-      if (timeSlice === TimeSliceEnum.MONTH) {
-        barWidth = x(new Date("02-01-2020")) - x(new Date("01-01-2020"))
-      } else {
-        barWidth = x(new Date("01-01-2020")) - x(new Date("01-01-2019"))
-      }
 
       y.domain([0, d3.max(data, (d) => d.total)]).nice();
       const staxG = g.append("g")
@@ -97,12 +109,14 @@ function Graph({ sends }) {
         .attr("height", (d) => y(d[0]) - y(d[1]))
         .attr("width", barWidth)
 
-      g.append("g")
+      const xAxis = g.append("g");
+      xAxis
         .attr("class", "x-axis")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
 
-      g.append("g")
+      const yAxis = g.append("g");
+      yAxis
         .attr("class", "y-axis")
         .call(d3.axisLeft(y).ticks(null, "s"))
         .append("text")
@@ -114,7 +128,9 @@ function Graph({ sends }) {
         .attr("font-size", "16px")
         .attr("text-anchor", "start");
 
-      var legend = g.append("g")
+      const bitter = xAxis.node().getBBox().width;
+
+      const legend = g.append("g")
         .attr("font-family", "sans-serif")
         .attr("font-size", 10)
         .attr("text-anchor", "end")
@@ -156,7 +172,7 @@ function Graph({ sends }) {
       </div>
       <div id="sends-filter">
         <label className="sendType">
-          Redpoints / Pinkpoints
+          Redpoints
         </label>
         <input type="checkbox" checked={redpoints} onChange={(e) => setRedpoints(e.target.checked)} />
         <label className="sendType">

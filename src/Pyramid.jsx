@@ -11,7 +11,7 @@ function Pyramid({ sends, year }) {
   // const [timeSlice, setTimeSlice] = useState(TimeSliceEnum.YEAR);
   const timeSlice = TimeSliceEnum.YEAR;
 
-  useEffect(()=> {
+  useEffect(() => {
     if (sends && svgRef.current) {
       const yeet = d3.zoom().on("zoom", (e) => {
         // dataG.attr("transform", d3.event.transform)
@@ -19,23 +19,10 @@ function Pyramid({ sends, year }) {
         xAxis.attr("transform", `translate(${xTransform},${height})`)
         dataG.attr("transform", `translate(${xTransform},0)`)
       });
-  
+
       const [gradeDateQuantityArray, years] = sliceData(sends, timeSlice);
-      // {TimeSegment: value, gradeA: quantity, gradeB: quantity }
-      d3.select("#pyramid-graph").selectAll("*").remove();
-      // dosomething implement screen resize
-      const LEGEND_WIDTH = 50;
-      const svg = d3.select("#pyramid-graph").call(yeet);
-      const SVG_RECT = svg.node().getBoundingClientRect();
-  
-      const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-      const width = SVG_RECT.width - margin.left - margin.right - LEGEND_WIDTH;
-      const height = SVG_RECT.height - margin.top - margin.bottom;
-      const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .attr("id", "g");
-  
       const data = gradeDateQuantityArray;
-  
+
       for (const d of data) {
         let total = 0;
         for (let k = 0; k < years.length; k++) {
@@ -44,26 +31,42 @@ function Pyramid({ sends, year }) {
         }
         d.total = total;
       }
-  
+
+
+      d3.select("#pyramid-graph").selectAll("*").remove();
+
+      // dosomething implement screen resize
+      const LEGEND_WIDTH = 50;
+      const svg = d3.select(svgRef.current).call(yeet);
+
+      const SVG_RECT = svg.node().getBoundingClientRect();
+      const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+      const width = SVG_RECT.width - margin.left - margin.right - LEGEND_WIDTH;
+
+      const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`)
+      
+      const height = SVG_RECT.height - margin.top - margin.bottom;
+
+
       // set x scale
       var x = d3.scaleBand()
         .rangeRound([0, data.length * 80])
         .paddingInner(0.05)
         .align(0.1);
-  
+
       // set y scale
       var y = d3.scaleLinear()
         .rangeRound([height, 0]);
-  
+
       const startYear = years.sort()[0];
       var myColor = d3.scaleLinear().domain([startYear, year])
         .range(["white", "red"]); // dosomething .domain(keys)? interpolate?
-  
-  
+
+
       // x.domain(data.map((d) => d.grade));
       x.domain(getAllGrades());
       y.domain([0, d3.max(data, (d) => d.total)]).nice();
-  
+
       const dataG = g.append("g");
       dataG
         .selectAll("g")
@@ -78,14 +81,14 @@ function Pyramid({ sends, year }) {
         .attr("height", (d) => y(d[0]) - y(d[1]))
         .attr("width", x.bandwidth())
         .attr("id", "dataG");
-  
+
       const xAxis = g.append("g");
       xAxis
         .attr("class", "x-axis")
         .attr("transform", `translate(0,${height})`)
         .attr("id", "xAxis")
         .call(d3.axisBottom(x));
-  
+
       const yAxis = g.append("g");
       yAxis
         .attr("class", "y-axis")
@@ -99,11 +102,11 @@ function Pyramid({ sends, year }) {
         .attr("font-size", "16px")
         .attr("id", "yAxis")
         .attr("text-anchor", "start");
-  
-  
+
+
       const bitter = xAxis.node().getBBox().width;
-  
-      var legend = g.append("g")
+
+      const legend = g.append("g")
         .attr("font-family", "sans-serif")
         .attr("font-size", 10)
         .attr("text-anchor", "end")
@@ -111,13 +114,13 @@ function Pyramid({ sends, year }) {
         .data(years.slice().reverse())
         .enter().append("g")
         .attr("transform", (d, i) => `translate(${LEGEND_WIDTH}, ${i * 20})`);
-  
+
       legend.append("rect")
         .attr("x", width - 19)
         .attr("width", 19)
         .attr("height", 19)
         .attr("fill", d => myColor(d));
-  
+
       legend.append("text")
         .attr("x", width - 24)
         .attr("y", 9.5)
@@ -135,7 +138,7 @@ function Pyramid({ sends, year }) {
 
   return (
     <div id="Pyramid">
-      <svg id="pyramid-graph" ref={svgRef}/>
+      <svg id="pyramid-graph" ref={svgRef} />
     </div>
   )
 }
