@@ -1,41 +1,23 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Graph from './Graph';
 import Pyramid from './Pyramid';
 import MainPageHeader from './MainPageHeader';
-import SimpleMovingMedian from './SimpleMovingMedian';
+// import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
 import { gradeSorter, isValidRating } from './utils';
 import { BrowserRouter as Router, Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Button, Drawer } from '@material-ui/core';
+import { Menu as MenuIcon } from '@material-ui/icons/';
 
-class MainPage extends Component {
-  constructor(props) {
-    super(props);
-    const { email, sends, userData, setSends} = props;
-    this.setSends = setSends;
-    this.GRAPH_ENUM = {
-      TIME_GRAPH: "TIME_GRAPH",
-      PYRAMID: "PYRAMID",
-      MEDIAN: "MEDIAN",
-    };
+function MainPage({ email, sends, userData, setSends }) {
 
-    this.state = {
-      email,
-      sends,
-      userData,
-      graphType: this.GRAPH_ENUM.TIME_GRAPH,
-    };
-
-    this.hardestObject = this.getHardests();
-    this.year = (new Date()).getFullYear();
-  }
-
-  getHardests() {
+  const getHardests = (sends) => {
     const hardestObject = {
       onsight: { rating: "5.0" },
       flash: { rating: "5.0" },
       redpoint: { rating: "5.0" }
     }
-    for (const send of this.state.sends) {
+    for (const send of sends) {
       if (isValidRating(send)) {
         const leadStyle = send.leadStyle.toLowerCase();
         if (leadStyle === "onsight") {
@@ -56,45 +38,69 @@ class MainPage extends Component {
     return hardestObject;
   }
 
-  setGraphType(graphType) {
-    this.setState(function () {
-      return {
-        email: this.state.email,
-        sends: this.state.sends,
-        userData: this.state.userData,
-        graphType: graphType,
-      }
-    });
-  }
-  goHome() {
-    this.setSends([]);
-  }
-  render() {
-    const { name } = this.state.userData;
+/*   const GRAPH_ENUM = {
+    TIME_GRAPH: "TIME_GRAPH",
+    PYRAMID: "PYRAMID",
+    MEDIAN: "MEDIAN",
+    SUMMARY: "SUMMARY",
+  }; */
 
-    return (
-      <div id="MainPage">
-        <Router>
-          <div id="graph-selection">
-              <span id="HOME" onClick={this.goHome.bind(this)}><a>SendStats</a></span>
-              <span id="TIME_GRAPH"><Link to="/timeByGrades">Sends Over Time</Link></span>
-              <span id="PYRAMID"><Link to="/gradesByTime">Grade Pyramid</Link></span>
-          </div>
-          {/* <MainPageHeader hardestObject={this.hardestObject} name={name} /> */}
-          <Switch>
-            <div id="visual-wrapper">
-              <Route path="/timeByGrades" exact={true}>
-                <Graph email={this.state.email} sends={this.state.sends} />
-              </Route>
-              <Route path="/gradesByTime" exact={true}>
-                <Pyramid email={this.state.email} sends={this.state.sends} year={this.year} />
-              </Route>
-              <Redirect exact from="/" to="timeByGrades" />
-            </div>
-          </Switch>
-        </Router>
-      </div>
-    );
+
+  const hardestObject = getHardests(sends);
+  const year = (new Date()).getFullYear();
+
+  const goHome = () => { //dosomething
+    setSends([]);
   }
+  const { name } = userData;
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+
+  const handleRouteChange = (e) => {
+    // setDrawerOpen(false)
+  }
+
+  return (
+    <div id="MainPage">
+      <div id="graph-selection">
+        <Button onClick={(e) => setDrawerOpen(!drawerOpen)}>
+          <MenuIcon className="menu-icon"/>
+        </Button>
+        <span id="HOME" onClick={goHome}><a href="/">SendStats</a></span>
+      </div>
+      <Router>
+        <Drawer anchor={'left'} open={drawerOpen} onClose={(e) => setDrawerOpen(false)}>
+          <div id="link-list">
+            <div id="LL_TITLE">Navigation</div>
+            <span id="SUMMARY" onClick={handleRouteChange}>
+              <Link to="/summary">Sends Summary</Link>
+            </span>
+            <span id="TIME_GRAPH" onClick={handleRouteChange}>
+              <Link to="/timeByGrades">Sends Over Time</Link>
+            </span>
+            <span id="PYRAMID" onClick={handleRouteChange}>
+              <Link to="/gradePyramid">Grade Pyramid</Link>
+            </span>
+          </div>
+          <span>{name}</span>
+        </Drawer>
+        <div id="visual-wrapper" >
+          <Switch>
+            <Route path="/summary" exact={true}>
+              <MainPageHeader hardestObject={hardestObject} name={name} />
+            </Route>
+            <Route path="/timeByGrades" exact={true}>
+              <Graph email={email} sends={sends} />
+            </Route>
+            <Route path="/gradePyramid" exact={true}>
+              <Pyramid email={email} sends={sends} year={year} />
+            </Route>
+            <Redirect exact from="/" to="gradePyramid" />
+          </Switch>
+        </div>
+      </Router>
+    </div>
+  );
 }
 export default MainPage;

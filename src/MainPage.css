@@ -7,7 +7,7 @@
 }
 
 #MainPage {
-  width: 90%;
+  width: 95%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -25,13 +25,14 @@
 }
 
 #main-page-header {
-  background-color: var(--color4);
+  background-color: var(--color1);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 7em;
-  width: 90%
+  width: 90%;
+  height: 90%;
+  border: 2px solid black;
 }
 
 .logo {
@@ -54,6 +55,7 @@
   justify-content: center;
   flex-direction: column;
   color: white;
+  align-items: center;
 }
 
 #graph-selection {
@@ -61,35 +63,45 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  height: 5%;
+  height: 80px;
+  min-height: 80px;
   color: white;
   background-color: var(--color1);
 }
 
-#TIME_GRAPH, #PYRAMID, #HOME {
-  cursor: pointer;
-  margin-left: 30px;
-  height: 100%;
+#link-list {
   display: flex;
   align-items: center;
-  padding: 0px 4px;
+  justify-content: flex-start;
+  width: 200px;
+  height: 100%;
+  color: white;
+  background-color: var(--color4);
+  flex-direction: column;
 }
 
-#TIME_GRAPH > a, #PYRAMID > a {
+#TIME_GRAPH, #PYRAMID, #HOME, #SUMMARY {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 20px 4px;
+}
+
+#TIME_GRAPH>a, #PYRAMID>a, #SUMMARY>a {
   text-decoration: none;
   height: 100%;
   display: flex;
   align-items: center;
 }
 
-#HOME > a {
+#HOME>a {
   color: var(--color2);
   text-decoration: none;
-  font-weight: 1000;
+  font-weight: 500;
   font-size: 14pt;
 }
 
-#TIME_GRAPH.selected, #PYRAMID.selected, #MEDIAN.selected {
+#TIME_GRAPH.selected, #PYRAMID.selected, #MEDIAN.selected, #SUMMARY.selected {
   background-color: rgba(120, 85, 131, 0.95);
 }
 
@@ -101,16 +113,31 @@ a, a:visited, a:link {
   color: white;
 }
 
-#TIME_GRAPH:hover, #PYRAMID:hover {
+#TIME_GRAPH:hover, #PYRAMID:hover, #SUMMARY:hover {
   background-color: var(--color2);
+}
+
+#LL_TITLE {
+  width: 100%;
+  height: 80px;
+  color: var(--color2);
+  background-color: var(--color1);
+  color: var(--color2);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hard-send {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  flex-direction: row;
+  justify-content: center;
+  flex-direction: column;
   width: 30em;
+  padding-bottom: 20px;
 }
 
 .hard-send-type {
@@ -119,4 +146,8 @@ a, a:visited, a:link {
 
 .g-rect {
   stroke: rgba(139, 80, 156);
+}
+
+.menu-icon {
+  color: white;
 }

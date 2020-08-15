@@ -1,10 +1,13 @@
 import React from 'react';
+//import { useSelector } from 'react-redux';
+
 function MainPageHeader({ hardestObject, name }) {
   const { onsight, flash, redpoint } = hardestObject;
+  // const email = useSelector(state => state.userData.email);
   return (
     <div id="main-page-header">
+      {/* Email is {email} */}
       <div id="sent-stats-summary">
-        <span id="name">Send Stats for {name}</span>
         <div id="hardests">
           <div className="hard-send">
             <span className="hard-send-type" id="hardest-onsight">Hardest Onsight:</span>
