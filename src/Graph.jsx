@@ -51,7 +51,7 @@ function Graph({ sends }) {
 
 
       // dosomething implement screen resize
-      const LEGEND_WIDTH = 150;
+      const LEGEND_WIDTH = 50;
       const svg = d3.select(svgRef.current);
 
       const SVG_RECT = svg.node().getBoundingClientRect();
@@ -134,24 +134,6 @@ function Graph({ sends }) {
         .attr("y", 9.5)
         .attr("dy", "0.32em")
         .text((d) => d);
-
-      // Prep the tooltip bits, initial display is hidden
-      var tooltip = svg.append("g")
-        .attr("class", "tooltip")
-        .style("display", "none");
-
-      tooltip.append("rect")
-        .attr("width", 60)
-        .attr("height", 20)
-        .attr("fill", "white")
-        .style("opacity", 0.5);
-
-      tooltip.append("text")
-        .attr("x", 30)
-        .attr("dy", "1.2em")
-        .style("text-anchor", "middle")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold");
     }
   }, [currSends, timeSlice])
 
