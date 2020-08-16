@@ -125,6 +125,15 @@ const cleanLegend = (key) => {
   return m === 2 || m === 6 || key === '5.9' || key === "5.7"
 }
 
+const simpleStringSort = (a, b, order) => {
+  if (a < b) {
+    return order === 'down' ? 1 : -1;
+  } else if (a > b) {
+    return order === 'down' ? -1 : 1;
+  } 
+  return 0;
+}
+
 export {
   addOrIncrement,
   cleanLegend,
@@ -138,4 +147,5 @@ export {
   isValidRating,
   monthSorter,
   postJSON,
+  simpleStringSort,
 };
