@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import './EmailEntry.css';
 
 function EmailEntry(props) {
@@ -6,12 +6,15 @@ function EmailEntry(props) {
   const { handleChange, values } = props;
   // Use HTML5 style validation
   return (
+    <Fragment>
+      <label>Enter your Mountain Project Email!</label>
       <input
         className="emailEntry"
         name="email"
         value={values.email}
         onChange={handleChange}
       />
+    </Fragment>
   );
 }
 

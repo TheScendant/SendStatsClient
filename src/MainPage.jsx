@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Graph from './Graph';
 import Pyramid from './Pyramid';
-import MainPageHeader from './MainPageHeader';
+import Summary from './Summary';
 // import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
 import { gradeSorter, isValidRating } from './utils';
@@ -10,7 +10,6 @@ import { Button, Drawer } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons/';
 
 function MainPage({ email, sends, userData, setSends }) {
-
   const getHardests = (sends) => {
     const hardestObject = {
       onsight: { rating: "5.0" },
@@ -56,7 +55,6 @@ function MainPage({ email, sends, userData, setSends }) {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-
   const handleRouteChange = (e) => {
     // setDrawerOpen(false)
   }
@@ -73,22 +71,22 @@ function MainPage({ email, sends, userData, setSends }) {
         <Drawer anchor={'left'} open={drawerOpen} onClose={(e) => setDrawerOpen(false)}>
           <div id="link-list">
             <div id="LL_TITLE">Navigation</div>
-            <span id="SUMMARY" onClick={handleRouteChange}>
+            <div id="SUMMARY" onClick={handleRouteChange}>
               <Link to="/summary">Sends Summary</Link>
-            </span>
-            <span id="TIME_GRAPH" onClick={handleRouteChange}>
+            </div>
+            <div id="TIME_GRAPH" onClick={handleRouteChange}>
               <Link to="/timeByGrades">Sends Over Time</Link>
-            </span>
-            <span id="PYRAMID" onClick={handleRouteChange}>
+            </div>
+            <div id="PYRAMID" onClick={handleRouteChange}>
               <Link to="/gradePyramid">Grade Pyramid</Link>
-            </span>
+            </div>
           </div>
           <span>{name}</span>
         </Drawer>
         <div id="visual-wrapper" >
           <Switch>
             <Route path="/summary" exact={true}>
-              <MainPageHeader hardestObject={hardestObject} name={name} />
+              <Summary hardestObject={hardestObject} name={name} />
             </Route>
             <Route path="/timeByGrades" exact={true}>
               <Graph email={email} sends={sends} />

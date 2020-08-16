@@ -3,6 +3,8 @@
   position: relative;
   width: 64px;
   height: 64px;
+  position: relative;
+  top: 50%
 }
 .lds-ellipsis div {
   position: absolute;

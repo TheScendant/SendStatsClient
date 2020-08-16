@@ -1,7 +1,6 @@
 #FormWrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   box-sizing: border-box;
   color: white;
@@ -26,7 +25,7 @@ form {
   width: 100%;
   height: 100%;
   background-color: rgba(77, 53, 84, .95);
-  border: 2px solid black;
+  border: 2px solid var(--color4);
 }
 #SubmitButton {
   width: 25%;
@@ -43,13 +42,42 @@ form {
 #SubmitButton.disabled {
   color: #e9e9e9;
 }
-#SubmitButton:hover {
-
-}
 .error {
   color: red;
 }
 #EntryForm {
   height: 50%;
   width: 50%;
+  min-height: 400px;
+}
+.form-tabs, .form-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.form-tabs {
+  height: 80px;
+  width: 100%;
+}
+.form-tab {
+  width: 50%;
+  padding: 20px 0px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.form-tab:hover {
+  border-bottom: 2px solid white;
+}
+
+.form-tab.selected {
+  border-bottom: 2px solid white;
+}
+.entry-wrapper {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  flex-direction: column;
 }

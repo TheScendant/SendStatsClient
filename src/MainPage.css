@@ -24,17 +24,6 @@
   justify-content: center;
 }
 
-#main-page-header {
-  background-color: var(--color1);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 90%;
-  height: 90%;
-  border: 2px solid black;
-}
-
 .logo {
   position: relative;
   right: 25%;
@@ -85,6 +74,15 @@
   display: flex;
   align-items: center;
   padding: 20px 4px;
+  width: 90%;
+}
+#TIME_GRAPH, #PYRAMID, #SUMMARY {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 20px 4px;
+  width: 90%;
+  justify-content: center;
 }
 
 #TIME_GRAPH>a, #PYRAMID>a, #SUMMARY>a {

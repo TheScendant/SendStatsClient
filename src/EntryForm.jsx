@@ -30,9 +30,9 @@ function EntryForm(props) {
       let sends, userData;
       setLoading(true);
       if (email) {
-        setEmail(email);
+        setEmail(email.trim());
       } else if (userId) {
-        setUserId(userId);
+        setUserId(userId.trim());
       }
       sends = await postJSON(data, '/sendData');
       userData = await postJSON(data, '/userData');
@@ -68,17 +68,23 @@ function EntryForm(props) {
   } else {
     submitButton = <input type="submit" id="SubmitButton" className="enabled" />
   }
+
+  const [isEmailEntry, setIsEmailEntry] = useState(true);
+
+  const emailSelected = isEmailEntry ? 'selected' : '';
+  const userIdSelected = !isEmailEntry ? 'selected' : '';
+
   // show spinner or input
   if (loading) {
     spinner = <Spinner />
   } else {
     form = (<form onSubmit={submit}>
       {errorMessage}
-      <label>Enter one of the following to get started!</label>
-      <label>Mountain Project Email:</label>
-      <EmailEntry handleChange={handleChange} values={values} />
-      <label>Mountain Project User ID:</label>
-      <UserIdEntry handleChange={handleChange} values={values} />
+      {
+        emailSelected
+          ? <EmailEntry handleChange={handleChange} values={values} />
+          : <UserIdEntry handleChange={handleChange} values={values} />
+      }
       {submitButton}
     </form>);
   }
@@ -86,8 +92,14 @@ function EntryForm(props) {
     <div id="EntryForm">
       <div id="FormWrapper">
         {networkErrorMessage}
+        <div className="form-tabs">
+          <div className={`form-tab ${emailSelected}`} onClick={() => setIsEmailEntry(true)}>Email</div>
+          <div className={`form-tab ${userIdSelected}`} onClick={() => setIsEmailEntry(false)}>User ID</div>
+        </div>
+        <div className="entry-wrapper">
         {form}
         {spinner}
+        </div>
       </div>
     </div>
   );
