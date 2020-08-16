@@ -46,11 +46,13 @@ function Pyramid({ sends, year }) {
       const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`)
       
       const height = SVG_RECT.height - margin.top - margin.bottom;
+      console.warn(data)
 
+      const allGrades = getAllGrades();
 
       // set x scale
       var x = d3.scaleBand()
-        .rangeRound([0, data.length * 80])
+        .rangeRound([0, allGrades.length * 27])
         .paddingInner(0.05)
         .align(0.1);
 
@@ -64,7 +66,7 @@ function Pyramid({ sends, year }) {
 
 
       // x.domain(data.map((d) => d.grade));
-      x.domain(getAllGrades());
+      x.domain(allGrades);
       y.domain([0, d3.max(data, (d) => d.total)]).nice();
 
       const dataG = g.append("g");

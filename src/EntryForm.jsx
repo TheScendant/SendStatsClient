@@ -91,7 +91,6 @@ function EntryForm(props) {
   return (
     <div id="EntryForm">
       <div id="FormWrapper">
-        {networkErrorMessage}
         <div className="form-tabs">
           <div className={`form-tab ${emailSelected}`} onClick={() => setIsEmailEntry(true)}>Email</div>
           <div className={`form-tab ${userIdSelected}`} onClick={() => setIsEmailEntry(false)}>User ID</div>
@@ -99,6 +98,7 @@ function EntryForm(props) {
         <div className="entry-wrapper">
         {form}
         {spinner}
+        {networkErrorMessage}
         </div>
       </div>
     </div>

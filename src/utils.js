@@ -10,7 +10,7 @@ const addOrIncrement = (mapName, key) => {
 const gradesToInts = (grade) => {
   const macro = getMacroRating(grade);
   let micro = getMicroRating(grade);
-  micro = micro ? micro : 0;
+  micro = micro ? micro : 5;
   return parseInt(macro.toString() + micro.toString());
 }
 
@@ -120,8 +120,14 @@ const getAllGrades = () => {
   return allGrades.sort(gradeSorter);
 }
 
+const cleanLegend = (key) => {
+  const m = getMicroRating(key);
+  return m === 2 || m === 6 || key === '5.9' || key === "5.7"
+}
+
 export {
   addOrIncrement,
+  cleanLegend,
   getAllGrades,
   getGradeKeys,
   getMacroRating,

@@ -13,6 +13,7 @@ function EmailEntry(props) {
         name="email"
         value={values.email}
         onChange={handleChange}
+        placeholder="eg: hayden518@gmail.com"
       />
     </Fragment>
   );

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 // import sends from './sends';
 import './Graph.css'
 import { sliceData, TimeSliceEnum } from './TimeSlicer.js';
-import { gradesByTimeColoring, gradeSorter } from './utils';
+import { cleanLegend, gradesByTimeColoring, gradeSorter } from './utils';
 
 function Graph({ sends }) {
   const svgRef = useRef(null);
@@ -81,7 +81,7 @@ function Graph({ sends }) {
 
       const timeLength = calcMonthDifferences(timeBounds[0], timeBounds[1]);
       // timeLength = # of year or # of months
-      const barWidth = 25;
+      const barWidth = (timeSlice === TimeSliceEnum.YEAR) ? 200 : 25;
       const x = d3.scaleTime().domain(timeBounds).rangeRound([0, timeLength * barWidth])
 
       // set y scale
@@ -135,7 +135,7 @@ function Graph({ sends }) {
         .attr("font-size", 10)
         .attr("text-anchor", "end")
         .selectAll("g")
-        .data(keys.slice().reverse())
+        .data(keys.slice().reverse().filter(k => cleanLegend(k)))
         .enter().append("g")
         .attr("transform", (d, i) => `translate(${LEGEND_WIDTH},${i * 20})`);
 

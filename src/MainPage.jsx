@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Graph from './Graph';
 import Pyramid from './Pyramid';
 import Summary from './Summary';
+import SendList from './SendList';
 // import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
 import { gradeSorter, isValidRating } from './utils';
@@ -71,14 +72,17 @@ function MainPage({ email, sends, userData, setSends }) {
         <Drawer anchor={'left'} open={drawerOpen} onClose={(e) => setDrawerOpen(false)}>
           <div id="link-list">
             <div id="LL_TITLE">Navigation</div>
-            <div id="SUMMARY" onClick={handleRouteChange}>
+            <div className="drawer-link" id="SUMMARY" onClick={handleRouteChange}>
               <Link to="/summary">Sends Summary</Link>
             </div>
-            <div id="TIME_GRAPH" onClick={handleRouteChange}>
+            <div className="drawer-link" id="TIME_GRAPH" onClick={handleRouteChange}>
               <Link to="/timeByGrades">Sends Over Time</Link>
             </div>
-            <div id="PYRAMID" onClick={handleRouteChange}>
+            <div className="drawer-link" id="PYRAMID" onClick={handleRouteChange}>
               <Link to="/gradePyramid">Grade Pyramid</Link>
+            </div>
+            <div className="drawer-link" id="SEND_LIST" onClick={handleRouteChange}>
+              <Link to="/sendList">Send List</Link>
             </div>
           </div>
           <span>{name}</span>
@@ -93,6 +97,9 @@ function MainPage({ email, sends, userData, setSends }) {
             </Route>
             <Route path="/gradePyramid" exact={true}>
               <Pyramid email={email} sends={sends} year={year} />
+            </Route>
+            <Route path="/sendList" exact={true}>
+              <SendList email={email} sends={sends} year={year} />
             </Route>
             <Redirect exact from="/" to="gradePyramid" />
           </Switch>

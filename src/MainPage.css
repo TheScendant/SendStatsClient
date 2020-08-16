@@ -10,14 +10,12 @@
   width: 95%;
   height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
   background-color: var(--color4);
 }
 
 #visual-wrapper {
-  height: 100%;
+  height: calc(100% - 80px);
   width: 100%;
   display: flex;
   align-items: center;
@@ -76,7 +74,7 @@
   padding: 20px 4px;
   width: 90%;
 }
-#TIME_GRAPH, #PYRAMID, #SUMMARY {
+.drawer-link {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -85,7 +83,7 @@
   justify-content: center;
 }
 
-#TIME_GRAPH>a, #PYRAMID>a, #SUMMARY>a {
+.drawer-link>a {
   text-decoration: none;
   height: 100%;
   display: flex;
@@ -99,7 +97,7 @@
   font-size: 14pt;
 }
 
-#TIME_GRAPH.selected, #PYRAMID.selected, #MEDIAN.selected, #SUMMARY.selected {
+.drawer-link.selected{
   background-color: rgba(120, 85, 131, 0.95);
 }
 
@@ -111,7 +109,7 @@ a, a:visited, a:link {
   color: white;
 }
 
-#TIME_GRAPH:hover, #PYRAMID:hover, #SUMMARY:hover {
+.drawer-link:hover {
   background-color: var(--color2);
 }
 
