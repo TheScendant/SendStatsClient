@@ -151,7 +151,7 @@ function Graph({ sends }) {
         .attr("dy", "0.32em")
         .text((d) => d);
     }
-  }, [currSends, timeSlice])
+  })
 
   const radioClickHandler = (event) => {
     setTimeSlice(event.target.name === "year" ? TimeSliceEnum.YEAR : TimeSliceEnum.MONTH);

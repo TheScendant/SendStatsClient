@@ -7,8 +7,7 @@ import { postJSON } from './utils';
 import { useDispatch } from 'react-redux';
 import { setUserEmail } from './userSlice';
 
-function EntryForm(props) {
-  const { setEmail, setSends, setUserData, setUserId } = props;
+function EntryForm({ setEmail, setSends, setUserData, setUserId }) {
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
   // Use HTML5 style validation
