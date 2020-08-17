@@ -38,7 +38,6 @@ function Pyramid({ year }) {
         d.total = total;
       }
 
-
       d3.select("#pyramid-graph").selectAll("*").remove();
 
       // dosomething implement screen resize
@@ -136,16 +135,24 @@ function Pyramid({ year }) {
     }
   })
 
-  /* 
-  dosomething - pyramid by months? Legend would be massive?
-  const radioClickHandler = (event) => {
-    setSlice(event.target.name === "year" ? TimeSliceEnum.YEAR : TimeSliceEnum.MONTH);
+  
+  const aggChangeHandler = (event) => {
+    setAgg(event.target.name === "agg");
   }
-  */
 
   return (
     <div id="Pyramid">
       <svg id="pyramid-graph" ref={svgRef} />
+      <div id="time-filter">
+        <label className="radioLabel">
+          Aggregate
+          <input type="radio" name="agg" className="radio" checked={agg} onChange={aggChangeHandler} />
+        </label>
+        <label className="radioLabel">
+          Show Mid Grades
+          <input type="radio" name="notagg" className="radio" checked={!agg} onChange={aggChangeHandler} />
+        </label>
+      </div>
     </div>
   )
 }
