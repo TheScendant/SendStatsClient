@@ -78,7 +78,7 @@ function SendList() {
         </div>
       </div>
       {sendsCopy.map((send) => (
-        <div className="send-list-row" key={send.name}>
+        <div className="send-list-row" key={send.routeId}>
           <div className="send-list-cell">{send.name}</div>
           <div className="send-list-cell">{send.date}</div>
           <div className="send-list-cell">{send.rating}</div>

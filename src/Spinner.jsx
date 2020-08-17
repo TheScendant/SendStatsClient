@@ -2,7 +2,8 @@ import React from 'react';
 import './Spinner.css'
 function Spinner(props) {
   return (
-    <div  style={{height: '200px'}} >
+    <div className="likeItsHot" style={{height: '200px'}} >
+      <div>Retrieving Mountain Project data...</div>
       <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
     </div>
   );
