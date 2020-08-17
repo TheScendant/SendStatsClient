@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import React, { useEffect, useRef, /* useState */ } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // import sends from './sends';
 import './Pyramid.css'
 import { sliceData } from './GradeSlicer.js';
@@ -14,16 +14,20 @@ function Pyramid({ year }) {
 
   const sends = useSelector(state => state.sendsData.sends) || [];
 
+  const [agg, setAgg] = useState(true);
+
+
   useEffect(() => {
     if (sends && svgRef.current) {
       const yeet = d3.zoom().on("zoom", (e) => {
         // dataG.attr("transform", d3.event.transform)
         const xTransform = Math.max(Math.min(d3.event.transform.x, 0), (bitter - width) * -1);
+
         xAxis.attr("transform", `translate(${xTransform},${height})`)
         dataG.attr("transform", `translate(${xTransform},0)`)
       });
 
-      const [gradeDateQuantityArray, years] = sliceData(sends, timeSlice);
+      const [gradeDateQuantityArray, years] = sliceData(sends, timeSlice, agg);
       const data = gradeDateQuantityArray;
 
       for (const d of data) {
@@ -35,26 +39,29 @@ function Pyramid({ year }) {
         d.total = total;
       }
 
-
       d3.select("#pyramid-graph").selectAll("*").remove();
-
       // dosomething implement screen resize
       const LEGEND_WIDTH = 50;
-      const svg = d3.select(svgRef.current).call(yeet);
+      const svg = d3.select(svgRef.current);
+      svg.call(yeet);
 
       const SVG_RECT = svg.node().getBoundingClientRect();
       const margin = { top: 20, right: 20, bottom: 30, left: 40 };
       const width = SVG_RECT.width - margin.left - margin.right - LEGEND_WIDTH;
 
       const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`)
-      
+
       const height = SVG_RECT.height - margin.top - margin.bottom;
 
-      const allGrades = getAllGrades();
+      const allGrades = getAllGrades(agg);
+
+      const twentySevenGrades = allGrades.length * 27
+
+      const bestWidth = twentySevenGrades > width ? twentySevenGrades : width;
 
       // set x scale
       var x = d3.scaleBand()
-        .rangeRound([0, allGrades.length * 27])
+        .rangeRound([0, bestWidth])
         .paddingInner(0.05)
         .align(0.1);
 
@@ -107,7 +114,6 @@ function Pyramid({ year }) {
         .attr("id", "yAxis")
         .attr("text-anchor", "start");
 
-
       const bitter = xAxis.node().getBBox().width;
 
       const legend = g.append("g")
@@ -133,16 +139,24 @@ function Pyramid({ year }) {
     }
   })
 
-  /* 
-  dosomething - pyramid by months? Legend would be massive?
-  const radioClickHandler = (event) => {
-    setSlice(event.target.name === "year" ? TimeSliceEnum.YEAR : TimeSliceEnum.MONTH);
+
+  const aggChangeHandler = (event) => {
+    setAgg(event.target.name === "agg");
   }
-  */
 
   return (
     <div id="Pyramid">
       <svg id="pyramid-graph" ref={svgRef} />
+      <div id="time-filter">
+        <label className="radioLabel">
+          Aggregate
+          <input type="radio" name="agg" className="radio" checked={agg} onChange={aggChangeHandler} />
+        </label>
+        <label className="radioLabel">
+          Show Mid Grades
+          <input type="radio" name="notagg" className="radio" checked={!agg} onChange={aggChangeHandler} />
+        </label>
+      </div>
     </div>
   )
 }

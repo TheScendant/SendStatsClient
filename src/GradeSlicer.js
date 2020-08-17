@@ -7,18 +7,19 @@ const TimeSliceEnum = {
   MONTH: 'MONTH',
 }
 
-const sliceData = (sends, TimeSlice) => {
+const sliceData = (sends, TimeSlice, aggregrate) => {
   if (TimeSlice === TimeSliceEnum.YEAR) {
-    return sliceDataYearly(sends);
+    return sliceDataYearly(sends, aggregrate);
   }
 }
-const sliceDataYearly = (sends) => {
+const sliceDataYearly = (sends, aggregrate) => {
   const gradeToDateQuanities = new Map();
   const years = [];
   for (const send of sends) {
     if (isValidRating(send)) { // ignore boulders for now
       const year = new Date(send.date).getFullYear();
-      const grade = new Grade(year, send).getGrade();
+
+      const grade = new Grade(year, send, aggregrate).getGrade();
       if (!years.includes(year)) {
         years.push(year);
       }
@@ -27,7 +28,7 @@ const sliceDataYearly = (sends) => {
         gradeObject = gradeToDateQuanities.get(grade);
         gradeObject.increment(year);
       } else {
-        gradeObject = new Grade(year, send);
+        gradeObject = new Grade(year, send, aggregrate);
       }
       gradeToDateQuanities.set(grade, gradeObject);
     }
