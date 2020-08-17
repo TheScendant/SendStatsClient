@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import EntryForm from './EntryForm';
 import MainPage from './MainPage';
-function App() {
+import { useSelector } from 'react-redux';
 
-  const [email, setEmail] = useState("");
-  const [userId, setUserId] = useState("");
-  const [sends, setSends] = useState([]);
-  const [userData, setUserData] = useState("");
+function App() {
+  const userInfo = useSelector(state => state.userData.userInfo);
+  const sends = useSelector(state => state.sendsData.sends);
   let mainPage, entryForm;
-  if ((email || userId) && sends && sends.length && userData) {
-    mainPage = <MainPage email={email} sends={sends} userData={userData} setSends={setSends}/>
+
+  if (userInfo && sends) {
+    mainPage = <MainPage />
   } else {
-    entryForm = <EntryForm setEmail={setEmail} setSends={setSends} setUserId={setUserId} setUserData={setUserData}/>
+    entryForm = <EntryForm />
   }
 
   return (

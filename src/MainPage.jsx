@@ -5,54 +5,22 @@ import Summary from './Summary';
 import SendList from './SendList';
 // import SimpleMovingMedian from './SimpleMovingMedian';
 import './MainPage.css';
-import { gradeSorter, isValidRating } from './utils';
 import { BrowserRouter as Router, Link, Redirect, Route, Switch } from 'react-router-dom';
 import { Button, Drawer } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons/';
+import { useSelector } from 'react-redux';
 
-function MainPage({ email, sends, userData, setSends }) {
-  const getHardests = (sends) => {
-    const hardestObject = {
-      onsight: { rating: "5.0" },
-      flash: { rating: "5.0" },
-      redpoint: { rating: "5.0" }
-    }
-    for (const send of sends) {
-      if (isValidRating(send)) {
-        const leadStyle = send.leadStyle.toLowerCase();
-        if (leadStyle === "onsight") {
-          if (gradeSorter(send.rating, hardestObject.onsight.rating) === 1) {
-            hardestObject.onsight = send;
-          }
-        } else if (leadStyle === "flash") {
-          if (gradeSorter(send.rating, hardestObject.flash.rating) === 1) {
-            hardestObject.flash = send;
-          }
-        } else if (leadStyle === "redpoint") {
-          if (gradeSorter(send.rating, hardestObject.redpoint.rating) === 1) {
-            hardestObject.redpoint = send;
-          }
-        }
-      }
-    }
-    return hardestObject;
-  }
-
-/*   const GRAPH_ENUM = {
+function MainPage() {
+  /*   const GRAPH_ENUM = {
     TIME_GRAPH: "TIME_GRAPH",
     PYRAMID: "PYRAMID",
     MEDIAN: "MEDIAN",
     SUMMARY: "SUMMARY",
   }; */
 
-
-  const hardestObject = getHardests(sends);
   const year = (new Date()).getFullYear();
 
-  const goHome = () => { //dosomething
-    setSends([]);
-  }
-  const { name } = userData;
+  const name = useSelector(state => state.userData.userInfo.name);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -64,42 +32,50 @@ function MainPage({ email, sends, userData, setSends }) {
     <div id="MainPage">
       <div id="graph-selection">
         <Button onClick={(e) => setDrawerOpen(!drawerOpen)}>
-          <MenuIcon className="menu-icon"/>
+          <MenuIcon className="menu-icon" />
         </Button>
-        <span id="HOME" onClick={goHome}><a href="/">SendStats</a></span>
+        <span id="HOME"><a href="/">SendStats</a></span>
       </div>
       <Router>
         <Drawer anchor={'left'} open={drawerOpen} onClose={(e) => setDrawerOpen(false)}>
           <div id="link-list">
             <div id="LL_TITLE">Navigation</div>
-            <div className="drawer-link" id="SUMMARY" onClick={handleRouteChange}>
-              <Link to="/summary">Sends Summary</Link>
-            </div>
-            <div className="drawer-link" id="TIME_GRAPH" onClick={handleRouteChange}>
-              <Link to="/timeByGrades">Sends Over Time</Link>
-            </div>
-            <div className="drawer-link" id="PYRAMID" onClick={handleRouteChange}>
-              <Link to="/gradePyramid">Grade Pyramid</Link>
-            </div>
-            <div className="drawer-link" id="SEND_LIST" onClick={handleRouteChange}>
-              <Link to="/sendList">Send List</Link>
-            </div>
+            <Link className="drawer-link" to="/summary">
+              <span id="SUMMARY" onClick={handleRouteChange}>
+                Sends Summary
+              </span>
+            </Link>
+            <Link className="drawer-link" to="/timeByGrades">
+              <span id="TIME_GRAPH" onClick={handleRouteChange}>
+                Sends Over Time
+            </span>
+            </Link>
+            <Link className="drawer-link" to="/gradePyramid">
+              <span id="PYRAMID" onClick={handleRouteChange}>
+                Grade Pyramid
+            </span>
+            </Link>
+            <Link className="drawer-link" to="/sendList">
+              <span id="SEND_LIST" onClick={handleRouteChange}>
+                Send list
+              </span>
+            </Link>
           </div>
           <span>{name}</span>
         </Drawer>
         <div id="visual-wrapper" >
           <Switch>
             <Route path="/summary" exact={true}>
-              <Summary hardestObject={hardestObject} name={name} />
+              <Summary />
             </Route>
             <Route path="/timeByGrades" exact={true}>
-              <Graph email={email} sends={sends} />
+              <Graph />
             </Route>
             <Route path="/gradePyramid" exact={true}>
-              <Pyramid email={email} sends={sends} year={year} />
+              <Pyramid year={year} />
             </Route>
             <Route path="/sendList" exact={true}>
-              <SendList email={email} sends={sends} year={year} />
+              <SendList year={year} />
             </Route>
             <Redirect exact from="/" to="gradePyramid" />
           </Switch>

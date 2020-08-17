@@ -1,31 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const userSlice = createSlice({
-  name: 'sends',
-  initialState: {
-/*     userData: {
-      sends: [],
-      userInfo: {},
-    } */
-    email: '',
-  },
+  name: 'user',
+  initialState: {},
   reducers: {
-    setStoreSends: (state, action) => {
-      state.userData.sends = action.payload;
-    },
     setStoreUserInfo: (state, action) => {
-      state.userData.userInfo = action.payload;
+      state.userInfo = action.payload;
     },
     setUserEmail: (state, action) => {
       state.email = action.payload;
+    },
+    setUserID: (state, action) => {
+      state.userID = action.payload;
     }
   }
 })
 
 export const { 
-  setStoreSends, 
   setStoreUserInfo, 
   setUserEmail,
+  setUserID,
 } = userSlice.actions;
 
 export default userSlice.reducer;

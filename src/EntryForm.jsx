@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { useForm, useSettersAsEventHandler, useConstraints } from "react-uniformed"; import Spinner from './Spinner';
+import { useForm, useSettersAsEventHandler, useConstraints } from "react-uniformed";
+import Spinner from './Spinner';
 import EmailEntry from './EmailEntry';
 import UserIdEntry from './UserIdEntry';
 import './EntryForm.css'
 import { postJSON } from './utils';
 import { useDispatch } from 'react-redux';
-import { setUserEmail } from './userSlice';
+import { setUserEmail, setStoreUserInfo, setUserID } from './userSlice';
+import { setStoreSends, setStoreStars } from './sendsSlice';
 
-function EntryForm({ setEmail, setSends, setUserData, setUserId }) {
+function EntryForm() {
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
   // Use HTML5 style validation
@@ -25,20 +27,18 @@ function EntryForm({ setEmail, setSends, setUserData, setUserId }) {
   const onSubmit = async (data) => {
     setNetworkError(false); // dosomething remove this from screen on change?
     if (data) {
-      const { email, userId } = data;
-      let sends, userData;
       setLoading(true);
-      if (email) {
-        setEmail(email.trim());
-      } else if (userId) {
-        setUserId(userId.trim());
-      }
-      sends = await postJSON(data, '/sendData');
-      userData = await postJSON(data, '/userData');
-      if (sends && userData) {
-        dispatch(setUserEmail(email));
-        setSends(JSON.parse(sends.message));
-        setUserData(JSON.parse(userData.message));
+
+      const { email, userId } = data;
+      const sendRes = await postJSON(data, '/sendData');
+      const userDataRes = await postJSON(data, '/userData');
+
+      if (sendRes && userDataRes) {
+        const { sends, stars } = JSON.parse(sendRes.message);
+        dispatch(setStoreUserInfo(userDataRes.message))
+        dispatch( email ? setUserEmail(email) : setUserID(userId));
+        dispatch(setStoreSends(sends));
+        dispatch(setStoreStars(stars));
       } else {
         setNetworkError(true);
       }
@@ -95,9 +95,9 @@ function EntryForm({ setEmail, setSends, setUserData, setUserId }) {
           <div className={`form-tab ${userIdSelected}`} onClick={() => setIsEmailEntry(false)}>User ID</div>
         </div>
         <div className="entry-wrapper">
-        {form}
-        {spinner}
-        {networkErrorMessage}
+          {form}
+          {spinner}
+          {networkErrorMessage}
         </div>
       </div>
     </div>

@@ -5,11 +5,14 @@ import './Pyramid.css'
 import { sliceData } from './GradeSlicer.js';
 import { TimeSliceEnum } from './TimeSlicer.js';
 import { getAllGrades } from './utils';
+import { useSelector } from 'react-redux';
 
-function Pyramid({ sends, year }) {
+function Pyramid({ year }) {
   const svgRef = useRef(null);
-  // const [timeSlice, setTimeSlice] = useState(TimeSliceEnum.YEAR);
+  // const [timeSlice, setTimeSlice] = useState(TimeSliceEnum.YEAR); dosomething month?
   const timeSlice = TimeSliceEnum.YEAR;
+
+  const sends = useSelector(state => state.sendsData.sends) || [];
 
   useEffect(() => {
     if (sends && svgRef.current) {
@@ -46,7 +49,6 @@ function Pyramid({ sends, year }) {
       const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`)
       
       const height = SVG_RECT.height - margin.top - margin.bottom;
-      console.warn(data)
 
       const allGrades = getAllGrades();
 

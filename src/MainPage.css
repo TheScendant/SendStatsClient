@@ -67,28 +67,25 @@
   flex-direction: column;
 }
 
-#TIME_GRAPH, #PYRAMID, #HOME, #SUMMARY {
+#HOME, #TIME_GRAPH, #PYRAMID,  #SUMMARY, #SEND_LIST {
   cursor: pointer;
   display: flex;
   align-items: center;
   padding: 20px 4px;
   width: 90%;
+}
+
+#TIME_GRAPH, #PYRAMID,  #SUMMARY, #SEND_LIST {
+  justify-content: center;
 }
 
 .drawer-link {
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 20px 4px;
   width: 90%;
   justify-content: center;
-}
-
-.drawer-link>a {
   text-decoration: none;
-  height: 100%;
-  display: flex;
-  align-items: center;
 }
 
 #HOME>a {

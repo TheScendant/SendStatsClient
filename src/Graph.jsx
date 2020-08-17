@@ -4,9 +4,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import './Graph.css'
 import { sliceData, TimeSliceEnum } from './TimeSlicer.js';
 import { cleanLegend, gradesByTimeColoring, gradeSorter } from './utils';
+import { useSelector } from 'react-redux';
 
-function Graph({ sends }) {
+function Graph() {
   const svgRef = useRef(null);
+
+  const sends = useSelector(state => state.sendsData.sends) || [];
 
   const [timeSlice, setTimeSlice] = useState(TimeSliceEnum.MONTH);
   const [redpoints, setRedpoints] = useState(true);
@@ -18,7 +21,8 @@ function Graph({ sends }) {
     return (redpoints && (ls === 'redpoint' || ls === 'pinkpoint'))
       || (flashes && ls === 'flash')
       || (onsights && ls === 'onsight')
-  })
+  });
+
   const calcTimeBounds = (sends) => {
     const dates = sends.map(({ date }) => new Date(date));
 

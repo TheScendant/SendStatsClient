@@ -3,8 +3,11 @@ import './SendList.css';
 import { useState } from 'react';
 import { gradeSorter, isValidRating, simpleStringSort } from './utils';
 import {ArrowDownward as ArrowDownwardIcon, ArrowUpward as ArrowUpwardIcon} from '@material-ui/icons/';
+import { useSelector } from 'react-redux';
 
-function SendList({ sends }) {
+function SendList() {
+
+  const sends = useSelector(state => state.sendsData.sends) || [];
 
   const [sendsCopy, setSendsCopy] = useState(Array.from(sends).filter(s => isValidRating(s)).sort((a, b) => new Date(b.date) - new Date(a.date)));
   const [sortCrit, setSortCrit] = useState('date'); // forces rerender too! :)
