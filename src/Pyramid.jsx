@@ -22,6 +22,7 @@ function Pyramid({ year }) {
       const yeet = d3.zoom().on("zoom", (e) => {
         // dataG.attr("transform", d3.event.transform)
         const xTransform = Math.max(Math.min(d3.event.transform.x, 0), (bitter - width) * -1);
+
         xAxis.attr("transform", `translate(${xTransform},${height})`)
         dataG.attr("transform", `translate(${xTransform},0)`)
       });
@@ -39,24 +40,28 @@ function Pyramid({ year }) {
       }
 
       d3.select("#pyramid-graph").selectAll("*").remove();
-
       // dosomething implement screen resize
       const LEGEND_WIDTH = 50;
-      const svg = d3.select(svgRef.current).call(yeet);
+      const svg = d3.select(svgRef.current);
+      svg.call(yeet);
 
       const SVG_RECT = svg.node().getBoundingClientRect();
       const margin = { top: 20, right: 20, bottom: 30, left: 40 };
       const width = SVG_RECT.width - margin.left - margin.right - LEGEND_WIDTH;
 
       const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`)
-      
+
       const height = SVG_RECT.height - margin.top - margin.bottom;
 
       const allGrades = getAllGrades(agg);
 
+      const twentySevenGrades = allGrades.length * 27
+
+      const bestWidth = twentySevenGrades > width ? twentySevenGrades : width;
+
       // set x scale
       var x = d3.scaleBand()
-        .rangeRound([0, allGrades.length * 27])
+        .rangeRound([0, bestWidth])
         .paddingInner(0.05)
         .align(0.1);
 
@@ -109,7 +114,6 @@ function Pyramid({ year }) {
         .attr("id", "yAxis")
         .attr("text-anchor", "start");
 
-
       const bitter = xAxis.node().getBBox().width;
 
       const legend = g.append("g")
@@ -135,7 +139,7 @@ function Pyramid({ year }) {
     }
   })
 
-  
+
   const aggChangeHandler = (event) => {
     setAgg(event.target.name === "agg");
   }
