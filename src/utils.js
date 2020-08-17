@@ -1,6 +1,11 @@
 
 import * as d3 from 'd3';
+// if you change these micros it'll affect the aggRating and getAllGrades funcs!!
 const microWeights = new Map([["-", 1], ["a", 2], ["a/b", 3], ["b", 4], ["b/c", 5], ["c", 6], ["c/d", 7], ["d", 8], ["+", 9]]);
+const microGrades = new Map([[1, "-"], [2, "a"], [3, "a/b"], [4, "b"], [5, "b/c"], [6, "c"], [7, "c/d"], [8, "d"], [9, "+"]]);
+const singles = ["5.4", "5.5", "5.6", "5.7", "5.8", "5.9"];
+
+const BARE_GRADE_WEIGHT = 5;
 
 const addOrIncrement = (mapName, key) => {
   const oldValue = mapName.get(key);
@@ -10,7 +15,7 @@ const addOrIncrement = (mapName, key) => {
 const gradesToInts = (grade) => {
   const macro = getMacroRating(grade);
   let micro = getMicroRating(grade);
-  micro = micro ? micro : 5;
+  micro = micro ? micro : BARE_GRADE_WEIGHT;
   return parseInt(macro.toString() + micro.toString());
 }
 
@@ -71,14 +76,6 @@ const postJSON = async (data, url) => {
 
 const isValidRating = (send) => ((!send.rating.toLowerCase().includes("v")) && !send.rating.toLowerCase().includes("w") && send.rating.toLowerCase().includes("5"))
 
-/* const singlesColoring = d3.schemeRdPu[9];
-const tensColoring = d3.schemeBlues[9];
-const elevensColoring = d3.schemeGreens[9];
-const twelevesColoring = d3.schemeReds[9];
-const thirteensColoring = d3.schemeBrBG[9];
- */
-
-
 const gradesByTimeColoring = (grade, hardest) => {
   // const softest = ratings[0];
   const maxSpectral = gradesToInts(hardest);
@@ -101,20 +98,28 @@ const gradesByTimeColoring = (grade, hardest) => {
   return d3.interpolateSpectral(numb);
 }
 
-const getAllGrades = () => {
-  const singles = ["5.4", "5.5", "5.6", "5.7", "5.8", "5.9"];
-
+const getAllGrades = (agg) => {
   let allGrades = Array.from(singles);
-  singles.forEach((single) => {
-    allGrades.push(single.concat("-"));
-    allGrades.push(single.concat("+"));
-  });
+  if (!agg) {
+    singles.forEach((single) => {
+      allGrades.push(single.concat("-"));
+      allGrades.push(single.concat("+"));
+    });
+  }
 
   const doubles = ['5.10', '5.11', '5.12', '5.13', '5.14', '5.15'];
-  allGrades = allGrades.concat(doubles);
+  if (!agg) {
+    allGrades = allGrades.concat(doubles);
+  }
   doubles.forEach((double) => {
     for (const key of microWeights.keys()) {
-      allGrades.push(double.concat(key));
+      if (!agg) {
+        allGrades.push(double.concat(key));
+      } else {
+        if (microWeights.get(key) % 2 !== 1) {
+          allGrades.push(double.concat(key));
+        }
+      }
     }
   });
   return allGrades.sort(gradeSorter);
@@ -130,12 +135,41 @@ const simpleStringSort = (a, b, order) => {
     return order === 'down' ? 1 : -1;
   } else if (a > b) {
     return order === 'down' ? -1 : 1;
-  } 
+  }
   return 0;
+}
+
+/**
+ * Be warned all ye who enter here.
+ * @param {String} rating 
+ */
+const aggRating = (rating) => {
+  let micro = getMicroRating(rating);
+  const macro = getMacroRating(rating);
+
+  // the +, - and / grades all have an odd weight so change to it's closer even one
+  if (micro % 2 === 1) { // risky
+    if (micro === 1) {
+      micro = 2;
+    } else {
+      micro = micro - 1;
+    }
+  }
+
+  // 5.10 => 5.10b
+  // 5.7+ => 5.7
+  // 5.7- => 5.7
+  let mv = "";
+  if (!singles.includes(`5.${macro}`)) {
+    let m = microGrades.get(micro);
+    mv = m ? m : 'b';
+  }
+  return `5.${macro}${mv}`;
 }
 
 export {
   addOrIncrement,
+  aggRating,
   cleanLegend,
   getAllGrades,
   getGradeKeys,

@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import React, { useEffect, useRef, /* useState */ } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // import sends from './sends';
 import './Pyramid.css'
 import { sliceData } from './GradeSlicer.js';
@@ -14,6 +14,9 @@ function Pyramid({ year }) {
 
   const sends = useSelector(state => state.sendsData.sends) || [];
 
+  const [agg, setAgg] = useState(true);
+
+
   useEffect(() => {
     if (sends && svgRef.current) {
       const yeet = d3.zoom().on("zoom", (e) => {
@@ -23,7 +26,7 @@ function Pyramid({ year }) {
         dataG.attr("transform", `translate(${xTransform},0)`)
       });
 
-      const [gradeDateQuantityArray, years] = sliceData(sends, timeSlice);
+      const [gradeDateQuantityArray, years] = sliceData(sends, timeSlice, agg);
       const data = gradeDateQuantityArray;
 
       for (const d of data) {
@@ -50,7 +53,7 @@ function Pyramid({ year }) {
       
       const height = SVG_RECT.height - margin.top - margin.bottom;
 
-      const allGrades = getAllGrades();
+      const allGrades = getAllGrades(agg);
 
       // set x scale
       var x = d3.scaleBand()

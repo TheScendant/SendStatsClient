@@ -1,7 +1,9 @@
+import { aggRating } from './utils';
+
 export default class Grade {
-  constructor(year, send) {
-    const {rating} = send;
-    this.grade = rating;
+  constructor(year, send, aggregate) {
+    const { rating } = send;
+    this.grade = aggregate ? aggRating(rating) : rating;
     this.increment(year);
   }
   increment(year) {
@@ -10,6 +12,7 @@ export default class Grade {
   getGrade() {
     return this.grade;
   }
+
   getYearCount(year) {
     return this[year] ? this[year] : 0;
   }
