@@ -72,10 +72,10 @@
   display: flex;
   align-items: center;
   padding: 20px 4px;
-  width: 90%;
 }
 
 #TIME_GRAPH, #PYRAMID,  #SUMMARY, #SEND_LIST {
+  width: 90%;
   justify-content: center;
 }
 
