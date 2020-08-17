@@ -85,8 +85,21 @@ function Graph() {
 
       const timeLength = calcMonthDifferences(timeBounds[0], timeBounds[1]);
       // timeLength = # of year or # of months
-      const barWidth = (timeSlice === TimeSliceEnum.YEAR) ? 200 : 25;
-      const x = d3.scaleTime().domain(timeBounds).rangeRound([0, timeLength * barWidth])
+
+      // ye be warned
+      // if theres more default size bars then the svg width then that's our width
+      // otherwise we want to fill the screen so width is svg width
+      // if we do fill screen then need to resize bars to something pretty
+      let barWidth = (timeSlice === TimeSliceEnum.YEAR) ? 200 : 25;
+      let bestWidth;
+      if (timeLength * barWidth > width) {
+        bestWidth = timeLength * barWidth;
+      } else {
+        bestWidth = width;
+        barWidth = width / timeLength;
+      }
+
+      const x = d3.scaleTime().domain(timeBounds).rangeRound([0, bestWidth])
 
       // set y scale
       var y = d3.scaleLinear()
