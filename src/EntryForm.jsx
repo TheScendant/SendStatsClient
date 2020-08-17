@@ -38,7 +38,7 @@ function EntryForm() {
         dispatch(setStoreUserInfo(userDataRes.message))
         dispatch( email ? setUserEmail(email) : setUserID(userId));
         dispatch(setStoreSends(sends));
-        dispatch(setStoreStars(stars));
+        dispatch(setStoreStars(stars.toFixed(2)));
       } else {
         setNetworkError(true);
       }

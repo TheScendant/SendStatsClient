@@ -3,6 +3,7 @@ import './App.css';
 import EntryForm from './EntryForm';
 import MainPage from './MainPage';
 import { useSelector } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   const userInfo = useSelector(state => state.userData.userInfo);
@@ -16,10 +17,12 @@ function App() {
   }
 
   return (
-    <div id="App">
-      {mainPage}
-      {entryForm}
-    </div>
+    <Router>
+      <div id="App">
+        {mainPage}
+        {entryForm}
+      </div>
+    </Router>
   );
 }
 

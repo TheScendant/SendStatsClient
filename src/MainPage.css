@@ -20,6 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 .logo {
@@ -96,7 +97,7 @@
 }
 
 .drawer-link.selected {
-  background-color: rgba(120, 85, 131, 0.95);
+  background-color: var(--color3)
 }
 
 #name {
@@ -132,6 +133,7 @@ a, a:visited, a:link {
   flex-direction: column;
   width: 30em;
   padding-bottom: 20px;
+  color: white;
 }
 
 .hard-send-type {
@@ -143,5 +145,9 @@ a, a:visited, a:link {
 }
 
 .menu-icon {
+  color: white;
+}
+
+.scroll-graph-tip {
   color: white;
 }

@@ -35,16 +35,12 @@ function Summary() {
     }
     return hardestObject;
   }
-  
-  const {onsight, flash, redpoint } = getHardests(sends);
+
+  const { onsight, flash, redpoint } = getHardests(sends);
 
   return (
     <div id="Summary">
       <div id="sent-stats-summary">
-        <div>
-          You have collected {stars} stars.
-          You have sent {sendCount} routes.
-        </div>
         <div id="hardests">
           <div className="hard-send">
             <span className="hard-send-type" id="hardest-onsight">Hardest Onsight:</span>
@@ -74,6 +70,10 @@ function Summary() {
             </a>
           </div>
         </div>
+        <div className="hard-send">
+            <div className="hard-send-type">You have collected {stars} stars.</div>
+            <div className="hard-send-type">You have sent {sendCount} routes.</div>
+          </div>
       </div>
     </div>
   )
