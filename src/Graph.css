@@ -42,4 +42,5 @@ text {
   align-items: center;
   justify-content: center;
   flex-direction: row;
+  color: white;
 }

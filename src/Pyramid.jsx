@@ -6,6 +6,7 @@ import { sliceData } from './GradeSlicer.js';
 import { TimeSliceEnum } from './TimeSlicer.js';
 import { getAllGrades } from './utils';
 import { useSelector } from 'react-redux';
+import SendList from './SendList';
 
 function Pyramid({ year }) {
   const svgRef = useRef(null);
@@ -15,7 +16,10 @@ function Pyramid({ year }) {
   const sends = useSelector(state => state.sendsData.sends) || [];
 
   const [agg, setAgg] = useState(true);
-
+  // dosomething - repent for this code
+  const [canShowModal, setCanShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({}); // observable change? #AIDS
 
   useEffect(() => {
     if (sends && svgRef.current) {
@@ -48,7 +52,7 @@ function Pyramid({ year }) {
       const SVG_RECT = svg.node().getBoundingClientRect();
       const margin = { top: 20, right: 20, bottom: 30, left: 40 };
       const width = SVG_RECT.width - margin.left - margin.right - LEGEND_WIDTH;
-
+      setCanShowModal(width > 1000);
       const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`)
 
       const height = SVG_RECT.height - margin.top - margin.bottom;
@@ -91,7 +95,14 @@ function Pyramid({ year }) {
         .attr("y", (d) => y(d[1]))
         .attr("height", (d) => y(d[0]) - y(d[1]))
         .attr("width", x.bandwidth())
-        .attr("id", "dataG");
+        .attr("id", "dataG")
+        .attr('class', 'clickMe')
+        .on('click', e => {
+          if (canShowModal) {
+            setShowModal(true);
+            setModalData(e.data);
+          }
+        });
 
       const xAxis = g.append("g");
       xAxis
@@ -137,16 +148,25 @@ function Pyramid({ year }) {
         .attr("dy", "0.32em")
         .text((d) => d);
     }
-  })
+  }, [sends, timeSlice, agg, year, canShowModal])
 
 
   const aggChangeHandler = (event) => {
-    setAgg(event.target.name === "agg");
+    setAgg(event.target.name === 'agg');
   }
+
+  const modal = (showModal && canShowModal && modalData) ? 'showModal' : 'hideModal';
 
   return (
     <div id="Pyramid">
       <svg id="pyramid-graph" ref={svgRef} />
+      <div id="modal" className={modal}>
+        <div className="modalHeader">
+          <div className="modalHeaderTitle">List of {modalData.grade} Sends</div>
+          <div className="closeModal" onClick={() => setShowModal(false)}>X</div>
+        </div>
+        <SendList sendList={modalData.sendList} />
+      </div>
       <div id="time-filter">
         <label className="radioLabel">
           Aggregate
@@ -157,7 +177,7 @@ function Pyramid({ year }) {
           <input type="radio" name="notagg" className="radio" checked={!agg} onChange={aggChangeHandler} />
         </label>
       </div>
-    </div>
+    </div >
   )
 }
 export default Pyramid;

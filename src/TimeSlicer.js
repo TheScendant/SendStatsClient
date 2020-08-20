@@ -15,8 +15,6 @@ const sliceData = (sends, TimeSlice) => {
   }
 }
 
-
-
 const sliceDataMonthly = (sends) => {
   const dateToGradeQuanities = new Map();
   const ratings = [];

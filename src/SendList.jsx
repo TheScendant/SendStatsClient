@@ -2,13 +2,14 @@ import React from 'react';
 import './SendList.css';
 import { useState } from 'react';
 import { gradeSorter, isValidRating, simpleStringSort } from './utils';
-import {ArrowDownward as ArrowDownwardIcon, ArrowUpward as ArrowUpwardIcon} from '@material-ui/icons/';
+import { ArrowDownward as ArrowDownwardIcon, ArrowUpward as ArrowUpwardIcon } from '@material-ui/icons/';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
-function SendList() {
+function SendList({ sendList }) {
 
-  const sends = useSelector(state => state.sendsData.sends) || [];
-
+  const reduxSends = useSelector(state => state.sendsData.sends) || [];
+  const sends = sendList ? sendList : reduxSends;
   const [sendsCopy, setSendsCopy] = useState(Array.from(sends).filter(s => isValidRating(s)).sort((a, b) => new Date(b.date) - new Date(a.date)));
   const [sortCrit, setSortCrit] = useState('date'); // forces rerender too! :)
   const [sortedDesc, setSortedDesc] = useState(true);
@@ -58,6 +59,11 @@ function SendList() {
       setSortCrit('rating');
     }
   }
+
+  useEffect(() => {
+    const sends = sendList ? sendList : reduxSends;
+    setSendsCopy(Array.from(sends).filter(s => isValidRating(s)).sort((a, b) => new Date(b.date) - new Date(a.date)));
+  }, [sendList, reduxSends]);
 
   const sortArrow = sortedDesc ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />;
 

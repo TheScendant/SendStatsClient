@@ -7,7 +7,7 @@
 }
 .send-list-table {
   height: 90%;
-  width: 95%;
+  width: 100%;
   overflow-y: scroll;
   color: white;
 }

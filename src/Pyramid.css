@@ -22,3 +22,41 @@
 #pyramid-graph > g > g.x-axis > g:nth-child(2n+1) text {
   display: none;
 }
+
+.showModal {
+  position: absolute;
+  z-index: 100;
+  height: 400px;
+  width: 600px;
+  background-color: var(--color1);
+  border: 2px solid black;
+}
+
+.hideModal {
+  display: none;
+}
+
+.closeModal {
+  cursor: pointer;
+  padding-right: 4px;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid black;
+  color: var(--color2);
+  height: 25px;
+  align-items: center;
+}
+.modalHeaderTitle {
+  padding-left: 4px;
+}
+.modalBody {
+  overflow-y: scroll;
+  height: 370px;
+  padding-left: 4px;
+}
+.clickMe {
+  cursor: pointer;
+}

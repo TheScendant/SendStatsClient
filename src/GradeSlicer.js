@@ -26,25 +26,33 @@ const sliceDataYearly = (sends, aggregrate) => {
       let gradeObject;
       if (gradeToDateQuanities.has(grade)) {
         gradeObject = gradeToDateQuanities.get(grade);
-        gradeObject.increment(year);
+        gradeObject.grade.increment(year);
+        gradeObject.sendList.push(send);
+
       } else {
-        gradeObject = new Grade(year, send, aggregrate);
+        let g = new Grade(year, send, aggregrate);
+        gradeObject = {grade: g, sendList: [send]}
       }
       gradeToDateQuanities.set(grade, gradeObject);
     }
   }
 
+  /*
+    Build an array of objects relating grade to number of grades 
+    sent per year. eg:
+    {2018: 1, 2019: 10, 2020: 5, grade: "5.11b", total: 16, sendList: [{}]}
+  */
   const gradeDateQuantityArray = [];
   for (const gradeKey of gradeToDateQuanities.keys()) {
     const gradeObject = gradeToDateQuanities.get(gradeKey);
-    const grade = { grade: gradeObject.getGrade() };
+    const grade = { grade: gradeObject.grade.getGrade(), sendList: gradeObject.sendList};
     for (let k = 0; k < years.length; k++) {
       const year = years[k];
-      grade[year] = gradeObject.getYearCount(year);
+      grade[year] = gradeObject.grade.getYearCount(year);
     }
     gradeDateQuantityArray.push(grade);
   }
-  gradeDateQuantityArray.sort((a,b) => gradeSorter(a.grade,b.grade));
+  gradeDateQuantityArray.sort((a,b) => gradeSorter(a.grade, b.grade));
   return [gradeDateQuantityArray, years];
 }
 export {
