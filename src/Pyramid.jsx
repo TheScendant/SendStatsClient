@@ -16,15 +16,13 @@ function Pyramid({ year }) {
   const sends = useSelector(state => state.sendsData.sends) || [];
 
   const [agg, setAgg] = useState(true);
-  // dosomething - repent for this code
   const [canShowModal, setCanShowModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState({}); // observable change? #AIDS
+  const [modalData, setModalData] = useState({});
 
   useEffect(() => {
     if (sends && svgRef.current) {
       const yeet = d3.zoom().on("zoom", (e) => {
-        // dataG.attr("transform", d3.event.transform)
         const xTransform = Math.max(Math.min(d3.event.transform.x, 0), (bitter - width) * -1);
 
         xAxis.attr("transform", `translate(${xTransform},${height})`)
