@@ -60,6 +60,9 @@ function SendList({ sendList }) {
     }
   }
 
+  /*
+    sends will be either the sendList prop or pulled from redux store
+  */
   useEffect(() => {
     const sends = sendList ? sendList : reduxSends;
     setSendsCopy(Array.from(sends).filter(s => isValidRating(s)).sort((a, b) => new Date(b.date) - new Date(a.date)));

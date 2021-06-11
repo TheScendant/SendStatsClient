@@ -47,9 +47,9 @@ function Graph() {
   useEffect(() => {
     if (currSends && svgRef.current) {
       const yeet = d3.zoom().on("zoom", (e) => {
-        const xTransform = Math.max(Math.min(d3.event.transform.x, 0), (bitter - width) * -1);
-        xAxis.attr("transform", `translate(${xTransform},${height})`)
-        staxG.attr("transform", `translate(${xTransform},0)`)
+          const xTransform = Math.max(Math.min(d3.event.transform.x, 0), (bitter - width) * -1);
+          xAxis.attr("transform", `translate(${xTransform},${height})`)
+          staxG.attr("transform", `translate(${xTransform},0)`)
       })
 
       const [ratings, dateGradeQuantityArray] = sliceData(currSends, timeSlice);
@@ -70,7 +70,7 @@ function Graph() {
 
       // dosomething implement screen resize
       const LEGEND_WIDTH = 50;
-      const svg = d3.select(svgRef.current).call(yeet);
+      const svg = d3.select(svgRef.current).call(yeet).on("wheel.zoom", null)
 
       const SVG_RECT = svg.node().getBoundingClientRect();
       const margin = { top: 20, right: 20, bottom: 30, left: 40 };

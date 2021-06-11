@@ -45,7 +45,7 @@ function Pyramid({ year }) {
       // dosomething implement screen resize
       const LEGEND_WIDTH = 50;
       const svg = d3.select(svgRef.current);
-      svg.call(yeet);
+      svg.call(yeet).on("wheel.zoom", null);
 
       const SVG_RECT = svg.node().getBoundingClientRect();
       const margin = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -96,7 +96,7 @@ function Pyramid({ year }) {
         .attr("id", "dataG")
         .attr('class', 'clickMe')
         .on('click', e => {
-          if (canShowModal) {
+          if (canShowModal) { // don't rerender if we're not gonna show the modal
             setShowModal(true);
             setModalData(e.data);
           }

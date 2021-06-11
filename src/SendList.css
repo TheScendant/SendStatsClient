@@ -5,6 +5,9 @@
   width: 100%;
   justify-content: space-around;
 }
+.send-list-row:hover {
+  background-color: var(--color3);
+}
 .send-list-table {
   height: 90%;
   width: 100%;
