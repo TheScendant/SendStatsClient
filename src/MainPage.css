@@ -13,6 +13,16 @@
   flex-direction: column;
   background-color: var(--color4);
 }
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+    #MainPage {
+      width: 100%;
+    }
+  }
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) {
+    #MainPage {
+      width: 100%;
+    }
+}
 
 #visual-wrapper {
   height: calc(100% - 80px);
@@ -68,14 +78,14 @@
   flex-direction: column;
 }
 
-#HOME, #TIME_GRAPH, #PYRAMID,  #SUMMARY, #SEND_LIST {
+#HOME, #TIME_GRAPH, #PYRAMID, #SUMMARY, #SEND_LIST {
   cursor: pointer;
   display: flex;
   align-items: center;
   padding: 20px 4px;
 }
 
-#TIME_GRAPH, #PYRAMID,  #SUMMARY, #SEND_LIST {
+#TIME_GRAPH, #PYRAMID, #SUMMARY, #SEND_LIST {
   width: 90%;
   justify-content: center;
 }

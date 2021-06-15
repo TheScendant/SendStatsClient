@@ -127,10 +127,11 @@ function Graph() {
         .attr("width", barWidth)
 
       const xAxis = g.append("g");
+      const xAxisContent = d3.axisBottom(x);
       xAxis
         .attr("class", "x-axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x));
+        .call(xAxisContent);
 
       const yAxis = g.append("g");
       yAxis
