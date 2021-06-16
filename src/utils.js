@@ -54,12 +54,16 @@ const monthSorter = (a, b) => {
   return 0;
 }
 
+export const herokuUrl = "https://send-stats-server.herokuapp.com";
+
 const postJSON = async (data, url) => {
   try {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": herokuUrl,
+        "Referer": herokuUrl
       },
       body: JSON.stringify(data)
     });

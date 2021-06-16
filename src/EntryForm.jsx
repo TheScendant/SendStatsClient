@@ -4,11 +4,10 @@ import Spinner from './Spinner';
 import EmailEntry from './EmailEntry';
 import UserIdEntry from './UserIdEntry';
 import './EntryForm.css'
-import { postJSON } from './utils';
+import { herokuUrl, postJSON } from './utils';
 import { useDispatch } from 'react-redux';
 import { setUserEmail, setStoreUserInfo, setUserID } from './userSlice';
 import { setStoreSends, setStoreStars } from './sendsSlice';
-
 function EntryForm() {
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
@@ -30,8 +29,8 @@ function EntryForm() {
       setLoading(true);
 
       const { email, userId } = data;
-      const sendRes = await postJSON(data, '/sendData');
-      const userDataRes = await postJSON(data, '/userData');
+      const sendRes = await postJSON(data, `${herokuUrl}/sendData`);
+      const userDataRes = await postJSON(data, `${herokuUrl}/userData`);
 
       if (sendRes && userDataRes) {
         const { sends, stars } = JSON.parse(sendRes.message);
