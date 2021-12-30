@@ -20,6 +20,8 @@ function Pyramid({ year }) {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({});
 
+  const [isBoulders, setIsBoulders] = useState(false)
+
   useEffect(() => {
     if (sends && svgRef.current) {
       const yeet = d3.zoom().on("zoom", (e) => {
@@ -29,7 +31,7 @@ function Pyramid({ year }) {
         dataG.attr("transform", `translate(${xTransform},0)`)
       });
 
-      const [gradeDateQuantityArray, years] = sliceData(sends, timeSlice, agg);
+      const [gradeDateQuantityArray, years] = sliceData(sends, timeSlice, agg, isBoulders);
       const data = gradeDateQuantityArray;
 
       for (const d of data) {
@@ -146,11 +148,15 @@ function Pyramid({ year }) {
         .attr("dy", "0.32em")
         .text((d) => d);
     }
-  }, [sends, timeSlice, agg, year, canShowModal])
+  }, [sends, timeSlice, agg, year, canShowModal, isBoulders])
 
 
   const aggChangeHandler = (event) => {
     setAgg(event.target.name === 'agg');
+  }
+
+  const boulderChangeHandler = (e) => {
+    setIsBoulders(e.target.name === 'boulder')
   }
 
   const modal = (showModal && canShowModal && modalData) ? 'showModal' : 'hideModal';
@@ -174,6 +180,17 @@ function Pyramid({ year }) {
           Show Mid Grades
           <input type="radio" name="notagg" className="radio" checked={!agg} onChange={aggChangeHandler} />
         </label>
+      </div>
+      <div id="boulder-filter">
+        <label className="radioLabel">
+          Boulders
+          <input type="radio" name="boulder" className="radio" checked={isBoulders} onChange={boulderChangeHandler} />
+        </label>
+        <label className="radioLabel">
+          Ropes
+          <input type="radio" name="rope" className="radio" checked={!isBoulders} onChange={boulderChangeHandler} />
+        </label>
+
       </div>
     </div >
   )

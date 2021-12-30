@@ -78,7 +78,11 @@ const postJSON = async (data, url) => {
   }
 };
 
-const isValidRating = (send) => ((!send.rating.toLowerCase().includes("v")) && !send.rating.toLowerCase().includes("w") && send.rating.toLowerCase().includes("5"))
+const isValidRating = (send, isBoulder) => {
+  const rope = (!send.rating.toLowerCase().includes("v")) && !send.rating.toLowerCase().includes("w") && send.rating.toLowerCase().includes("5")
+  // what about w's ???
+  return isBoulder ? !rope : rope
+}
 
 const gradesByTimeColoring = (grade, hardest) => {
   // const softest = ratings[0];
