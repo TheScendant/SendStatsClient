@@ -170,7 +170,7 @@ function Pyramid({ year }) {
           <div className="modalHeaderTitle">List of {modalData.grade} Sends</div>
           <div className="closeModal" onClick={() => setShowModal(false)}>X</div>
         </div>
-        <SendList sendList={modalData.sendList} />
+        <SendList sendList={modalData.sendList} isBoulders={isBoulders} />
       </div>
       {!isBoulders && (<div id="time-filter">
         <label className="radioLabel">
