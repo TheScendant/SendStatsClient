@@ -1,4 +1,4 @@
-import { gradeSorter, isValidRating } from './utils';
+import { boulderSorter, gradeSorter, isValidRating } from './utils';
 import Grade from './Grade';
 // import Year from './Year';
 
@@ -18,7 +18,6 @@ const sliceDataYearly = (sends, aggregrate, isBoulder) => {
   for (const send of sends) {
     if (isValidRating(send, isBoulder)) { // ignore boulders for now
       const year = new Date(send.date).getFullYear();
-
       const grade = new Grade(year, send, aggregrate).getGrade();
       if (!years.includes(year)) {
         years.push(year);
@@ -52,7 +51,11 @@ const sliceDataYearly = (sends, aggregrate, isBoulder) => {
     }
     gradeDateQuantityArray.push(grade);
   }
-  gradeDateQuantityArray.sort((a, b) => gradeSorter(a.grade, b.grade));
+  if (isBoulder) {
+    gradeDateQuantityArray.sort((a, b) => boulderSorter(a.grade, b.grade));
+  } else {
+    gradeDateQuantityArray.sort((a, b) => gradeSorter(a.grade, b.grade));
+  }
   return [gradeDateQuantityArray, years];
 }
 export {

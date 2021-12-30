@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './Pyramid.css'
 import { sliceData } from './GradeSlicer.js';
 import { TimeSliceEnum } from './TimeSlicer.js';
-import { getAllGrades } from './utils';
+import { getAllBoulderGrades, getAllGrades } from './utils';
 import { useSelector } from 'react-redux';
 import SendList from './SendList';
 
@@ -57,7 +57,7 @@ function Pyramid({ year }) {
 
       const height = SVG_RECT.height - margin.top - margin.bottom;
 
-      const allGrades = getAllGrades(agg);
+      const allGrades = isBoulders ? getAllBoulderGrades() : getAllGrades(agg);
 
       const twentySevenGrades = allGrades.length * 27
 
@@ -156,6 +156,7 @@ function Pyramid({ year }) {
   }
 
   const boulderChangeHandler = (e) => {
+    setAgg(false);
     setIsBoulders(e.target.name === 'boulder')
   }
 
@@ -171,7 +172,7 @@ function Pyramid({ year }) {
         </div>
         <SendList sendList={modalData.sendList} />
       </div>
-      <div id="time-filter">
+      {!isBoulders && (<div id="time-filter">
         <label className="radioLabel">
           Aggregate
           <input type="radio" name="agg" className="radio" checked={agg} onChange={aggChangeHandler} />
@@ -180,7 +181,7 @@ function Pyramid({ year }) {
           Show Mid Grades
           <input type="radio" name="notagg" className="radio" checked={!agg} onChange={aggChangeHandler} />
         </label>
-      </div>
+      </div>)}
       <div id="boulder-filter">
         <label className="radioLabel">
           Boulders

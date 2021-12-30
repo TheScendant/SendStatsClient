@@ -41,6 +41,13 @@ const gradeSorter = (a, b) => {
   }
   return 0;
 }
+const boulderSorter = (a, b) => {
+  const cleanA = parseInt(a.replace('+', '').replace('-', ''))
+  const cleanB = parseInt(b.replace('+', '').replace('-', ''))
+
+  return cleanA - cleanB
+
+}
 const monthSorter = (a, b) => {
   if (a.Year < b.Year) {
     return -1
@@ -81,6 +88,9 @@ const postJSON = async (data, url) => {
 const isValidRating = (send, isBoulder) => {
   const rope = (!send.rating.toLowerCase().includes("v")) && !send.rating.toLowerCase().includes("w") && send.rating.toLowerCase().includes("5")
   // what about w's ???
+  if ((isBoulder && send.rating.includes('/')) || send.rating.toLowerCase().includes('w')) {
+    return false
+  }
   return isBoulder ? !rope : rope
 }
 
@@ -105,6 +115,8 @@ const gradesByTimeColoring = (grade, hardest) => {
   numb = numb / (maxSpectral - 90);
   return d3.interpolateSpectral(numb);
 }
+
+const getAllBoulderGrades = () => ['V0', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11', 'V12', 'V13', 'V14', 'V15', 'V16']
 
 const getAllGrades = (agg) => {
   let allGrades = Array.from(singles);
@@ -178,7 +190,9 @@ const aggRating = (rating) => {
 export {
   addOrIncrement,
   aggRating,
+  boulderSorter,
   cleanLegend,
+  getAllBoulderGrades,
   getAllGrades,
   getGradeKeys,
   getMacroRating,
