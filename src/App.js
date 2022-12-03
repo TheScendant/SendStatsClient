@@ -10,6 +10,8 @@ function App() {
   const sends = useSelector(state => state.sendsData.sends);
   let mainPage, entryForm;
 
+  // use router path to get user id here and then fetch instead of rendering entry form
+
   if (userInfo && sends) {
     mainPage = <MainPage />
   } else {

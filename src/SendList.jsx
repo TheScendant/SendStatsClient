@@ -6,11 +6,11 @@ import { ArrowDownward as ArrowDownwardIcon, ArrowUpward as ArrowUpwardIcon } fr
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
-function SendList({ sendList }) {
+function SendList({ sendList, isBoulders }) {
 
   const reduxSends = useSelector(state => state.sendsData.sends) || [];
   const sends = sendList ? sendList : reduxSends;
-  const [sendsCopy, setSendsCopy] = useState(Array.from(sends).filter(s => isValidRating(s)).sort((a, b) => new Date(b.date) - new Date(a.date)));
+  const [sendsCopy, setSendsCopy] = useState(Array.from(sends).filter(s => isValidRating(s, isBoulders)).sort((a, b) => new Date(b.date) - new Date(a.date)));
   const [sortCrit, setSortCrit] = useState('date'); // forces rerender too! :)
   const [sortedDesc, setSortedDesc] = useState(true);
 
@@ -65,8 +65,8 @@ function SendList({ sendList }) {
   */
   useEffect(() => {
     const sends = sendList ? sendList : reduxSends;
-    setSendsCopy(Array.from(sends).filter(s => isValidRating(s)).sort((a, b) => new Date(b.date) - new Date(a.date)));
-  }, [sendList, reduxSends]);
+    setSendsCopy(Array.from(sends).filter(s => isValidRating(s, isBoulders)).sort((a, b) => new Date(b.date) - new Date(a.date)));
+  }, [sendList, reduxSends, isBoulders]);
 
   const sortArrow = sortedDesc ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />;
 

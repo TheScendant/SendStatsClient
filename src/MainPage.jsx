@@ -48,6 +48,9 @@ function MainPage() {
 
   const showScrollTip = (pathname === '/gradePyramid') || (pathname === '/timeByGrades');
 
+  const userId = useSelector(state => state.userData.userInfo.id)
+  console.warn(userId)
+
   return (
     <div id="MainPage">
       <div id="graph-selection">
@@ -59,22 +62,22 @@ function MainPage() {
       <Drawer anchor={'left'} open={drawerOpen} onClose={(e) => setDrawerOpen(false)}>
         <div id="link-list">
           <div id="LL_TITLE">Navigation</div>
-          <Link className={`drawer-link ${classNames({selected: pathname === '/summary'})}`} to="/summary">
+          <Link className={`drawer-link ${classNames({selected: pathname === '/summary'})}`} to={`/${userId}/summary`}>
             <span id="SUMMARY" onClick={handleRouteChange}>
               Sends Summary
               </span>
           </Link>
-          <Link className={`drawer-link ${classNames({selected: pathname === '/timeByGrades'})}`} to="/timeByGrades">
+          <Link className={`drawer-link ${classNames({selected: pathname === '/timeByGrades'})}`} to={`/${userId}/timeByGrades`}>
             <span id="TIME_GRAPH" onClick={handleRouteChange}>
               Sends Over Time
             </span>
           </Link>
-          <Link className={`drawer-link ${classNames({selected: pathname === '/gradePyramid'})}`} to="/gradePyramid">
+          <Link className={`drawer-link ${classNames({selected: pathname === '/gradePyramid'})}`} to={`/${userId}/gradePyramid`}>
             <span id="PYRAMID" onClick={handleRouteChange}>
               Grade Pyramid
             </span>
           </Link>
-          <Link className={`drawer-link ${classNames({selected: pathname === '/sendList'})}`} to="/sendList">
+          <Link className={`drawer-link ${classNames({selected: pathname === '/sendList'})}`} to={`/${userId}/sendList`}>
             <span id="SEND_LIST" onClick={handleRouteChange}>
               Send list
             </span>
@@ -89,16 +92,16 @@ function MainPage() {
       </Drawer>
       <div id="visual-wrapper" >
         <Switch>
-          <Route path="/summary" exact={true}>
+          <Route path={`/${userId}/summary`} exact={true}>
             <Summary />
           </Route>
-          <Route path="/timeByGrades" exact={true}>
+          <Route path={`/${userId}/timeByGrades`} exact={true}>
             <Graph />
           </Route>
-          <Route path="/gradePyramid" exact={true}>
+          <Route path={`/${userId}/gradePyramid`} exact={true}>
             <Pyramid year={year} />
           </Route>
-          <Route path="/sendList" exact={true}>
+          <Route path={`/${userId}/sendList`} exact={true}>
             <SendList year={year} />
           </Route>
           <Route path="/rechartsGraph" exact={true}>
@@ -106,6 +109,8 @@ function MainPage() {
           </Route>
           <Redirect exact from="/" to="gradePyramid" />
         </Switch>
+{/*           <Redirect exact from="/" to={`/${userId}/gradePyramid`} />
+ */}       
         {showScrollTip && <div className="scroll-graph-tip">Click and drag graph to scroll</div>}
       </div>
     </div>
