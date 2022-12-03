@@ -10,6 +10,7 @@ import { Button, Drawer } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons/';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
+import { RechartsGraph } from './RechartsGraph';
 
 function MainPage() {
   const LOCATION_ENUM = {
@@ -76,7 +77,12 @@ function MainPage() {
           <Link className={`drawer-link ${classNames({selected: pathname === '/sendList'})}`} to="/sendList">
             <span id="SEND_LIST" onClick={handleRouteChange}>
               Send list
-              </span>
+            </span>
+          </Link>
+          <Link className={`drawer-link ${classNames({selected: pathname === '/rechartsGraph'})}`} to="/rechartsGraph">
+            <span id="RECHARTS_GRAPH" onClick={handleRouteChange}>
+              Recharts Graph
+            </span>
           </Link>
         </div>
         <span>{name}</span>
@@ -94,6 +100,9 @@ function MainPage() {
           </Route>
           <Route path="/sendList" exact={true}>
             <SendList year={year} />
+          </Route>
+          <Route path="/rechartsGraph" exact={true}>
+            <RechartsGraph />
           </Route>
           <Redirect exact from="/" to="gradePyramid" />
         </Switch>

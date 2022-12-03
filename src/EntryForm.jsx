@@ -29,8 +29,8 @@ function EntryForm() {
       setLoading(true);
 
       const { email, userId } = data;
-      const sendRes = await postJSON(data, `${herokuUrl}/sendData`);
-      const userDataRes = await postJSON(data, `${herokuUrl}/userData`);
+      const sendRes = await postJSON(data, `/sendData`);
+      const userDataRes = await postJSON(data, `/userData`);
 
       if (sendRes && userDataRes) {
         const { sends, stars } = JSON.parse(sendRes.message);

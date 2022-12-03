@@ -56,14 +56,30 @@ const monthSorter = (a, b) => {
 
 export const herokuUrl = "https://send-stats-server.herokuapp.com";
 
+export const redScale = {
+  "r0": "#FCFAFA",
+  "r1": "#FBF4F4",
+  "r2": "#FAEAEA",
+  "r3": "#F8D7D7",
+  "r4": "#F4B2B2",
+  "r5": "#F08C8C",
+  "r6": "#EE7979",
+  "r7": "#EC6767",
+  "r8": "#EA5454",
+  "r9": "#E84141",
+  "r10": "#BE393B",
+  "r11": "#6A2A2E",
+  "r12": "#2B1F24"
+};
+export const redScaleArray = Object.values(redScale);
 const postJSON = async (data, url) => {
   try {
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": herokuUrl,
-        "Referer": herokuUrl
+        "Access-Control-Allow-Origin": "*",
+        "Referer": "*"
       },
       body: JSON.stringify(data)
     });
