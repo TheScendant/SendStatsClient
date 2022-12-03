@@ -8,6 +8,7 @@ import { herokuUrl, postJSON } from './utils';
 import { useDispatch } from 'react-redux';
 import { setUserEmail, setStoreUserInfo, setUserID } from './userSlice';
 import { setStoreSends, setStoreStars } from './sendsSlice';
+import { useHistory } from 'react-router-dom';
 function EntryForm() {
   const [loading, setLoading] = useState(false);
   const [networkError, setNetworkError] = useState(false);
@@ -18,6 +19,7 @@ function EntryForm() {
   });
   const dispatch = useDispatch();
 
+  const history = useHistory();
 
   /**
    * onSubmit is only called when there aren't errors
@@ -29,19 +31,30 @@ function EntryForm() {
       setLoading(true);
 
       const { email, userId } = data;
-      const sendRes = await postJSON(data, `${herokuUrl}/sendData`);
-      const userDataRes = await postJSON(data, `${herokuUrl}/userData`);
+      // const sendRes = await postJSON(data, `${herokuUrl}/sendData`);
+      // const userDataRes = await postJSON(data, `${herokuUrl}/userData`);
+
+      const sendRes = await postJSON(data, `/sendData`);
+      const userDataRes = await postJSON(data, `/userData`);
+
 
       if (sendRes && userDataRes) {
         const { sends, stars } = JSON.parse(sendRes.message);
-        dispatch(setStoreUserInfo(userDataRes.message))
-        dispatch( email ? setUserEmail(email) : setUserID(userId));
+        const userData = JSON.parse(userDataRes.message)
+
+        dispatch(setStoreUserInfo(userData));
+        dispatch(email ? setUserEmail(email) : setUserID(userId));
         dispatch(setStoreSends(sends));
         dispatch(setStoreStars(stars.toFixed(2)));
+        setLoading(false);
+
+        const { id } = userData;
+        history.push(`/${id}/gradePyramid`)
+
       } else {
         setNetworkError(true);
+        setLoading(false);
       }
-      setLoading(false);
     };
   }
 

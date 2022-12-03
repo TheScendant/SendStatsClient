@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import './Summary.css'
 
 function Summary() {
-
   const sends = useSelector(state => state.sendsData.sends);
   const stars = useSelector(state => state.sendsData.stars);
   const sendCount = sends && sends.length;

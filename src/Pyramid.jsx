@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './Pyramid.css'
 import { sliceData } from './GradeSlicer.js';
 import { TimeSliceEnum } from './TimeSlicer.js';
-import { getAllGrades } from './utils';
+import { getAllBoulderGrades, getAllGrades } from './utils';
 import { useSelector } from 'react-redux';
 import SendList from './SendList';
 
@@ -20,6 +20,8 @@ function Pyramid({ year }) {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({});
 
+  const [isBoulders, setIsBoulders] = useState(false)
+
   useEffect(() => {
     if (sends && svgRef.current) {
       const yeet = d3.zoom().on("zoom", (e) => {
@@ -29,7 +31,7 @@ function Pyramid({ year }) {
         dataG.attr("transform", `translate(${xTransform},0)`)
       });
 
-      const [gradeDateQuantityArray, years] = sliceData(sends, timeSlice, agg);
+      const [gradeDateQuantityArray, years] = sliceData(sends, timeSlice, agg, isBoulders);
       const data = gradeDateQuantityArray;
 
       for (const d of data) {
@@ -55,7 +57,7 @@ function Pyramid({ year }) {
 
       const height = SVG_RECT.height - margin.top - margin.bottom;
 
-      const allGrades = getAllGrades(agg);
+      const allGrades = isBoulders ? getAllBoulderGrades() : getAllGrades(agg);
 
       const twentySevenGrades = allGrades.length * 27
 
@@ -146,11 +148,16 @@ function Pyramid({ year }) {
         .attr("dy", "0.32em")
         .text((d) => d);
     }
-  }, [sends, timeSlice, agg, year, canShowModal])
+  }, [sends, timeSlice, agg, year, canShowModal, isBoulders])
 
 
   const aggChangeHandler = (event) => {
     setAgg(event.target.name === 'agg');
+  }
+
+  const boulderChangeHandler = (e) => {
+    setAgg(false);
+    setIsBoulders(e.target.name === 'boulder')
   }
 
   const modal = (showModal && canShowModal && modalData) ? 'showModal' : 'hideModal';
@@ -163,9 +170,9 @@ function Pyramid({ year }) {
           <div className="modalHeaderTitle">List of {modalData.grade} Sends</div>
           <div className="closeModal" onClick={() => setShowModal(false)}>X</div>
         </div>
-        <SendList sendList={modalData.sendList} />
+        <SendList sendList={modalData.sendList} isBoulders={isBoulders} />
       </div>
-      <div id="time-filter">
+      {!isBoulders && (<div id="time-filter">
         <label className="radioLabel">
           Aggregate
           <input type="radio" name="agg" className="radio" checked={agg} onChange={aggChangeHandler} />
@@ -174,6 +181,17 @@ function Pyramid({ year }) {
           Show Mid Grades
           <input type="radio" name="notagg" className="radio" checked={!agg} onChange={aggChangeHandler} />
         </label>
+      </div>)}
+      <div id="boulder-filter">
+        <label className="radioLabel">
+          Boulders
+          <input type="radio" name="boulder" className="radio" checked={isBoulders} onChange={boulderChangeHandler} />
+        </label>
+        <label className="radioLabel">
+          Ropes
+          <input type="radio" name="rope" className="radio" checked={!isBoulders} onChange={boulderChangeHandler} />
+        </label>
+
       </div>
     </div >
   )
