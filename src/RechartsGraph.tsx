@@ -1,10 +1,9 @@
 import * as d3 from 'd3';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
-import { BarChart, Bar, XAxis, YAxis, 
-  CartesianGrid, 
-  Label,
-  LabelList} from 'recharts';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid
+} from 'recharts';
 import { sliceData } from './GradeSlicer';
 import { TimeSliceEnum } from './TimeSlicer';
 import { redScaleArray } from './utils';
@@ -34,10 +33,10 @@ export const RechartsGraph = () => {
     <BarChart width={1000} height={500} data={data} >
       <CartesianGrid />
       <XAxis dataKey="grade" />
-      <YAxis label={{ value: "Number of sends", angle: -90, position: 'insideLeft'}}/>
+      <YAxis label={{ value: "Number of sends", angle: -90, position: 'insideLeft' }} />
       {years.map((year: any, i: any) => (
         // @ts-ignore
-        <Bar dataKey={year} stackId="a" fill={redScaleArray[i+3]} />
+        <Bar dataKey={year} stackId="a" fill={redScaleArray[i + 3]} />
       ))}
     </BarChart>
   )
