@@ -78,14 +78,14 @@
   flex-direction: column;
 }
 
-#HOME, #TIME_GRAPH, #PYRAMID, #SUMMARY, #SEND_LIST {
+#HOME, #TIME_GRAPH, #PYRAMID, #SUMMARY, #SEND_LIST, #RECHARTS_GRAPH {
   cursor: pointer;
   display: flex;
   align-items: center;
   padding: 20px 4px;
 }
 
-#TIME_GRAPH, #PYRAMID, #SUMMARY, #SEND_LIST {
+#TIME_GRAPH, #PYRAMID, #SUMMARY, #SEND_LIST, #RECHARTS_GRAPH {
   width: 90%;
   justify-content: center;
 }

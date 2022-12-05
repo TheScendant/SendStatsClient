@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend
 } from 'recharts';
 import { sliceData } from './GradeSlicer';
 import { TimeSliceEnum } from './TimeSlicer';
@@ -34,9 +34,10 @@ export const RechartsGraph = () => {
       <CartesianGrid />
       <XAxis dataKey="grade" />
       <YAxis label={{ value: "Number of sends", angle: -90, position: 'insideLeft' }} />
+      <Legend />
       {years.map((year: any, i: any) => (
         // @ts-ignore
-        <Bar dataKey={year} stackId="a" fill={redScaleArray[i + 3]} />
+        < Bar dataKey={year} stackId="a" fill={redScaleArray[(i + 3) % 13]} />
       ))}
     </BarChart>
   )
